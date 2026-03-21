@@ -2182,7 +2182,7 @@ function openSmartShare() {
             <input type="checkbox" class="share-chk" data-type="stock" data-idx="${i}" onchange="updateButtonUI()" style="width: 20px; height: 20px; accent-color: #3b82f6;">
             <div style="margin-left: 10px; flex: 1;">
                 <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${s.name}</div>
-                <div style="font-size: 9px; color: #94a3b8;">Item-0${i+1}</div>
+                <div style="font-size: 9px; color: #94a3b8;">Item-${i+1}</div>
             </div>
         </label>`;
     });
@@ -2197,7 +2197,7 @@ function openSmartShare() {
             <input type="checkbox" class="share-chk" data-type="recipe" data-idx="${i}" onchange="updateButtonUI()" style="width: 20px; height: 20px; accent-color: #e11d48;">
             <div style="margin-left: 10px; flex: 1;">
                 <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${r.name}</div>
-                <div style="font-size: 9px; color: #fb7185;">Recipe-0${i+1}</div>
+                <div style="font-size: 9px; color: #fb7185;">Recipe-${i+1}</div>
             </div>
         </label>`;
     });
