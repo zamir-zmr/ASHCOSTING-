@@ -777,8 +777,6 @@
 // 1. Firebase Configuration
 // 1. Firebase Configuration
 // 1. Firebase Configuration (Aapka diya hua)
-
-// 1. Firebase Configuration (Aapka Original Code)
 const firebaseConfig = {
   apiKey: "AIzaSyA3bsKfP7CxS0Sb0CY6xu_vFogVcxbJCII",
   authDomain: "ashcostingapp.firebaseapp.com",
@@ -793,23 +791,7 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
-
-// 3. Offline Persistence Enable Karna (Mera Code - Realtime Database ke liye)
 const db = firebase.database();
-
-// Isse data device par save ho jayega aur offline kaam karega
-firebase.database().ref().keepSynced(true); 
-
-// Connection status check karne ke liye (Optional par professional hai)
-const connectedRef = firebase.database().ref(".info/connected");
-connectedRef.on("value", (snap) => {
-  if (snap.val() === true) {
-    console.log("Status: Online (Connected to Firebase)");
-  } else {
-    console.log("Status: Offline (Using Local Data)");
-  }
-});
-
 
 // 3. Lock Function (Security + Sync Start)
 function Lock() {
