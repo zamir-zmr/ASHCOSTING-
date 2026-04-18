@@ -1234,7 +1234,7 @@ function syncCatsToCloud() {
     saveData(); // Local save
     if (typeof db !== 'undefined') {
         db.ref('shared_categories').set(cats); // Madam ke phone ke liye
-        console.log("Categories Synced to Cloud ✅");
+        console.log("Categories Synced to Cloud ");
     }
 }
 
@@ -1290,7 +1290,7 @@ function initCatSortable() {
             // --- SYNC FIX ---
             syncCatsToCloud(); // Ab drag karne ke baad Madam ke phone par order change hoga
             refreshOtherUI(); 
-            showToast("Order Saved & Synced ✅");
+            showToast("Order Saved & Synced ");
         }
     });
 }
@@ -1339,7 +1339,7 @@ function addCategory() {
     renderCatFilters(); 
     
     // --- UPDATED TOAST WITH CATEGORY NAME ---
-    showToast(`${val} Category Saved & Synced ✅`);
+    showToast(`${val} Category Saved & Synced`);
 }
 
 function editCategory(i) {
@@ -1524,7 +1524,7 @@ function submitInputModal() {
         }
         
         // --- UPDATED TOAST WITH NAME ---
-        showToast(`${name} Saved & Synced ✅`);
+        showToast(`${name} Saved & Synced`);
 
     } else {
         let cat = document.getElementById('recipeCatSelect').value;
@@ -1550,7 +1550,7 @@ function submitInputModal() {
         }
         
         // --- UPDATED TOAST WITH NAME ---
-        showToast(`${name} Recipe Saved & Synced ✅`);
+        showToast(`${name} Recipe Saved & Synced`);
     }
 
     // Local Storage update
@@ -1594,7 +1594,7 @@ function syncAllToCloud() {
         // Firebase par update bhej raha hai taaki Madam ko bhi dikhe
         db.ref('shared_stock_list').set(stock);
         db.ref('shared_recipes_list').set(recipes);
-        console.log("Cloud Sync Done ✅");
+        console.log("Cloud Sync Done ");
     }
 }
 
@@ -2063,7 +2063,7 @@ function handleDeleteAction() {
                 smartClose(); 
                 
                 // Specific Toast for Recipe
-                showToast(`${recipeName} Recipe Deleted & Synced ✅`);
+                showToast(`${recipeName} Recipe Deleted & Synced`);
             }
         });
     } 
@@ -2094,7 +2094,7 @@ function handleDeleteAction() {
                 smartClose(); 
                 
                 // Specific Toast for Stock
-                showToast(`${stockName} Deleted from Stock & Synced ✅`);
+                showToast(`${stockName} Deleted from Stock & Synced`);
             }
         });
     }
@@ -2123,7 +2123,7 @@ function deleteCat(i) {
                 db.ref('shared_categories').set(catSync)
                   .then(() => {
                       // --- UPDATED TOAST WITH NAME ---
-                      showToast(`${catName} Category Deleted & Synced ✅`);
+                      showToast(`${catName} Category Deleted & Synced`);
 
                       if(typeof initApp === "function") initApp();
                   });
@@ -2252,7 +2252,7 @@ function downloadJSONFile() {
         link.click();
         document.body.removeChild(link);
         
-        showToast("JSON File Downloaded! ✅");
+        showToast("JSON File Downloaded! ");
     } catch (err) {
         console.error("Download Error:", err);
         showToast("Download failed. Use 'GENERATE CODE' instead.", true);
@@ -2534,7 +2534,7 @@ function processSmartAdd() {
                 db.ref('shared_stock_list').set(stock);
                 db.ref('shared_recipes_list').set(recipes);
                 db.ref('shared_categories').set(cats);
-                console.log("JSON Data Synced to Cloud ✅");
+                console.log("JSON Data Synced to Cloud ");
             }
 
             // C. UI REFRESH
@@ -2542,7 +2542,7 @@ function processSmartAdd() {
             
             showImportSummary(addedLog);
             inputArea.value = ""; 
-            showToast("Sync Successful! ✅");
+            showToast("Sync Successful! ");
         } else { 
             showToast("All items already exist!", true); 
         }
