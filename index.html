@@ -1577,23 +1577,6 @@ function submitInputModal() {
 // --- 4. RENDER STOCK ---
 
 // --- 1. RENDER STOCK (MODIFIED) ---
-function renderStock() {
-    const list = document.getElementById('stockList');
-    if(!list) return;
-    
-    list.innerHTML = stock.map((s, i) => `
-        <div class="draggable-item" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee;">
-            <div style="display:flex; align-items:center; flex:1;">
-                <div>
-                    <b style="color:#2d3436; display:block;">${s.name}</b>
-                    <small style="color:#00b894; font-weight:600;">${(s.price || 0).toFixed(3)} OMR / ${s.base || 1000}g</small>
-                </div>
-            </div>
-            <div style="display:flex; gap:15px; align-items:center;">
-                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="openInputModal('stock', ${i})"></i>
-            </div>
-        </div>`).join('');
-}
 
 // --- 2. RENDER RECIPES (MODIFIED) ---
 function renderRecipes() {
@@ -1859,6 +1842,85 @@ function saveAndExit() {
 
 function clearPhoto() { tempImg = ''; updatePreview(); }
 
+function renderStock() {
+    const list = document.getElementById('stockList');
+    if(!list) return;
+    
+    list.innerHTML = stock.map((s, i) => `
+        <div class="draggable-item" 
+             style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; user-select:none; -webkit-user-select:none;"
+             ontouchstart="startLongPress(${i})" 
+             ontouchend="cancelLongPress()" 
+             ontouchmove="cancelLongPress()"
+             onmousedown="startLongPress(${i})" 
+             onmouseup="cancelLongPress()"
+             onmouseleave="cancelLongPress()">
+             
+            <div style="display:flex; align-items:center; flex:1;">
+                <div>
+                    <b style="color:#2d3436; display:block;">${s.name}</b>
+                    <small style="color:#00b894; font-weight:600;">${(s.price || 0).toFixed(3)} OMR / ${s.base || 1000}g</small>
+                </div>
+            </div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); openInputModal('stock', ${i})"></i>
+            </div>
+        </div>`).join('');
+}
+
+// Ye functions ensure karte hain ki popup trigger ho
+
+
+function startLongPress(i) {
+    clearTimeout(longPressTimer);
+    longPressTimer = setTimeout(() => {
+        let s = stock[i];
+        
+        // Modal elements mein data bharna
+        const nameEl = document.getElementById('stockViewName');
+        const priceEl = document.getElementById('stockViewPrice');
+        const imgEl = document.getElementById('stockViewImg');
+        const modalEl = document.getElementById('stockViewModal');
+
+        if(nameEl) nameEl.innerText = s.name || "No Name";
+        if(priceEl) priceEl.innerText = (s.price ? s.price.toFixed(3) : "0.000") + " OMR";
+        
+        if(imgEl) {
+            if(s.img) { 
+                imgEl.src = s.img; 
+                imgEl.style.display = 'block'; 
+            } else { 
+                imgEl.style.display = 'none'; 
+            }
+        }
+
+        // Pop-up dikhana aur back button handle karna
+        if(modalEl) {
+            history.pushState({modal: "view"}, "");
+            modalEl.style.display = 'flex';
+        }
+        
+        // Mobile vibration feedback
+        if(navigator.vibrate) navigator.vibrate(60);
+    }, 600); // 0.6 second hold time
+}
+
+
+function startLongPress(i) {
+    longPressTimer = setTimeout(() => {
+        let s = stock[i];
+        document.getElementById('stockViewName').innerText = s.name;
+        document.getElementById('stockViewPrice').innerText = s.price.toFixed(3) + " OMR";
+        let img = document.getElementById('stockViewImg');
+        if(s.img) { img.src = s.img; img.style.display = 'block'; } else { img.style.display='none'; }
+        history.pushState({modal: "view"}, "");
+        document.getElementById('stockViewModal').style.display = 'flex';
+    }, 600);
+}
+
+
+function cancelLongPress() { clearTimeout(longPressTimer); }
+
 
 
         /* --- IMAGE & LONG PRESS --- */
@@ -1925,20 +1987,6 @@ function updatePreview() {
     document.getElementById('modalImgDel').style.display = tempImg ? 'flex' : 'none';
 }
 
-function startLongPress(i) {
-    longPressTimer = setTimeout(() => {
-        let s = stock[i];
-        document.getElementById('stockViewName').innerText = s.name;
-        document.getElementById('stockViewPrice').innerText = s.price.toFixed(3) + " OMR";
-        let img = document.getElementById('stockViewImg');
-        if(s.img) { img.src = s.img; img.style.display = 'block'; } else { img.style.display='none'; }
-        history.pushState({modal: "view"}, "");
-        document.getElementById('stockViewModal').style.display = 'flex';
-    }, 600);
-}
-
-
-function cancelLongPress() { clearTimeout(longPressTimer); }
 
 
 
