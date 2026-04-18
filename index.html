@@ -1316,17 +1316,20 @@ function filterBy(c) { currentFilter = c; renderRecipes(); renderCatFilters(); }
 function addCategory() {
     let val = document.getElementById('newCatInp').value.trim();
     
+    // 1. Khali input check
     if(!val) {
         showToast("Please enter a category name!", true);
         return;
     }
 
+    // 2. Duplicate check
     let exists = cats.find(c => c.toLowerCase() === val.toLowerCase());
     if(exists) {
         showToast(`'${val}' already exists!`, true);
         return; 
     }
 
+    // 3. Category add karna
     cats.push(val); 
     document.getElementById('newCatInp').value = ''; 
     
@@ -1334,7 +1337,9 @@ function addCategory() {
     syncCatsToCloud(); // Nayi category Madam ko turant dikhegi
     
     renderCatFilters(); 
-    showToast("Category Added Successfully!"); 
+    
+    // --- UPDATED TOAST WITH CATEGORY NAME ---
+    showToast(`${val} Category Saved & Synced ✅`);
 }
 
 function editCategory(i) {
@@ -1377,30 +1382,8 @@ function editCategory(i) {
 // Function for deleting (Aapne deleteCat manga tha pichle message mein)
 
 
-function deleteCat(i) {
-    showCustomModal({
-        title: "DELETE CATEGORY?",
-        msg: "Deleting this category will not delete the recipes.",
-        showInput: false,
-        onYes: () => {
-            cats.splice(i, 1);
 
-            if (typeof db !== 'undefined') {
-                // Last category delete hone par [] bhejien
-                let catSync = (cats.length === 0) ? [] : cats;
-                db.ref('shared_categories').set(catSync)
-                  .then(() => {
-                      showToast("Category Deleted Online", "error");
-                      if(typeof initApp === "function") initApp();
-                  });
-            }
 
-            saveData();
-            if(typeof renderCatFilters === "function") renderCatFilters();
-            if(typeof smartClose === "function") smartClose();
-        }
-    });
-}
 
 
 
@@ -1511,6 +1494,7 @@ function openInputModal(type, idx = null) {
 }
 
 // --- 3. SUBMIT & FIREBASE SYNC (MAHAM FIX) ---
+
 function submitInputModal() {
     let name = document.getElementById('inp1').value.trim();
     let priceInput = document.getElementById('inp2').value.trim();
@@ -1538,7 +1522,9 @@ function submitInputModal() {
         if (typeof db !== 'undefined') {
             db.ref('shared_stock_list').set(stock);
         }
-        showToast("Stock Saved & Synced ✅");
+        
+        // --- UPDATED TOAST WITH NAME ---
+        showToast(`${name} Saved & Synced ✅`);
 
     } else {
         let cat = document.getElementById('recipeCatSelect').value;
@@ -1562,7 +1548,9 @@ function submitInputModal() {
         if (typeof db !== 'undefined') {
             db.ref('shared_recipes_list').set(recipes);
         }
-        showToast("Recipe Saved & Synced ✅");
+        
+        // --- UPDATED TOAST WITH NAME ---
+        showToast(`${name} Recipe Saved & Synced ✅`);
     }
 
     // Local Storage update
@@ -2048,47 +2036,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
 function handleDeleteAction() {
-    showCustomModal({
-        title: "Delete Permanently?",
-        msg: "This action will remove the item for everyone (Zamir & Madam).",
-        showInput: false,
-        onYes: () => {
-            // 1. Local Array se delete karein
-            if(mode === 'recipe') {
+    // 1. RECIPE DELETE LOGIC
+    if (mode === 'recipe') {
+        let recipeName = recipes[activeIdx] ? (recipes[activeIdx].name || "Recipe") : "Recipe";
+
+        showCustomModal({
+            title: "Delete Recipe?",
+            msg: `Are you sure you want to delete\n"${recipeName}"?`,
+            showInput: false,
+            onYes: () => {
+                // Local array se delete
                 recipes.splice(activeIdx, 1);
-                // --- CLOUD SYNC ---
-                if (typeof db !== 'undefined') db.ref('shared_recipes_list').set(recipes);
-            } else {
-                stock.splice(activeIdx, 1);
-                // --- CLOUD SYNC ---
-                if (typeof db !== 'undefined') db.ref('shared_stock_list').set(stock);
+                
+                // Cloud sync
+                if (typeof db !== 'undefined') {
+                    db.ref('shared_recipes_list').set(recipes);
+                }
+                
+                // Save and Refresh
+                saveData(); 
+                initApp();
+                
+                // UI Close
+                document.getElementById('inputModalOverlay').style.display = 'none';
+                smartClose(); 
+                
+                // Specific Toast for Recipe
+                showToast(`${recipeName} Recipe Deleted & Synced ✅`);
             }
-            
-            // 2. Local Storage update karein
-            saveData(); 
-            
-            // 3. UI Update karein (Madam ke phone par automatic ho jayega agar initApp mein .on listener hai)
-            initApp();
-            
-            // Modal band karein
-            document.getElementById('inputModalOverlay').style.display = 'none';
-            smartClose(); 
-            showToast("Deleted & Synced Online ✅");
-        }
-    });
+        });
+    } 
+    
+    // 2. STOCK DELETE LOGIC
+    else if (mode === 'stock') {
+        let stockName = stock[activeIdx] ? (stock[activeIdx].name || "Item") : "Item";
+
+        showCustomModal({
+            title: "Delete Stock Item?",
+            msg: `Are you sure you want to delete\n"${stockName}"?`,
+            showInput: false,
+            onYes: () => {
+                // Local array se delete
+                stock.splice(activeIdx, 1);
+                
+                // Cloud sync
+                if (typeof db !== 'undefined') {
+                    db.ref('shared_stock_list').set(stock);
+                }
+                
+                // Save and Refresh
+                saveData(); 
+                initApp();
+                
+                // UI Close
+                document.getElementById('inputModalOverlay').style.display = 'none';
+                smartClose(); 
+                
+                // Specific Toast for Stock
+                showToast(`${stockName} Deleted from Stock & Synced ✅`);
+            }
+        });
+    }
 }
 
 
 
 
+
+
 function deleteCat(i) {
+    // Pehle category ka naam nikal lete hain taaki toast mein dikha sakein
+    let catName = cats[i] || "Category";
+
     showCustomModal({
         title: "DELETE CATEGORY?",
-        msg: "Deleting this category will not delete the recipes.",
+        msg: `Are you sure you want to delete \n "${catName}" ?`,
         showInput: false,
         onYes: () => {
+            // Array se delete karne se pehle naam humne upar save kar liya hai
             cats.splice(i, 1);
 
             if (typeof db !== 'undefined') {
@@ -2096,7 +2122,9 @@ function deleteCat(i) {
                 let catSync = (cats.length === 0) ? [] : cats;
                 db.ref('shared_categories').set(catSync)
                   .then(() => {
-                      showToast("Category Deleted Online", "error");
+                      // --- UPDATED TOAST WITH NAME ---
+                      showToast(`${catName} Category Deleted & Synced ✅`);
+
                       if(typeof initApp === "function") initApp();
                   });
             }
