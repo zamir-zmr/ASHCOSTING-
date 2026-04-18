@@ -774,6 +774,8 @@
 // 1. Firebase Configuration
 // 1. Firebase Configuration
 // 1. Firebase Configuration
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyA3bsKfP7CxS0Sb0CY6xu_vFogVcxbJCII",
   authDomain: "ashcostingapp.firebaseapp.com",
@@ -1095,14 +1097,27 @@ DATA</button>
         </div>
     </div>
 
-    <div id="stockViewModal" class="modal-overlay">
-        <div class="input-modal" style="text-align:center;">
-            <img id="stockViewImg" style="width:100%; border-radius:15px; margin-bottom:15px;">
-            <h2 id="stockViewName" style="margin:0;"></h2>
-            <h3 id="stockViewPrice" style="color:var(--accent); margin-bottom:20px;"></h3>
-            <button class="btn-pill" style="width:100%; background:#eee;" onclick="smartClose()">CLOSE</button>
+<div id="stockViewModal" class="modal-overlay" onclick="if(event.target === this) smartClose()">
+    <div class="input-modal" style="text-align:center; max-height: 90vh; overflow-y: auto; padding: 20px;">
+        
+        <div style="background: #f8f9fa; border-radius: 15px; overflow: hidden; margin-bottom: 15px;">
+            <img id="stockViewImg" 
+                 style="width:100%; display: block; object-fit: cover;" 
+                 onerror="this.src='https://via.placeholder.com/300?text=No+Image+Available'">
         </div>
+
+        <h2 id="stockViewName" style="margin:0; font-size: 20px; color: #2d3436;"></h2>
+        
+        <h3 id="stockViewPrice" style="color:var(--accent); margin: 10px 0 20px 0; font-size: 18px;"></h3>
+
+        <button class="btn-pill" 
+                style="width:100%; background:#f1f2f6; border: none; padding: 12px; font-weight: 600; cursor: pointer; border-radius: 12px;" 
+                onclick="smartClose()">
+            CLOSE
+        </button>
     </div>
+</div>
+
     <script>
 // Data load aur default values fix
 
@@ -1121,14 +1136,50 @@ let longPressTimer;
 
 
 
-
 function initApp() {
-    
+    // 1. FIREBASE REAL-TIME SYNC (Zamir & Madam Sync Fix)
+    if (typeof db !== 'undefined') {
+        
+        // STOCK SYNC: Jab bhi Madam add karengi, aapka phone Bina Refresh kiye update hoga
+        db.ref('shared_stock_list').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                stock = data;
+                // Local memory update taaki offline bhi chale
+                localStorage.setItem('stock_list', JSON.stringify(stock));
+                renderStock(); 
+                console.log("Stock updated from Cloud!");
+            }
+        });
+
+        // RECIPES SYNC: Madam recipe banayengi toh aapko turant dikhega
+        db.ref('shared_recipes_list').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                recipes = data;
+                localStorage.setItem('recipes_list', JSON.stringify(recipes));
+                renderRecipes();
+                console.log("Recipes updated from Cloud!");
+            }
+        });
+
+        // CATEGORIES SYNC
+        db.ref('shared_categories').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                cats = data;
+                localStorage.setItem('categories_list', JSON.stringify(cats));
+                renderCatFilters();
+            }
+        });
+    }
+
+    // 2. Initial Renders
     renderCatFilters();
     renderRecipes();
     renderStock();
 
-    // 3. Logo loading logic
+    // 3. Logo loading logic (Aapka original logic)
     const saved = localStorage.getItem('ASH_CUSTOM_LOGO');
     if(saved) {
         const imgEl = document.getElementById('appLogoImg');
@@ -1142,6 +1193,7 @@ function initApp() {
         }
     }
 }
+
 
 
 // Gallery Upload Function
@@ -1171,23 +1223,25 @@ function uploadAppLogo(input) {
     }
 }
 
-        function saveData() { 
-            localStorage.setItem('ASH_R', JSON.stringify(recipes)); 
-            localStorage.setItem('ASH_S', JSON.stringify(stock)); 
-            localStorage.setItem('ASH_C', JSON.stringify(cats)); 
-        }
-        
-        // --- BACKUP & RESTORE LOGIC ---
-// --- UPDATED BACKUP LOGIC (NO IMAGES) ---
+function saveData() { 
+    localStorage.setItem('ASH_R', JSON.stringify(recipes)); 
+    localStorage.setItem('ASH_S', JSON.stringify(stock)); 
+    localStorage.setItem('ASH_C', JSON.stringify(cats)); 
+}
 
+// --- NEW SYNC HELPER FOR CATEGORIES ---
+function syncCatsToCloud() {
+    saveData(); // Local save
+    if (typeof db !== 'undefined') {
+        db.ref('shared_categories').set(cats); // Madam ke phone ke liye
+        console.log("Categories Synced to Cloud ✅");
+    }
+}
 
+/* --- CATEGORY LOGIC --- */
 
-
-        
-
-        /* --- CATEGORY LOGIC --- */
 function renderCatFilters() {
-    // Top bar aur dropdown ka logic (Aapka existing code)
+    // Top bar aur dropdown ka logic
     let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
     cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
     document.getElementById('catFilterBar').innerHTML = html;
@@ -1196,12 +1250,11 @@ function renderCatFilters() {
     cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
     document.getElementById('recipeCatSelect').innerHTML = drop;
 
-    // Category Manager List (Full Row Draggable Design)
+    // Category Manager List
     document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
     <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
         
         <div style="display:flex; align-items:center; flex:1;">
-
             <b class="cat-name-text" style="color:var(--accent)">${c}</b>
         </div>
 
@@ -1212,13 +1265,8 @@ function renderCatFilters() {
         </div>
     </div>`).join('');
 
-
-    // --- YE LINE FIX KAREGI ---
-    // Naya category bante hi Sortable ko re-initialize karega
     setTimeout(initCatSortable, 200); 
 }
-
-// Naya Function: Jo order save karega
 
 function initCatSortable() {
     let el = document.getElementById('catManagerList');
@@ -1228,9 +1276,9 @@ function initCatSortable() {
 
     el.sortableInstance = Sortable.create(el, {
         animation: 150,
-        delay: 500,             // 0.5 second ka long press
-        delayOnTouchOnly: true, // Sirf mobile touch par delay hoga
-        touchStartThreshold: 5, // 5px tak ungli hilegi toh cancel nahi hoga
+        delay: 500,             
+        delayOnTouchOnly: true, 
+        touchStartThreshold: 5, 
         ghostClass: 'sortable-ghost',
         onEnd: function() {
             let newOrder = [];
@@ -1238,71 +1286,58 @@ function initCatSortable() {
                 newOrder.push(item.innerText.trim());
             });
             cats = newOrder;
-            saveData();
-            refreshOtherUI(); // Top bar refresh
-            showToast("Saved");
+            
+            // --- SYNC FIX ---
+            syncCatsToCloud(); // Ab drag karne ke baad Madam ke phone par order change hoga
+            refreshOtherUI(); 
+            showToast("Order Saved & Synced ✅");
         }
     });
 }
 
-
-// Sirf top bar refresh karne ke liye naya function
 function refreshTopFilters() {
     let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
     cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
     document.getElementById('catFilterBar').innerHTML = html;
 }
 
-
 function refreshOtherUI() {
-    // Top bar filters update
     let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
     cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
     document.getElementById('catFilterBar').innerHTML = html;
     
-    // Recipe dropdown update
     let drop = `<option value="">No Category</option>`;
     cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
     document.getElementById('recipeCatSelect').innerHTML = drop;
 }
 
+function filterBy(c) { currentFilter = c; renderRecipes(); renderCatFilters(); }
 
-
-        function filterBy(c) { currentFilter = c; renderRecipes(); renderCatFilters(); }
-        
-        
-        
 function addCategory() {
     let val = document.getElementById('newCatInp').value.trim();
     
-    // 1. Khali input 
     if(!val) {
         showToast("Please enter a category name!", true);
         return;
     }
 
-    // 2. Duplicate 
     let exists = cats.find(c => c.toLowerCase() === val.toLowerCase());
-
     if(exists) {
-        // Agar pehle se hai, toh message dikhao aur wahi ruk jao
-        showToast(`'${val}'  already exists in Category`, true);
+        showToast(`'${val}' already exists!`, true);
         return; 
     }
 
-    // 3. Naya add karo agar upar wali conditions fail ho gayi
     cats.push(val); 
     document.getElementById('newCatInp').value = ''; 
-    saveData(); 
+    
+    // --- SYNC FIX ---
+    syncCatsToCloud(); // Nayi category Madam ko turant dikhegi
+    
     renderCatFilters(); 
     showToast("Category Added Successfully!"); 
 }
 
-
-        
-
-
-        function editCategory(i) {
+function editCategory(i) {
     let oldName = cats[i];
     
     showCustomModal({
@@ -1313,32 +1348,59 @@ function addCategory() {
         onYes: (newName) => {
             let finalName = newName ? newName.trim() : "";
             
-            // 1. Agar naam khali hai ya purana hi hai
             if (!finalName || finalName === oldName) return;
 
-            // 2. Duplicate 
             let exists = cats.find((c, idx) => c.toLowerCase() === finalName.toLowerCase() && idx !== i);
-
             if(exists) {
                 showToast(`'${finalName}' Already Exists!`, true);
-                
-                // --- YEHA BADLAV HAI ---
-                // Pop-up ko khula rakhne ke liye hum function ko phir se call karenge
                 setTimeout(() => editCategory(i), 100); 
                 return; 
             }
 
-            // 3. Save Logic
+            // Sabhi recipes mein category name update karein
             recipes.forEach(r => { if (r.category === oldName) r.category = finalName; });
             cats[i] = finalName; 
-            saveData(); 
+            
+            // --- SYNC FIX ---
+            syncCatsToCloud(); // Rename hote hi Madam ke phone par bhi update hoga
+            if (typeof db !== 'undefined') {
+                db.ref('shared_recipes_list').set(recipes); // Recipes bhi sync karni padegi category rename ke liye
+            }
+
             renderCatFilters(); 
             renderRecipes();
-            showToast("Category Updated!");
+            showToast("Category Updated & Synced!");
         }
     });
 }
 
+// Function for deleting (Aapne deleteCat manga tha pichle message mein)
+
+
+function deleteCat(i) {
+    showCustomModal({
+        title: "DELETE CATEGORY?",
+        msg: "Deleting this category will not delete the recipes.",
+        showInput: false,
+        onYes: () => {
+            cats.splice(i, 1);
+
+            if (typeof db !== 'undefined') {
+                // Last category delete hone par [] bhejien
+                let catSync = (cats.length === 0) ? [] : cats;
+                db.ref('shared_categories').set(catSync)
+                  .then(() => {
+                      showToast("Category Deleted Online", "error");
+                      if(typeof initApp === "function") initApp();
+                  });
+            }
+
+            saveData();
+            if(typeof renderCatFilters === "function") renderCatFilters();
+            if(typeof smartClose === "function") smartClose();
+        }
+    });
+}
 
 
 
@@ -1348,27 +1410,29 @@ function addCategory() {
 
 // 1. Toggle Manage Function - Jo EXIT button aur Manage mode ko handle karta hai
 
+
 function toggleManage() {
     isManage = !isManage;
     const b = document.getElementById('mBtn');
     
-    // UI update
     b.innerText = isManage ? "EXIT" : "MANAGE";
     b.classList.toggle('active', isManage);
     document.getElementById('homeCont').classList.toggle('manage-mode', isManage);
 
-    // Agar EXIT dabaya (isManage false hua), toh screens reset karo
     if(!isManage) {
-        // Sabhi khule huye panels ko hide karo
         document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
-        // Home screen dikhao
         document.getElementById('homeCont').style.display = 'block';
+        
+        // Refresh data to make sure Zamir and Madam are on same page
+        if(typeof initApp === 'function') initApp();
     }
 }
 
 
 
 // 2. Panel Functions - History support ke saath
+
+// --- 1. MODAL & PANEL LOGIC ---
 function openPanel(id) { 
     history.pushState({panel: id}, ""); 
     document.getElementById(id).style.display = 'flex'; 
@@ -1378,36 +1442,34 @@ function closePanel(id) {
     history.back(); 
 }
 
+
 function smartClose() { 
-    history.back(); 
+    if(window.history.state) history.back();
+    else document.querySelectorAll('.panel, .modal-overlay').forEach(el => el.style.display = 'none');
 }
 
-// 3. MOBILE BACK BUTTON FIX (Sabse Important)
+// MOBILE BACK BUTTON FIX
 window.onpopstate = function(event) {
-    // A. Saare Modals aur Panels ko band karo
     document.querySelectorAll('.panel, .modal-overlay').forEach(el => el.style.display = 'none');
     
-    // B. Manage Mode ko RESET karo (Mobile back dabane par EXIT apne aap MANAGE ban jaye)
     isManage = false;
     const b = document.getElementById('mBtn');
-    if(b) {
-        b.innerText = "MANAGE";
-        b.classList.remove('active');
-    }
+    if(b) { b.innerText = "MANAGE"; b.classList.remove('active'); }
+    
     const homeCont = document.getElementById('homeCont');
     if(homeCont) {
         homeCont.classList.remove('manage-mode');
-        homeCont.style.display = 'block'; // Home screen wapas dikhao
+        homeCont.style.display = 'block';
     }
     
-    // C. Agar history mein koi panel hai toh use wapas dikhao
     if (event.state && event.state.panel) {
         let panel = document.getElementById(event.state.panel);
         if (panel) panel.style.display = 'flex';
     }
 };
 
-// 4. Input Modal Functions
+// --- 2. INPUT MODAL LOGIC ---
+
 
 function openInputModal(type, idx = null) {
     mode = type; 
@@ -1417,7 +1479,6 @@ function openInputModal(type, idx = null) {
     document.getElementById('inputModalOverlay').style.display = 'flex';
     document.getElementById('delBtnInModal').style.display = (idx !== null) ? 'block' : 'none';
     
-    // Set Dynamic Titles and visibility
     if (type === 'stock') {
         document.getElementById('inputModalTitle').innerText = "Item Details";
         document.getElementById('priceWrapper').style.display = 'block';
@@ -1430,98 +1491,58 @@ function openInputModal(type, idx = null) {
         document.getElementById('catSelectSection').style.display = 'block';
     }
 
-    // Load Data
     if(idx !== null) {
         let d = (type === 'recipe') ? recipes[idx] : stock[idx];
         document.getElementById('inp1').value = d.name;
         if(type === 'stock') {
             document.getElementById('inp2').value = d.price || "";
-            // Agar pehle se saved base hai toh wo dikhao, nahi toh 1000
             document.getElementById('inpBase').value = d.base || 1000;
         } else {
             document.getElementById('recipeCatSelect').value = d.category || "";
         }
         tempImg = d.img || "";
     } else {
-        // NAYA ITEM BANANE KE LIYE:
         document.getElementById('inp1').value = ""; 
         document.getElementById('inp2').value = ""; 
-        // CHANGE: "" ki jagah "1000" likha taaki user ka kaam asaan ho jaye
-        document.getElementById('inpBase').value = ""; 
+        document.getElementById('inpBase').value = "1000"; 
         tempImg = "";
     }
     updatePreview();
 }
 
-
-
-// 1. Modal band karne ka function
-function closeInputModalDirectly() {
-    // Direct band karne ke liye history back call karein 
-    history.back();
-}
-
-// 2. Data save karne ka main function (SIRF EK RAKHEIN)
-
-
+// --- 3. SUBMIT & FIREBASE SYNC (MAHAM FIX) ---
 function submitInputModal() {
     let name = document.getElementById('inp1').value.trim();
     let priceInput = document.getElementById('inp2').value.trim();
-    let baseInput = document.getElementById('inpBase').value.trim(); // Quantity field
+    let baseInput = document.getElementById('inpBase').value.trim();
 
-    // 1. Name Validation
-    if (!name) {
-        showToast("Please enter a name!", true);
-        return;
-    }
+    if (!name) { showToast("Please enter a name!", true); return; }
 
     if (mode === 'stock') {
-        // 2. Price Validation (Khali nahi hona chahiye)
-        if (priceInput === "" || isNaN(priceInput)) {
-            showToast("Please enter a valid price!", true);
-            return;
-        }
+        if (priceInput === "" || isNaN(priceInput)) { showToast("Enter valid price!", true); return; }
+        if (baseInput === "" || isNaN(baseInput) || parseFloat(baseInput) <= 0) { showToast("Enter valid quantity!", true); return; }
 
-        // 3. Quantity (Base) Validation - NEW
-        // Agar quantity khali hai ya 0 se kam hai
-        if (baseInput === "" || isNaN(baseInput) || parseFloat(baseInput) <= 0) {
-            showToast("Please enter a valid quantity!", true);
-            return;
-        }
-
-        let isDuplicate = stock.some((item, index) => item.name.toLowerCase() === name.toLowerCase() && index !== activeIdx);
-        if (isDuplicate) {
-            showToast("Item name already exists!", true);
-            return;
-        }
-        
-
-let item = {
-    name: name,
-    price: parseFloat(priceInput) || 0,
-    // CHANGE: Dono ko 1000 kar dein Grams system ke liye
-    base: parseFloat(baseInput) || 1000, 
-    total: parseFloat(baseInput) || 1000,
-    img: tempImg
-};
+        let item = {
+            name: name,
+            price: parseFloat(priceInput) || 0,
+            base: parseFloat(baseInput) || 1000, 
+            total: parseFloat(baseInput) || 1000,
+            img: tempImg, 
+            updatedAt: Date.now()
+        };
 
         if (activeIdx !== null) stock[activeIdx] = item;
         else stock.push(item);
         
-        showToast("Item saved successfully");
-    } else {
-        // --- RECIPE SAVING LOGIC ---
-        let cat = document.getElementById('recipeCatSelect').value;
-        if (!cat || cat === "" || cat === "No Category") {
-            showToast("Please select a Category first!", true);
-            return;
+        // ONLINE SYNC - Firebase ko data bhejna
+        if (typeof db !== 'undefined') {
+            db.ref('shared_stock_list').set(stock);
         }
+        showToast("Stock Saved & Synced ✅");
 
-        let isDuplicate = recipes.some((r, index) => r.name.toLowerCase() === name.toLowerCase() && index !== activeIdx);
-        if (isDuplicate) {
-            showToast("Recipe name already exists!", true);
-            return;
-        }
+    } else {
+        let cat = document.getElementById('recipeCatSelect').value;
+        if (!cat || cat === "") { showToast("Select Category!", true); return; }
         
         let recipeData = {
             name: name,
@@ -1530,25 +1551,51 @@ let item = {
             items: (activeIdx !== null) ? (recipes[activeIdx].items || []) : [],
             packaging: (activeIdx !== null) ? (recipes[activeIdx].packaging || 0) : 0,
             effortPct: (activeIdx !== null) ? (recipes[activeIdx].effortPct || 0) : 0,
-            marginPct: (activeIdx !== null) ? (recipes[activeIdx].marginPct || 0) : 0
+            marginPct: (activeIdx !== null) ? (recipes[activeIdx].marginPct || 0) : 0,
+            updatedAt: Date.now()
         };
 
         if (activeIdx !== null) recipes[activeIdx] = recipeData;
         else recipes.push(recipeData);
 
-        showToast("Recipe created successfully");
+        // ONLINE SYNC - Firebase ko data bhejna
+        if (typeof db !== 'undefined') {
+            db.ref('shared_recipes_list').set(recipes);
+        }
+        showToast("Recipe Saved & Synced ✅");
     }
 
+    // Local Storage update
     saveData();     
-    initApp();      
+    renderStock();
+    renderRecipes();
     
     document.getElementById('inputModalOverlay').style.display = 'none';
     if(window.history.state && window.history.state.modal) history.back();
 }
 
+// --- 4. RENDER STOCK ---
 
+// --- 1. RENDER STOCK (MODIFIED) ---
+function renderStock() {
+    const list = document.getElementById('stockList');
+    if(!list) return;
+    
+    list.innerHTML = stock.map((s, i) => `
+        <div class="draggable-item" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee;">
+            <div style="display:flex; align-items:center; flex:1;">
+                <div>
+                    <b style="color:#2d3436; display:block;">${s.name}</b>
+                    <small style="color:#00b894; font-weight:600;">${(s.price || 0).toFixed(3)} OMR / ${s.base || 1000}g</small>
+                </div>
+            </div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="openInputModal('stock', ${i})"></i>
+            </div>
+        </div>`).join('');
+}
 
-
+// --- 2. RENDER RECIPES (MODIFIED) ---
 function renderRecipes() {
     let filtered = (currentFilter === 'ALL') ? recipes : recipes.filter(r => r.category === currentFilter);
     document.getElementById('recipeGrid').innerHTML = filtered.map((r, i) => {
@@ -1568,57 +1615,92 @@ function renderRecipes() {
         </div>`}).join('');
 }
 
-
-
-
-function renderStock() {
-    document.getElementById('stockList').innerHTML = stock.map((s, i) => `
-        <div class="draggable-item" data-name="${s.name}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
-            
-            <div style="display:flex; align-items:center; flex:1;">
-                <div>
-                    <b class="stock-name-text" style="color:var(--accent); display:block;">${s.name}</b>
-                    <small style="color:#666;">${s.price.toFixed(3)} OMR</small>
-                </div>
-            </div>
-
-            <div style="display:flex; gap:18px; align-items:center; padding-right:5px;">
-                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); openInputModal('stock', ${i})"></i>
-            </div>
-            
-        </div>`).join('');
+// --- 3. IMPORTANT: SYNC HELPER (Ye add karna zaroori hai) ---
+// Ye function ensure karega ki jab bhi aap item add karein, wo Firebase par jaye
+function syncAllToCloud() {
+    saveData(); // Pehle mobile mein save karega
+    if (typeof db !== 'undefined') {
+        // Firebase par update bhej raha hai taaki Madam ko bhi dikhe
+        db.ref('shared_stock_list').set(stock);
+        db.ref('shared_recipes_list').set(recipes);
+        console.log("Cloud Sync Done ✅");
+    }
 }
 
-        /* --- CALCULATIONS --- */
-        function openEditor(i) {
-            activeIdx = i; let r = recipes[i];
-            history.pushState({modal: "editor"}, "");
-            document.getElementById('activeTitle').innerText = r.name;
-            document.getElementById('packInp').value = r.packaging || 0;
-            document.getElementById('effInp').value = r.effortPct || 0;
-            document.getElementById('sellInp').value = r.marginPct || 0;
-            document.getElementById('editorPanel').style.display = 'flex';
-            renderTable();
-        }
+// --- 4. FIX FOR ADDING ITEMS ---
+// Aapke addIng function mein ye line add karein (agar pehle se nahi hai)
+function addIng(n, p, b) {
+    let finalBase = b || 1000;
+    
+    // Recipe mein naya item add ho raha hai
+    recipes[activeIdx].items.push({ 
+        name: n, 
+        price: p, 
+        total: finalBase, 
+        used: 0 
+    });
+
+    // UI saaf karo
+    let sInp = document.querySelector('#editorPanel input[oninput*="showSuggest"]');
+    if(sInp) sInp.value = '';
+    document.getElementById('suggestions').innerHTML = ''; 
+
+    // FIREBASE UPDATE - Ye sabse zaroori hai!
+    syncAllToCloud(); 
+    
+    renderTable(); 
+}
+
+
+/* --- CALCULATIONS --- */
+function openEditor(i) {
+    activeIdx = i; // --- 1. RENDER STOCK (MODIFIED) ---
+
+
+
+
+
+
+
+
+// --- 2. RENDER RECIPES (MODIFIED) ---
+
+
+// --- 3. IMPORTANT: SYNC HELPER (Ye add karna zaroori hai) ---
+// Ye function ensure karega ki jab bhi aap item add karein, wo Firebase par jaye
+
+
+// --- 4. FIX FOR ADDING ITEMS ---
+// Aapke addIng function mein ye line add karein (agar pehle se nahi hai)
+
+
+
+let r = recipes[i];
+    history.pushState({modal: "editor"}, "");
+    document.getElementById('activeTitle').innerText = r.name;
+    document.getElementById('packInp').value = r.packaging || 0;
+    document.getElementById('effInp').value = r.effortPct || 0;
+    document.getElementById('sellInp').value = r.marginPct || 0;
+    document.getElementById('editorPanel').style.display = 'flex';
+    renderTable();
+}
         
 function renderTable() {
     let r = recipes[activeIdx];
     let html = "";
 
     (r.items || []).forEach((it, i) => {
-        // Stock se latest data dhundna
         let latestItem = stock.find(s => s.name.trim().toLowerCase() === it.name.trim().toLowerCase());
         
         if(latestItem) {
             it.price = latestItem.price;
-            // CHANGE: Fallback changed from 1000 to 1
             it.total = latestItem.base || latestItem.total || 1000;
         }
 
         html += `
         <div class="row-item" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1px solid #f0f0f0; border-left: 4px solid #00D2D3; border-radius: 6px; box-shadow: none;">
             
-            <div onclick="recipes[activeIdx].items.splice(${i},1); renderTable()" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
+            <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             
             <div style="padding-left: 6px; border-right: 1px solid #eee; overflow: hidden;">
                 <input type="text" value="${it.name}" oninput="upd(${i},'name',this.value)" style="width: 100%; font-size: 12px; border:none; background:transparent; font-weight: 600; color: #2d3436; outline: none; height: 24px;">
@@ -1642,67 +1724,48 @@ function renderTable() {
     calcTotal();
 }
 
-
-// Ye naya function apne code mein niche paste kar dein
 function initDragLogic() {
     const el = document.getElementById('ingredientList');
-    
-    // Purane instance ko khatam karke naya banata hai
     if (window.listSorter) window.listSorter.destroy();
 
     window.listSorter = Sortable.create(el, {
         animation: 150,
-        delay: 400, // 0.4 second long press karein phir drag karein
+        delay: 400,
         delayOnTouchOnly: true,
         onEnd: function (evt) {
             let items = recipes[activeIdx].items;
-            // Array mein item ki jagah badalna
             const movedItem = items.splice(evt.oldIndex, 1)[0];
             items.splice(evt.newIndex, 0, movedItem);
             
             saveData();
-            // Sirf calculation update karein, pura table nahi warna focus bigad jayega
+            syncRecipeToCloud(); 
             calcTotal(); 
         }
     });
 }
 
-
-
-
-
-        
-        
-        
-
-        function upd(i, k, v) { 
+function upd(i, k, v) { 
     let recipe = recipes[activeIdx];
     recipe.items[i][k] = (k === 'name') ? v : parseFloat(v) || 0; 
 
-    // Sirf us row ki COST ko update karein (taaki keyboard na band ho)
     let item = recipe.items[i];
     let rowCost = (item.price / item.total) * item.used || 0;
     
-    // Row ke cost display ko live update karna
     let rows = document.querySelectorAll('#ingredientList .row-item');
     if(rows[i]) {
         rows[i].querySelector('b').innerText = rowCost.toFixed(3);
     }
 
-    // Neeche ka Grand Total update karein
     calcTotal(); 
 }
+
 function calcTotal() {
     let r = recipes[activeIdx];
     let recipeT = 0;
     
     (r.items || []).forEach(it => {
-        // Stock material se latest base dhundna
         let stockItem = stock.find(s => s.name === it.name);
-        
-        // CHANGE: Fallback changed from 1000 to 1
         let currentBase = (stockItem && stockItem.base) ? stockItem.base : (it.total || 1000);
-        
         recipeT += (it.price / currentBase) * it.used || 0;
     });
     
@@ -1718,7 +1781,9 @@ function calcTotal() {
     document.getElementById('allTotalDisplay').innerText = subTotal.toFixed(3);
     document.getElementById('grandTotal').innerText = final.toFixed(3) + " OMR";
     
-    r.packaging = pack; r.effortPct = effP; r.marginPct = sellP;
+    r.packaging = pack; 
+    r.effortPct = effP; 
+    r.marginPct = sellP;
 }
 
 function showSuggest(q) {
@@ -1730,45 +1795,71 @@ function showSuggest(q) {
     let fits = stock.filter(s => s.name.toLowerCase().includes(q.toLowerCase()));
     
     document.getElementById('suggestions').innerHTML = fits.map(f => {
-        // CHANGE: Default base changed from 1000 to 1
         let b = f.base || 1000; 
         
+        // onclick="addIng(...)" ko hum yahan handle karenge
         return `
             <div style="padding:12px; border-bottom:1px solid #eee; font-weight:bold; cursor:pointer;" 
-                 onclick="addIng('${f.name}', ${f.price}, ${b})"> 
+                 onclick="addIng('${f.name.replace(/'/g, "\\'")}', ${f.price}, ${b})"> 
                 ${f.name} 
                 <span style="float:right; color:var(--primary)">
-                    ${f.price.toFixed(3)} OMR / ${b} G
+                    ${f.price.toFixed(3)} OMR / ${b}g
                 </span>
             </div>`;
     }).join('');
 }
 
+// --- YE FUNCTION MISSING THA ---
+function addIng(name, price, base) {
+    if (activeIdx === null || !recipes[activeIdx]) {
+        showToast("Please open a recipe first!", true);
+        return;
+    }
 
-function addIng(n, p, b) {
-    // b wo gram hai jo aapne stock mein save kiya (e.g. 500)
-    // Agar b nahi mil raha toh default 1000
-    let finalBase = b || 1000;
-
-    recipes[activeIdx].items.push({ 
-        name: n, 
-        price: p, 
-        total: finalBase, // Ab ye hamesha 1000 nahi hoga!
-        used: 0 
+    // 1. Recipe ke andar item push karein
+    if (!recipes[activeIdx].items) recipes[activeIdx].items = [];
+    
+    recipes[activeIdx].items.push({
+        name: name,
+        price: parseFloat(price) || 0,
+        base: parseFloat(base) || 1000,
+        used: 0 // Shuruat mein 0 rahega
     });
 
-    // Search box saaf karo
-    let sInp = document.querySelector('#editorPanel input[oninput*="showSuggest"]');
+    // 2. Input saaf karein aur suggestions band karein
+    const sInp = document.querySelector('input[oninput*="showSuggest"]');
     if(sInp) sInp.value = '';
-    
-    document.getElementById('suggestions').innerHTML = ''; 
+    document.getElementById('suggestions').innerHTML = '';
+
+    // 3. FIREBASE & LOCAL SYNC
+    saveData(); 
+    if (typeof db !== 'undefined') {
+        db.ref('shared_recipes_list').set(recipes);
+    }
+
+    // 4. UI UPDATE
     renderTable(); 
+    showToast("Added: " + name);
 }
 
-        
-        
-        function saveAndExit() { saveData(); smartClose(); }
-        function clearPhoto() { tempImg = ''; updatePreview(); }
+
+
+// Naya sync helper function jo maine add kiya hai cloud sync ke liye
+function syncRecipeToCloud() {
+    saveData();
+    if (typeof db !== 'undefined') {
+        db.ref('shared_recipes_list').set(recipes);
+    }
+}
+
+function saveAndExit() { 
+    syncRecipeToCloud(); 
+    smartClose(); 
+}
+
+function clearPhoto() { tempImg = ''; updatePreview(); }
+
+
 
         /* --- IMAGE & LONG PRESS --- */
         
@@ -1846,12 +1937,22 @@ function startLongPress(i) {
     }, 600);
 }
 
-        function cancelLongPress() { clearTimeout(longPressTimer); }
-        function handleDeleteAction() {
 
-}
+function cancelLongPress() { clearTimeout(longPressTimer); }
+
+
+
+
+
+
+
+
+
+// Ye line batati hai ki jab "OK" button dabega tab confirm logic chalna chahiye
+
+
         
-        let confirmCallback = null;
+let confirmCallback = null;
 
 // 1. Modal dikhane ka function
 function showCustomModal({title, msg, showInput, val, onYes}) {
@@ -1896,38 +1997,65 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 4. Delete Function (Fixed Hindi Version)
+
+
+
+
 function handleDeleteAction() {
     showCustomModal({
-        title: "Deletion Confirmation",
-        msg: "Are you sure you want to delete it permanently?",
+        title: "Delete Permanently?",
+        msg: "This action will remove the item for everyone (Zamir & Madam).",
         showInput: false,
         onYes: () => {
-            // Asli delete yahan hota hai
-            if(mode === 'recipe') recipes.splice(activeIdx, 1);
-            else stock.splice(activeIdx, 1);
+            // 1. Local Array se delete karein
+            if(mode === 'recipe') {
+                recipes.splice(activeIdx, 1);
+                // --- CLOUD SYNC ---
+                if (typeof db !== 'undefined') db.ref('shared_recipes_list').set(recipes);
+            } else {
+                stock.splice(activeIdx, 1);
+                // --- CLOUD SYNC ---
+                if (typeof db !== 'undefined') db.ref('shared_stock_list').set(stock);
+            }
             
+            // 2. Local Storage update karein
             saveData(); 
+            
+            // 3. UI Update karein (Madam ke phone par automatic ho jayega agar initApp mein .on listener hai)
             initApp();
             
             // Modal band karein
             document.getElementById('inputModalOverlay').style.display = 'none';
-            // Wapas list par jayein
             smartClose(); 
+            showToast("Deleted & Synced Online ✅");
         }
     });
 }
 
 
 
+
 function deleteCat(i) {
     showCustomModal({
         title: "DELETE CATEGORY?",
-        msg: "Deleting this category will not delete the recipes, but will remove their category tag.",
+        msg: "Deleting this category will not delete the recipes.",
         showInput: false,
         onYes: () => {
             cats.splice(i, 1);
+
+            if (typeof db !== 'undefined') {
+                // Last category delete hone par [] bhejien
+                let catSync = (cats.length === 0) ? [] : cats;
+                db.ref('shared_categories').set(catSync)
+                  .then(() => {
+                      showToast("Category Deleted Online", "error");
+                      if(typeof initApp === "function") initApp();
+                  });
+            }
+
             saveData();
-            renderCatFilters();
+            if(typeof renderCatFilters === "function") renderCatFilters();
+            if(typeof smartClose === "function") smartClose();
         }
     });
 }
@@ -2285,24 +2413,67 @@ function processSmartAdd() {
         
         let decoded = JSON.parse(rawCode);
         let addedLog = [];
+        let hasNewData = false;
         
-        if(decoded.s) decoded.s.forEach(item => {
-            if(!stock.some(s => s.name.toLowerCase() === item.name.toLowerCase())) { stock.push(item); addedLog.push("📦 Item: " + item.name); }
-        });
-        if(decoded.r) decoded.r.forEach(rec => {
-            if(!recipes.some(r => r.name.toLowerCase() === rec.name.toLowerCase())) { recipes.push(rec); addedLog.push("📖 Recipe: " + rec.name); }
-        });
-        if(decoded.c) decoded.c.forEach(newCat => {
-            if(!cats.includes(newCat)) { cats.push(newCat); addedLog.push("📁 Category: " + newCat); }
-        });
+        // 1. STOCK ITEMS CHECK & ADD
+        if(decoded.s) {
+            decoded.s.forEach(item => {
+                if(!stock.some(s => s.name.toLowerCase() === item.name.toLowerCase())) { 
+                    stock.push(item); 
+                    addedLog.push("📦 Item: " + item.name);
+                    hasNewData = true;
+                }
+            });
+        }
 
-        if(addedLog.length > 0) {
+        // 2. RECIPES CHECK & ADD
+        if(decoded.r) {
+            decoded.r.forEach(rec => {
+                if(!recipes.some(r => r.name.toLowerCase() === rec.name.toLowerCase())) { 
+                    recipes.push(rec); 
+                    addedLog.push("📖 Recipe: " + rec.name);
+                    hasNewData = true;
+                }
+            });
+        }
+
+        // 3. CATEGORIES CHECK & ADD
+        if(decoded.c) {
+            decoded.c.forEach(newCat => {
+                if(!cats.includes(newCat)) { 
+                    cats.push(newCat); 
+                    addedLog.push("📁 Category: " + newCat);
+                    hasNewData = true;
+                }
+            });
+        }
+
+        if(hasNewData) {
+            // A. LOCAL STORAGE SAVE
             saveData();
+
+            // B. FIREBASE SYNC (Zaroori Fix)
+            // Isse data Online jayega aur Madam ke phone par turant dikhega
+            if (typeof db !== 'undefined') {
+                db.ref('shared_stock_list').set(stock);
+                db.ref('shared_recipes_list').set(recipes);
+                db.ref('shared_categories').set(cats);
+                console.log("JSON Data Synced to Cloud ✅");
+            }
+
+            // C. UI REFRESH
             if(typeof initApp === "function") initApp(); 
+            
             showImportSummary(addedLog);
             inputArea.value = ""; 
-        } else { showToast("All items already exist!", true); }
-    } catch(err) { showToast("Invalid Format!", true); }
+            showToast("Sync Successful! ✅");
+        } else { 
+            showToast("All items already exist!", true); 
+        }
+    } catch(err) { 
+        console.error(err);
+        showToast("Invalid JSON Format!", true); 
+    }
 }
 
 
@@ -2453,7 +2624,7 @@ window.addEventListener('click', (e) => {
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
               
               <h2 
-            style="font-size: 5px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">v1</span>
+            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">version 4</span>
             </h2>
             </span>
             
