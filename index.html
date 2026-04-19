@@ -1506,25 +1506,51 @@ function submitInputModal() {
         if (priceInput === "" || isNaN(priceInput)) { showToast("Enter valid price!", true); return; }
         if (baseInput === "" || isNaN(baseInput) || parseFloat(baseInput) <= 0) { showToast("Enter valid quantity!", true); return; }
 
+        let nPrice = parseFloat(priceInput) || 0;
+        let nBase = parseFloat(baseInput) || 1000;
+
         let item = {
             name: name,
-            price: parseFloat(priceInput) || 0,
-            base: parseFloat(baseInput) || 1000, 
-            total: parseFloat(baseInput) || 1000,
+            price: nPrice,
+            base: nBase, 
+            total: nBase,
             img: tempImg, 
             updatedAt: Date.now()
         };
 
-        if (activeIdx !== null) stock[activeIdx] = item;
-        else stock.push(item);
+        // --- AUTO UPDATE LOGIC IN ALL RECIPES ---
+        if (activeIdx !== null && stock[activeIdx]) {
+            let oldName = stock[activeIdx].name;
+            
+            // Sari recipes ko scan karein aur jahan matching item mile wahan update karein
+            recipes.forEach(recipe => {
+                if (recipe.items && Array.isArray(recipe.items)) {
+                    recipe.items.forEach(ing => {
+                        if (ing.name === oldName) {
+                            ing.name = name;      // Agar naam badla toh update karein
+                            ing.price = nPrice;    // Nayi price sync karein
+                            ing.base = nBase;      // Naya base quantity sync karein
+                        }
+                    });
+                }
+            });
+
+            // Recipes ko bhi Cloud par sync karein kyunki data change hua hai
+            if (typeof db !== 'undefined') {
+                db.ref('shared_recipes_list').set(recipes);
+            }
+            
+            stock[activeIdx] = item;
+        } else {
+            stock.push(item);
+        }
         
-        // ONLINE SYNC - Firebase ko data bhejna
+        // ONLINE SYNC - Stock list update
         if (typeof db !== 'undefined') {
             db.ref('shared_stock_list').set(stock);
         }
         
-        // --- UPDATED TOAST WITH NAME ---
-        showToast(`${name} Saved & Synced`);
+        showToast(`${name} Updated in All Recipes`);
 
     } else {
         let cat = document.getElementById('recipeCatSelect').value;
@@ -1544,16 +1570,15 @@ function submitInputModal() {
         if (activeIdx !== null) recipes[activeIdx] = recipeData;
         else recipes.push(recipeData);
 
-        // ONLINE SYNC - Firebase ko data bhejna
+        // ONLINE SYNC - Recipe list update
         if (typeof db !== 'undefined') {
             db.ref('shared_recipes_list').set(recipes);
         }
         
-        // --- UPDATED TOAST WITH NAME ---
         showToast(`${name} Recipe Saved & Synced`);
     }
 
-    // Local Storage update
+    // Local Storage update aur UI Refresh
     saveData();     
     renderStock();
     renderRecipes();
@@ -1561,6 +1586,7 @@ function submitInputModal() {
     document.getElementById('inputModalOverlay').style.display = 'none';
     if(window.history.state && window.history.state.modal) history.back();
 }
+
 
 // --- 4. RENDER STOCK ---
 
