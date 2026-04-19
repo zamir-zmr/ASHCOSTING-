@@ -743,7 +743,46 @@
     background: #f8f8f8 !important;
     border: 1.5px solid #00D2D3 !important;
 }
+/* Modal Entrance Animation */
+@keyframes modalPop {
+    0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
 
+#stockViewModal .input-modal {
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 30px; /* More professional rounded corners */
+}
+
+/* Blur Background Effect */
+
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    z-index: 5000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Flight image jo animation ke waqt dikhegi */
+.flight-img {
+    position: fixed;
+    z-index: 5001;
+    object-fit: cover;
+    transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 14px;
+}
 
 </style>
 
@@ -1957,30 +1996,69 @@ function closePanel(id) {
 }
 
 // Long Press Functions (Wahi purana logic bina kisi reduction ke)
+
+
+const LONG_PRESS_TIME = 800; // 0.8 second - Aap ise apne hisab se badha sakte hain
+
 function startLongPress(i) {
     clearTimeout(longPressTimer);
+    
+    // 1. Visual Feedback: Card ko halka sa daba hua (shrink) dikhayein
+    const card = document.getElementById(`stock-card-${i}`);
+    if(card) {
+        card.style.transform = "scale(0.95)";
+        card.style.transition = "transform 0.8s ease"; // Slow shrink
+    }
+
     longPressTimer = setTimeout(() => {
         let s = stock[i];
         if(!s) return;
+
+        // Elements fetch karein
         const nameEl = document.getElementById('stockViewName');
         const priceEl = document.getElementById('stockViewPrice');
         const imgEl = document.getElementById('stockViewImg');
         const modalEl = document.getElementById('stockViewModal');
 
+        // Data fill karein
         if(nameEl) nameEl.innerText = s.name || "No Name";
         if(priceEl) priceEl.innerText = (s.price ? s.price.toFixed(3) : "0.000") + " OMR";
-        if(imgEl && s.img) { imgEl.src = s.img; imgEl.style.display = 'block'; }
-        else if(imgEl) { imgEl.style.display = 'none'; }
+        
+        if(imgEl) {
+            imgEl.src = s.img || 'https://via.placeholder.com/300?text=No+Image+Available';
+            imgEl.style.display = 'block';
+        }
 
+        // Modal dikhayein
         if(modalEl) {
             history.pushState({modal: "view"}, "");
             modalEl.style.display = 'flex';
+            modalEl.style.opacity = '1';
         }
+
+        // Card ko wapas normal karein modal khulne par
+        if(card) card.style.transform = "scale(1)";
+
         if(navigator.vibrate) navigator.vibrate(60);
-    }, 600);
+    }, LONG_PRESS_TIME);
 }
 
-function cancelLongPress() { clearTimeout(longPressTimer); }
+function cancelLongPress() {
+    // 1. Timer ko turant stop karein
+    clearTimeout(longPressTimer);
+    
+    // 2. Card ka scale reset karein (Smoothly wapas normal size)
+    const allCards = document.querySelectorAll('.draggable-item');
+    allCards.forEach(card => {
+        card.style.transform = "scale(1)"; 
+        card.style.transition = "transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)"; 
+    });
+
+    // 3. State management
+    if (typeof isLongPressActive !== 'undefined') {
+        isLongPressActive = false;
+    }
+}
 
 
 
