@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -744,149 +744,6 @@
     border: 1.5px solid #00D2D3 !important;
 }
 
-/* Normal Grid (2 Columns) */
-
-/* --- Base Grid View (2 Columns) --- */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px; /* Gap kam kiya */
-    padding: 8px;
-}
-
-/* --- List View Mode (Active) --- */
-.list-view-active {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important; /* Items ke beech ka gap kam kiya */
-    padding: 8px !important;
-    animation: fadeIn 0.4s ease;
-}
-
-.list-view-active .card {
-    flex-direction: row !important; /* Image left, Text right */
-    height: 70px !important; /* List card ki height kam ki */
-    align-items: center;
-    padding: 0 8px;
-}
-
-.list-view-active .card-img-box {
-    width: 60px !important; /* Image box size kam kiya */
-    height: 60px !important;
-    min-width: 60px;
-    border-radius: 8px;
-}
-
-.list-view-active .card-info {
-    padding: 0 10px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* --- Premium Toggle Button --- */
-.toggle-btn-premium {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    width: 42px; /* Thoda compact size */
-    height: 42px;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    outline: none;
-    margin: 5px 10px; /* Header spacing */
-}
-
-.toggle-btn-premium:active {
-    transform: scale(0.9);
-    background: #f8fafc;
-}
-
-/* --- Animations & Icons --- */
-.icon-rotate {
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.rotate-active {
-    transform: rotate(180deg);
-}
-
-#viewIcon {
-    font-size: 18px;
-    color: #475569;
-    transition: color 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-
-
-
-/* Floating Button Style */
-
-.floating-toggle {
-    position: fixed;
-    /* 90px se badha kar 110px kar diya taaki thoda niche aa jaye */
-    top: 140px;      
-    right: 15px;
-    z-index: 1000;
-    
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    outline: none;
-    margin: 0;
-    padding: 0;
-}
-
-/* Icon Animation */
-.icon-rotate {
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-}
-
-.rotate-active {
-    transform: rotate(180deg);
-}
-
-#viewIcon {
-    font-size: 16px;
-    color: #475569;
-}
-
-/* List View Active (Zero Gap Logic) */
-.list-view-active {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 4px !important; /* Items ke beech ka gap */
-    padding: 5px !important;
-}
-
-.list-view-active .card {
-    flex-direction: row !important;
-    height: 70px !important;
-    margin: 1px 0 !important; /* Top/Bottom margin 1px */
-    align-items: center;
-}
-
 
 </style>
 
@@ -1109,25 +966,11 @@ DATA</button>
         
     </div>
 
+    <div class="cat-filter-wrapper" id="catFilterBar"></div>
 
-
-
-
-
-<div class="cat-filter-wrapper" id="catFilterBar"></div>
-
-<div class="container" id="homeCont">
-    <button id="viewToggleBtn" onclick="toggleView()" class="toggle-btn-premium floating-toggle">
-        <div id="iconWrapper" class="icon-rotate">
-            <i id="viewIcon" class="fas fa-th-large"></i>
-        </div>
-    </button>
-
-    <div id="recipeGrid" class="grid"></div>
-</div>
-
-
-
+    <div class="container" id="homeCont">
+        <div id="recipeGrid" class="grid"></div>
+    </div>
     
 <div id="inputModalOverlay" class="modal-overlay">
     <div class="input-modal">
@@ -1172,26 +1015,17 @@ DATA</button>
 </div>
 
 
-<div id="stockPanel" class="panel">
-    <div class="panel-nav" style="padding: 10px 15px;">STOCK MATERIALS <span onclick="closePanel('stockPanel')">✕</span></div>
-    
-    <div style="padding: 5px 15px 0 15px;">
-        <div style="position: relative; display: flex; align-items: center;">
-            <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
-            <input type="text" id="stockSearchInput" placeholder="Search materials..." 
-                onkeyup="filterStockItems()"
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px; outline: none;">
+    <div id="stockPanel" class="panel">
+        <div class="panel-nav">STOCK MATERIALS <span onclick="closePanel('stockPanel')">✕</span>
+        </div>
+        
+        <button class="btn-pill" style="width:100%; background:var(--primary); color:white; padding:15px; margin-bottom:15px;" onclick="openInputModal('stock')">+ ADD MATERIAL</button>
+        
+        <div class="panel-content" style="padding:15px; overflow-y:auto; flex:1;">
+            
+            <div id="stockList"></div>
         </div>
     </div>
-
-    <button class="btn-pill" style="width:calc(100% - 30px); background:var(--primary); color:white; padding: 10px; margin: 8px 15px 0 15px; font-size: 12px; border: none; border-radius: 10px;" onclick="openInputModal('stock')">
-        <i class="fas fa-plus"></i> ADD MATERIAL
-    </button>
-    
-    <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
-        <div id="stockList"></div>
-    </div>
-</div>
 
 <div id="catPanel" class="panel">
     <div class="panel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')">✕</span></div>
@@ -1661,7 +1495,6 @@ function openInputModal(type, idx = null) {
 
 // --- 3. SUBMIT & FIREBASE SYNC (MAHAM FIX) ---
 
-
 function submitInputModal() {
     let name = document.getElementById('inp1').value.trim();
     let priceInput = document.getElementById('inp2').value.trim();
@@ -1681,35 +1514,42 @@ function submitInputModal() {
             price: nPrice,
             base: nBase, 
             total: nBase,
-            img: tempImg, // Photo yahan save ho rahi hai
+            img: tempImg, 
             updatedAt: Date.now()
         };
 
+        // --- AUTO UPDATE LOGIC IN ALL RECIPES ---
         if (activeIdx !== null && stock[activeIdx]) {
             let oldName = stock[activeIdx].name;
+            
+            // Sari recipes ko scan karein aur jahan matching item mile wahan update karein
             recipes.forEach(recipe => {
                 if (recipe.items && Array.isArray(recipe.items)) {
                     recipe.items.forEach(ing => {
                         if (ing.name === oldName) {
-                            ing.name = name;
-                            ing.price = nPrice;
-                            ing.base = nBase;
+                            ing.name = name;      // Agar naam badla toh update karein
+                            ing.price = nPrice;    // Nayi price sync karein
+                            ing.base = nBase;      // Naya base quantity sync karein
                         }
                     });
                 }
             });
 
+            // Recipes ko bhi Cloud par sync karein kyunki data change hua hai
             if (typeof db !== 'undefined') {
                 db.ref('shared_recipes_list').set(recipes);
             }
+            
             stock[activeIdx] = item;
         } else {
             stock.push(item);
         }
         
+        // ONLINE SYNC - Stock list update
         if (typeof db !== 'undefined') {
             db.ref('shared_stock_list').set(stock);
         }
+        
         showToast(`${name} Updated in All Recipes`);
 
     } else {
@@ -1730,18 +1570,17 @@ function submitInputModal() {
         if (activeIdx !== null) recipes[activeIdx] = recipeData;
         else recipes.push(recipeData);
 
+        // ONLINE SYNC - Recipe list update
         if (typeof db !== 'undefined') {
             db.ref('shared_recipes_list').set(recipes);
         }
+        
         showToast(`${name} Recipe Saved & Synced`);
     }
 
-    // --- SEARCH RESET LOGIC ---
-    const sInput = document.getElementById('stockSearchInput');
-    if(sInput) sInput.value = ""; 
-
+    // Local Storage update aur UI Refresh
     saveData();     
-    renderStock(); // Ab ye photo ke sath dikhayega
+    renderStock();
     renderRecipes();
     
     document.getElementById('inputModalOverlay').style.display = 'none';
@@ -1754,64 +1593,24 @@ function submitInputModal() {
 // --- 1. RENDER STOCK (MODIFIED) ---
 
 // --- 2. RENDER RECIPES (MODIFIED) ---
-// 1. First, define this variable at the top of your script area
-let isListView = false; 
-
-function toggleView() {
-    const icon = document.getElementById('viewIcon');
-    const wrapper = document.getElementById('iconWrapper');
-    
-    // 1. Rotate Animation
-    wrapper.classList.toggle('rotate-active');
-    
-    // 2. State Change
-    isListView = !isListView;
-    
-    // 3. Icon Switch
-    if (isListView) {
-        icon.className = 'fas fa-list-ul'; // List Icon
-        icon.style.color = '#3b82f6';      // Active color
-    } else {
-        icon.className = 'fas fa-th-large'; // Grid Icon
-        icon.style.color = '#475569';
-    }
-    
-    // 4. Render Updates
-    renderRecipes();
-}
-
-
-
-
 function renderRecipes() {
     let filtered = (currentFilter === 'ALL') ? recipes : recipes.filter(r => r.category === currentFilter);
-    const gridDiv = document.getElementById('recipeGrid');
-
-    if (isListView) {
-        gridDiv.classList.add('list-view-active');
-    } else {
-        gridDiv.classList.remove('list-view-active');
-    }
-
-    // .join('') ke sath map ke andar ka sara space khatam kar diya gaya hai
-    gridDiv.innerHTML = filtered.map((r, i) => {
+    document.getElementById('recipeGrid').innerHTML = filtered.map((r, i) => {
         let realIdx = recipes.indexOf(r);
-        let iconSize = isListView ? '30px' : '60px'; // Icon size thoda optimize kiya
         
         let photoContent = r.img 
-            ? `<img src="${r.img}" style="display:block; width:100%; height:100%; object-fit:cover;" onerror="this.style.opacity='0'">` 
-            : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f1f2f6; color:#dfe6e9; line-height:1;">🖼️</div>`;
+            ? `<img src="${r.img}" onerror="this.style.opacity='0'">` 
+            : `<div style="font-size: 75px; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; background: #f1f2f6; color: #dfe6e9;">🖼️</div>`;
 
-        // Return ke baad backticks ke beech ka gap bilkul khatam kar diya hai
-        return `<div class="card" onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})" style="margin:0;"><div class="card-img-box" style="margin:0; padding:0; display:flex; overflow:hidden;">${photoContent}</div><div class="card-info" style="margin:0; padding:5px 10px; display:flex; flex-direction:column; justify-content:center;"><span class="card-cat-tag" style="margin:0; line-height:1;">${r.category || 'NO CAT'}</span><b style="margin:0; line-height:1.2;">${r.name}</b></div></div>`;
-    }).join('');
+        return `
+        <div class="card" onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
+            <div class="card-img-box">${photoContent}</div>
+            <div class="card-info">
+                <span class="card-cat-tag">${r.category || 'NO CAT'}</span>
+                <b>${r.name}</b>
+            </div>
+        </div>`}).join('');
 }
-
-// 2. This is the function for your button click
-
-
-// 3. Your updated renderRecipes function
-
 
 // --- 3. IMPORTANT: SYNC HELPER (Ye add karna zaroori hai) ---
 // Ye function ensure karega ki jab bhi aap item add karein, wo Firebase par jaye
@@ -2057,108 +1856,41 @@ function saveAndExit() {
 
 function clearPhoto() { tempImg = ''; updatePreview(); }
 
-
-
-
-
+function renderStock() {
+    const list = document.getElementById('stockList');
+    if(!list) return;
+    
+    list.innerHTML = stock.map((s, i) => `
+        <div class="draggable-item" 
+             style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; user-select:none; -webkit-user-select:none;"
+             ontouchstart="startLongPress(${i})" 
+             ontouchend="cancelLongPress()" 
+             ontouchmove="cancelLongPress()"
+             onmousedown="startLongPress(${i})" 
+             onmouseup="cancelLongPress()"
+             onmouseleave="cancelLongPress()">
+             
+            <div style="display:flex; align-items:center; flex:1;">
+                <div>
+                    <b style="color:#2d3436; display:block;">${s.name}</b>
+                    <small style="color:#00b894; font-weight:600;">${(s.price || 0).toFixed(3)} OMR / ${s.base || 1000}g</small>
+                </div>
+            </div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); openInputModal('stock', ${i})"></i>
+            </div>
+        </div>`).join('');
+}
 
 // Ye functions ensure karte hain ki popup trigger ho
 
 
-
-
-
-
-
-
-
-
-// Real-time Search Logic
-// 1. Search filter function
-function filterStockItems() {
-    const query = document.getElementById('stockSearchInput').value.toLowerCase();
-    renderStock(query);
-}
-
-// 2. Search clear karne ka function
-function clearStockSearch() {
-    const searchInput = document.getElementById('stockSearchInput');
-    if (searchInput) {
-        searchInput.value = ""; // Text box khali karein
-    }
-    renderStock(); // Puri list wapas dikhayein
-}
-
-// 3. Render function (with original index support)
-
-function renderStock(searchQuery = "") {
-    const list = document.getElementById('stockList');
-    if(!list) return;
-    
-    const filteredStock = stock.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    list.innerHTML = filteredStock.map((s) => {
-        const i = stock.indexOf(s);
-        
-        // Photo check: Agar photo hai to wo dikhao, nahi to icon
-        const itemImg = s.img ? 
-            `<img src="${s.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">` : 
-            `<i class="fas fa-box" style="color: var(--primary); font-size: 18px;"></i>`;
-
-        return `
-        <div class="draggable-item" 
-             style="display:flex; justify-content:space-between; padding:12px; background: #ffffff; border-radius: 20px; margin-bottom:12px; align-items:center; 
-                    border: 1.5px solid #f1f5f9; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
-             ontouchstart="startLongPress(${i})" 
-             ontouchend="cancelLongPress()" 
-             onmousedown="startLongPress(${i})" 
-             onmouseup="cancelLongPress()">
-             
-            <div style="display:flex; align-items:center; flex:1;">
-                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #e2e8f0; overflow: hidden;">
-                    ${itemImg}
-                </div>
-                
-                <div>
-                    <b style="color:#0f172a; display:block; font-size:15px; font-weight: 800; letter-spacing: -0.3px;">${s.name}</b>
-                    <div style="display: flex; align-items: center; margin-top: 3px;">
-                        <span style="color: #0d9488; font-size: 11px; font-weight: 700; background: #f0fdfa; padding: 2px 6px; border-radius: 6px;">
-                            ${(s.price || 0).toFixed(3)} OMR
-                        </span>
-                        <span style="margin: 0 6px; color: #cbd5e1; font-size: 10px;">•</span>
-                        <small style="color: #64748b; font-size: 11px; font-weight: 600;">${s.base || 1000}g</small>
-                    </div>
-                </div>
-            </div>
-            
-            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
-                <i class="fas fa-pen-to-square" style="color: #475569; font-size: 14px;"></i>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-// 4. Naya function jo Edit click hone par search clear karega
-function handleEditClick(index) {
-    event.stopPropagation();
-    clearStockSearch(); // Pehle search clear hoga
-    openInputModal('stock', index); // Phir edit modal khulega
-}
-
-// 5. Close Panel function mein bhi add karein
-function closePanel(id) {
-    document.getElementById(id).style.display = 'none';
-    if(id === 'stockPanel') {
-        clearStockSearch(); // Panel band hote hi search clear
-    }
-}
-
-// Long Press Functions (Wahi purana logic bina kisi reduction ke)
 function startLongPress(i) {
     clearTimeout(longPressTimer);
     longPressTimer = setTimeout(() => {
         let s = stock[i];
-        if(!s) return;
+        
+        // Modal elements mein data bharna
         const nameEl = document.getElementById('stockViewName');
         const priceEl = document.getElementById('stockViewPrice');
         const imgEl = document.getElementById('stockViewImg');
@@ -2166,19 +1898,42 @@ function startLongPress(i) {
 
         if(nameEl) nameEl.innerText = s.name || "No Name";
         if(priceEl) priceEl.innerText = (s.price ? s.price.toFixed(3) : "0.000") + " OMR";
-        if(imgEl && s.img) { imgEl.src = s.img; imgEl.style.display = 'block'; }
-        else if(imgEl) { imgEl.style.display = 'none'; }
+        
+        if(imgEl) {
+            if(s.img) { 
+                imgEl.src = s.img; 
+                imgEl.style.display = 'block'; 
+            } else { 
+                imgEl.style.display = 'none'; 
+            }
+        }
 
+        // Pop-up dikhana aur back button handle karna
         if(modalEl) {
             history.pushState({modal: "view"}, "");
             modalEl.style.display = 'flex';
         }
+        
+        // Mobile vibration feedback
         if(navigator.vibrate) navigator.vibrate(60);
+    }, 600); // 0.6 second hold time
+}
+
+
+function startLongPress(i) {
+    longPressTimer = setTimeout(() => {
+        let s = stock[i];
+        document.getElementById('stockViewName').innerText = s.name;
+        document.getElementById('stockViewPrice').innerText = s.price.toFixed(3) + " OMR";
+        let img = document.getElementById('stockViewImg');
+        if(s.img) { img.src = s.img; img.style.display = 'block'; } else { img.style.display='none'; }
+        history.pushState({modal: "view"}, "");
+        document.getElementById('stockViewModal').style.display = 'flex';
     }, 600);
 }
 
-function cancelLongPress() { clearTimeout(longPressTimer); }
 
+function cancelLongPress() { clearTimeout(longPressTimer); }
 
 
 
@@ -2971,7 +2726,7 @@ window.addEventListener('click', (e) => {
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
               
               <h2 
-            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F2</span>
+            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F1</span>
             </h2>
             </span>
             
