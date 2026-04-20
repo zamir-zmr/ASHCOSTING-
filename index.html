@@ -1014,18 +1014,27 @@ DATA</button>
     </div>
 </div>
 
-
-    <div id="stockPanel" class="panel">
-        <div class="panel-nav">STOCK MATERIALS <span onclick="closePanel('stockPanel')">✕</span>
-        </div>
-        
-        <button class="btn-pill" style="width:100%; background:var(--primary); color:white; padding:15px; margin-bottom:15px;" onclick="openInputModal('stock')">+ ADD MATERIAL</button>
-        
-        <div class="panel-content" style="padding:15px; overflow-y:auto; flex:1;">
-            
-            <div id="stockList"></div>
+<div id="stockPanel" class="panel">
+    <div class="panel-nav" style="padding: 10px 15px;">STOCK MATERIALS <span onclick="closePanel('stockPanel')">✕</span></div>
+    
+    <div style="padding: 5px 15px 0 15px;">
+        <div style="position: relative; display: flex; align-items: center;">
+            <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
+            <input type="text" id="stockSearchInput" placeholder="Search materials..." 
+                onkeyup="filterStockItems()"
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px; outline: none;">
         </div>
     </div>
+
+    <button class="btn-pill" style="width:calc(100% - 30px); background:var(--primary); color:white; padding: 10px; margin: 8px 15px 0 15px; font-size: 12px; border: none; border-radius: 10px;" onclick="openInputModal('stock')">
+        <i class="fas fa-plus"></i> ADD MATERIAL
+    </button>
+    
+    <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
+        <div id="stockList"></div>
+    </div>
+</div>
+
 
 <div id="catPanel" class="panel">
     <div class="panel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')">✕</span></div>
@@ -1856,31 +1865,53 @@ function saveAndExit() {
 
 function clearPhoto() { tempImg = ''; updatePreview(); }
 
-function renderStock() {
+function renderStock(searchQuery = "") {
     const list = document.getElementById('stockList');
     if(!list) return;
     
-    list.innerHTML = stock.map((s, i) => `
+    const filteredStock = stock.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    list.innerHTML = filteredStock.map((s) => {
+        const i = stock.indexOf(s);
+        
+        // Photo check: Agar photo hai to wo dikhao, nahi to icon
+        const itemImg = s.img ? 
+            `<img src="${s.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">` : 
+            `<i class="fas fa-box" style="color: var(--primary); font-size: 18px;"></i>`;
+
+        return `
         <div class="draggable-item" 
-             style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; user-select:none; -webkit-user-select:none;"
+             style="display:flex; justify-content:space-between; padding:12px; background: #ffffff; border-radius: 20px; margin-bottom:12px; align-items:center; 
+                    border: 1.5px solid #f1f5f9; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
              ontouchstart="startLongPress(${i})" 
              ontouchend="cancelLongPress()" 
-             ontouchmove="cancelLongPress()"
              onmousedown="startLongPress(${i})" 
-             onmouseup="cancelLongPress()"
-             onmouseleave="cancelLongPress()">
+             onmouseup="cancelLongPress()">
              
             <div style="display:flex; align-items:center; flex:1;">
+                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #e2e8f0; overflow: hidden;">
+                    ${itemImg}
+                </div>
+                
                 <div>
-                    <b style="color:#2d3436; display:block;">${s.name}</b>
-                    <small style="color:#00b894; font-weight:600;">${(s.price || 0).toFixed(3)} OMR / ${s.base || 1000}g</small>
+                    <b style="color:#0f172a; display:block; font-size:15px; font-weight: 800; letter-spacing: -0.3px;">${s.name}</b>
+                    <div style="display: flex; align-items: center; margin-top: 3px;">
+                        <span style="color: #0d9488; font-size: 11px; font-weight: 700; background: #f0fdfa; padding: 2px 6px; border-radius: 6px;">
+                            ${(s.price || 0).toFixed(3)} OMR
+                        </span>
+                        <span style="margin: 0 6px; color: #cbd5e1; font-size: 10px;">•</span>
+                        <small style="color: #64748b; font-size: 11px; font-weight: 600;">${s.base || 1000}g</small>
+                    </div>
                 </div>
             </div>
-            <div style="display:flex; gap:15px; align-items:center;">
-                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); openInputModal('stock', ${i})"></i>
+            
+            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
+                <i class="fas fa-pen-to-square" style="color: #475569; font-size: 14px;"></i>
             </div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
 }
+
 
 // Ye functions ensure karte hain ki popup trigger ho
 
