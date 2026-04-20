@@ -1586,32 +1586,6 @@ function toggleManage() {
 
 // --- 1. MODAL & PANEL LOGIC ---
 
-function openPanel(id) { 
-    // pushState ki jagah replaceState use karein taaki history stack na bhare
-    history.replaceState({panel: id}, ""); 
-    document.getElementById(id).style.display = 'flex'; 
-}
-
-function closePanel(id) { 
-    // Panel hide karein aur history clear rakhein
-    document.getElementById(id).style.display = 'none';
-    history.replaceState(null, ""); 
-}
-
-// Ye 3 line script ke end mein zaroor dalein (App close karne ke liye)
-window.onpopstate = function() {
-    document.querySelectorAll('.panel').forEach(el => el.style.display = 'none');
-    history.replaceState(null, "");
-};
-
-
-
-function smartClose() { 
-    if(window.history.state) history.back();
-    else document.querySelectorAll('.panel, .modal-overlay').forEach(el => el.style.display = 'none');
-}
-
-// MOBILE BACK BUTTON FIX
 window.onpopstate = function(event) {
     document.querySelectorAll('.panel, .modal-overlay').forEach(el => el.style.display = 'none');
     
@@ -1622,15 +1596,34 @@ window.onpopstate = function(event) {
     const homeCont = document.getElementById('homeCont');
     if(homeCont) {
         homeCont.classList.remove('manage-mode');
-        homeCont.style.display = 'block';
     }
-    
+
     if (event.state && event.state.panel) {
         let panel = document.getElementById(event.state.panel);
-        if (panel) panel.style.display = 'flex';
+        if(panel) panel.style.display = 'flex';
+        if(homeCont) homeCont.style.display = 'none';
+    } else {
+        if(homeCont) homeCont.style.display = 'block';
     }
 };
 
+function openPanel(id) { 
+    history.pushState({ panel: id }, ""); 
+    
+    document.querySelectorAll('.panel, .modal-overlay').forEach(el => el.style.display = 'none');
+    document.getElementById(id).style.display = 'flex'; 
+
+    const homeCont = document.getElementById('homeCont');
+    if(homeCont) homeCont.style.display = 'none';
+}
+
+function closePanel(id) { 
+    history.back();
+}
+
+function smartClose() { 
+    history.back();
+}
 // --- 2. INPUT MODAL LOGIC ---
 
 
@@ -2160,34 +2153,27 @@ function handleEditClick(index) {
 }
 
 // 5. Close Panel function mein bhi add karein
-
-function closePanel(id) {
-    // 1. Panel ko turant hide karein
+function hideActivePanel(id) { // Name changed from closePanel
     const el = document.getElementById(id);
     if (el) {
         el.style.display = 'none';
     }
 
-    // 2. Stock search clear karein (Agar stock panel hai)
     if(id === 'stockPanel') {
         if(typeof clearStockSearch === 'function') clearStockSearch();
     }
 
-    // 3. HISTORY BAG CLEAR (The Main Fix):
-    // history.back() ki jagah replaceState use karein.
-    // Isse browser purani history (Stock/Category) ko bhool jayega.
-    history.replaceState(null, ""); 
-
-    // 4. HOME FORCE SHOW:
-    // Taki screen khali na dikhe, main container ko wapas dikhayein.
+    // Home Page show karein
     const home = document.querySelector('.container');
     if (home) {
         home.style.display = 'block';
     }
 
-    // 5. Reset scroll
+    // History neutral karein taaki home par back dabate hi exit ho
+    history.replaceState(null, ""); 
     window.scrollTo(0, 0);
 }
+
 
 
 // Long Press Functions (Wahi purana logic bina kisi reduction ke)
