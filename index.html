@@ -1585,14 +1585,25 @@ function toggleManage() {
 // 2. Panel Functions - History support ke saath
 
 // --- 1. MODAL & PANEL LOGIC ---
+
 function openPanel(id) { 
-    history.pushState({panel: id}, ""); 
+    // pushState ki jagah replaceState use karein taaki history stack na bhare
+    history.replaceState({panel: id}, ""); 
     document.getElementById(id).style.display = 'flex'; 
 }
 
 function closePanel(id) { 
-    history.back(); 
+    // Panel hide karein aur history clear rakhein
+    document.getElementById(id).style.display = 'none';
+    history.replaceState(null, ""); 
 }
+
+// Ye 3 line script ke end mein zaroor dalein (App close karne ke liye)
+window.onpopstate = function() {
+    document.querySelectorAll('.panel').forEach(el => el.style.display = 'none');
+    history.replaceState(null, "");
+};
+
 
 
 function smartClose() { 
