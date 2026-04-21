@@ -366,17 +366,24 @@
         .card b { color: #2D3436; font-size: 11px; text-transform: uppercase; text-align: center; }
         .card-cat-tag { font-size: 8px; color: var(--accent); font-weight: 900; text-transform: uppercase; margin-bottom: 2px; }
 
-        /* IPhone Jiggle Effect *//* Smooth iPhone Style */
-/* iPhone Jiggle Animation */
+/* Premium iPhone Jiggle Animation */
+/* iPhone Jiggle Effect - Zamir Style */
 .manage-mode .card {
     border: 2px dashed #ff4757 !important;
-    animation: jiggle 0.3s infinite ease-in-out;
+    animation: jiggle 0.3s infinite ease-in-out !important;
+    pointer-events: auto; /* Clickable rakhne ke liye */
 }
 
 @keyframes jiggle {
     0% { transform: rotate(-1deg); }
     50% { transform: rotate(1deg); }
     100% { transform: rotate(-1deg); }
+}
+
+/* Optional: Har dusre card ko thoda alag time par shake karne ke liye (Real feel) */
+.manage-mode .card:nth-child(even) {
+    animation-duration: 0.22s;
+    animation-direction: reverse;
 }
 
 
@@ -1611,23 +1618,32 @@ function editCategory(i) {
 
 // 1. Toggle Manage Function - Jo EXIT button aur Manage mode ko handle karta hai
 
-
 function toggleManage() {
     isManage = !isManage;
     const b = document.getElementById('mBtn');
     
-    b.innerText = isManage ? "EXIT" : "MANAGE";
-    b.classList.toggle('active', isManage);
-    document.getElementById('homeCont').classList.toggle('manage-mode', isManage);
+    if(b) {
+        b.innerText = isManage ? "EXIT" : "MANAGE";
+        b.classList.toggle('active', isManage);
+    }
+
+    // Home container par class toggle karna taaki CSS trigger ho sake
+    const homeCont = document.getElementById('homeCont');
+    if(homeCont) {
+        homeCont.classList.toggle('manage-mode', isManage);
+    }
+
+    // --- CRITICAL: Cards ko refresh karke animation trigger karein ---
+    renderRecipes(); 
 
     if(!isManage) {
         document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
-        document.getElementById('homeCont').style.display = 'block';
+        if(homeCont) homeCont.style.display = 'block';
         
-        // Refresh data to make sure Zamir and Madam are on same page
         if(typeof initApp === 'function') initApp();
     }
 }
+
 
 
 
@@ -1859,6 +1875,7 @@ function toggleView() {
 
 
 // --- 1. MAIN SCREEN: RENDER RECIPES GRID ---
+
 function renderRecipes() {
     let filtered = (currentFilter === 'ALL') ? recipes : recipes.filter(r => r.category === currentFilter);
     const gridDiv = document.getElementById('recipeGrid');
@@ -1879,9 +1896,14 @@ function renderRecipes() {
 
         let delay = i < 12 ? i * 0.04 : 0;
 
+        // --- DANGER EFFECT LOGIC (iPhone style shake) ---
+        // Agar isManage true hai, to vibration/shake animation apply hogi
+        let dangerEffect = isManage ? 'animation: dangerShake 0.3s infinite alternate;' : '';
+        let dangerBorder = isManage ? 'border: 1px solid rgba(239, 68, 68, 0.3);' : '';
+
         return `
         <div class="card" 
-             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; animation: cardEntrance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: ${delay}s; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'}"
+             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; animation: cardEntrance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: ${delay}s; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect} ${dangerBorder}"
              onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
             
             <div onclick="event.stopPropagation(); showRecipeItems(${realIdx})" 
@@ -1907,6 +1929,7 @@ function renderRecipes() {
         </div>`;
     }).join('');
 }
+
 
 // --- 2. OVERLAY: SHOW RECIPE COSTING DETAILS ---
 function showRecipeItems(idx) {
@@ -1941,28 +1964,40 @@ function showRecipeItems(idx) {
         let itemCost = ((it.price / it.total) * it.used) || 0;
         calculatedTotal += itemCost;
         return `
-        <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:6px 18px; border-bottom:1px solid #f8fafc; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s;">
+        <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:5px 18px; border-bottom:2px solid #04fffb; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s;">
             <div style="flex:1;">
                 <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
                 <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
-                    ${it.used}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || 'g'}</span>
+                    ${it.used}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span>
                 </div>
             </div>
             <div style="text-align:right;">
-                <div style="font-weight:800; color:#10b981; font-size:13px; line-height:1;">${Number(itemCost).toFixed(3)}</div>
-                <div style="font-size:8px; color:#cbd5e1; font-weight:700;">OMR</div>
+            
+            
+    <div style="display: flex; align-items: baseline; gap: 4px; margin-top: 5px;">
+    <div style="font-weight: 900; color: #2ecc71; font-size: 14px; line-height: 1; letter-spacing: 0.5px;">
+        ${Number(itemCost).toFixed(3)}
+    </div>
+    
+    <div style="font-weight: 700; color: #94a3b8; font-size: 8px; text-transform: uppercase;">
+        OMR
+    </div>
+</div>
+
+                
+                
             </div>
         </div>`;
     }).join('');
 
     overlay.innerHTML = `
-        <div style="padding:32px 18px 12px 18px; background:#1e293b; color:white; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 25px 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
-            <div style="width:55px; height:55px; border-radius:12px; overflow:hidden; border:2px solid #00D2D3; flex-shrink:0; background: #2d3748;">
-                ${r.img ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px;">🖼️</div>`}
+        <div style="padding:5px 5px 5px 5px; background:#1e293b; color:white; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 25px 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
+            <div style="width:90px; height:90px; border-radius:12px; overflow:hidden; border:2px solid #00D2D3; flex-shrink:0; background: #2d3748;">
+                ${r.img ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:70px;">🖼️</div>`}
             </div>
             <div style="flex:1; overflow:hidden;">
                 <h2 style="margin:0; font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.name}</h2>
-                <div style="font-size:9px; color:#00D2D3; font-weight:700; text-transform:uppercase;">Technical Costing</div>
+                <div style="font-size:15px; color:#00D2D3; font-weight:700; text-transform:uppercase;">RECIPE</div>
             </div>
             <div id="closeBtnIcon" style="width:34px; height:34px; background:rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
                 <i class="fas fa-times" style="font-size:16px;"></i>
@@ -1970,7 +2005,7 @@ function showRecipeItems(idx) {
         </div>
 
         <div style="flex:1; overflow-y:auto; padding-top:5px; background: #fff;">
-            ${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:30px; font-size:12px;">No items found.</p>'}
+            ${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}
         </div>
 
         <div style="padding:12px 20px; background:#fff; border-top:1px solid #f1f5f9; border-radius:30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);">
