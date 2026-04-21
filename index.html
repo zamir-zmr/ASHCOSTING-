@@ -1856,39 +1856,38 @@ function renderRecipes() {
 }
 
 // --- 2. SHOW RECIPE ITEMS (Super Compressed Header for More Space) ---
+
 function showRecipeItems(idx) {
     const r = recipes[idx];
     
-    // 1. History mein ek state add karein taaki back button se overlay band ho
+    // History back support
     history.pushState({ action: "closeOverlay" }, "");
 
     const overlay = document.createElement('div');
     overlay.id = "recipeShowLayout";
     overlay.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:10000; display:flex; flex-direction:column; font-family: sans-serif; overflow:hidden;";
     
-    // Function jo overlay ko band karega
     const closeOverlay = () => {
         if (document.getElementById('recipeShowLayout')) {
             document.getElementById('recipeShowLayout').remove();
-            // Window listener ko saaf karein
             window.removeEventListener('popstate', handleBackPress);
         }
     };
 
-    // 2. Back button press hone par kya hoga
-    const handleBackPress = (event) => {
-        closeOverlay();
-    };
-
-    // Listener lagayein
+    const handleBackPress = () => closeOverlay();
     window.addEventListener('popstate', handleBackPress);
+
+    // Photo logic for header
+    let headerPhoto = r.img 
+        ? `<img src="${r.img}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:2px solid rgba(255,255,255,0.2);">` 
+        : `<div style="width:50px; height:50px; background:rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:30px;">🖼️</div>`;
 
     let calculatedTotal = 0;
     let itemsHTML = (r.items || []).map(it => {
         let itemCost = ((it.price / it.total) * it.used) || 0;
         calculatedTotal += itemCost;
         return `
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 15px; border-bottom:1px solid #f8fafc;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 15px; border-bottom:1px solid #f8fafc;">
             <div style="flex:1;">
                 <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
                 <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
@@ -1903,23 +1902,24 @@ function showRecipeItems(idx) {
     }).join('');
 
     overlay.innerHTML = `
-        <div style="padding:30px 15px 8px 15px; background:#1e293b; color:white; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
-            <div>
-                <h2 style="margin:0; font-size:14px; font-weight:800; line-height:1.2;">${r.name}</h2>
-                <div style="font-size:8px; color:#00D2D3; font-weight:700; text-transform:uppercase;">Costing Sheet</div>
+        <div style="padding:30px 15px 10px 15px; background:#1e293b; color:white; display:flex; align-items:center; gap:12px; flex-shrink:0;">
+            ${headerPhoto}
+            <div style="flex:1;">
+                <h2 style="margin:0; font-size:14px; font-weight:800; line-height:1.2; text-transform:uppercase;">${r.name}</h2>
+                <div style="font-size:8px; color:#00D2D3; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Costing Analysis</div>
             </div>
-            <div id="closeBtnIcon" style="width:28px; height:28px; background:rgba(255,255,255,0.1); border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-                <i class="fas fa-times" style="font-size:14px;"></i>
+            <div id="closeBtnIcon" style="width:30px; height:30px; background:rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                <i class="fas fa-times" style="font-size:16px;"></i>
             </div>
         </div>
 
         <div style="display:flex; justify-content:space-between; padding:4px 15px; background:#f1f5f9; font-size:8px; font-weight:800; color:#64748b; border-bottom:1px solid #e2e8f0; flex-shrink:0;">
-            <span>INGREDIENT & QTY</span>
+            <span>ITEM & QUANTITY</span>
             <span>SUBTOTAL</span>
         </div>
 
         <div style="flex:1; overflow-y:auto; background:#fff;">
-            ${itemsHTML || '<div style="padding:20px; text-align:center; color:#cbd5e1; font-size:11px;">Empty</div>'}
+            ${itemsHTML || '<div style="padding:20px; text-align:center; color:#cbd5e1; font-size:11px;">No items found</div>'}
         </div>
 
         <div style="padding:10px 15px; background:#fff; border-top:1px solid #f1f5f9; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
@@ -1932,7 +1932,7 @@ function showRecipeItems(idx) {
                 </div>
             </div>
             <button id="closeBtnBottom" 
-                    style="width:100%; padding:12px; border:none; background:#1e293b; color:white; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    style="width:100%; padding:12px; border:none; background:#1e293b; color:white; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;">
                 CLOSE PREVIEW
             </button>
         </div>
@@ -1940,7 +1940,6 @@ function showRecipeItems(idx) {
     
     document.body.appendChild(overlay);
 
-    // Button clicks par back action trigger karein taaki listener apne aap handle kar le
     document.getElementById('closeBtnIcon').onclick = () => history.back();
     document.getElementById('closeBtnBottom').onclick = () => history.back();
 }
