@@ -2332,10 +2332,16 @@ function clearPhoto() { tempImg = ''; updatePreview(); }
 
 // Real-time Search Logic
 // 1. Search filter function
+
 function filterStockItems() {
-    const query = document.getElementById('stockSearchInput').value.toLowerCase();
+    const searchInp = document.getElementById('stockSearchInput');
+    if (!searchInp) return;
+    
+    // .trim() lagane se "butter " (space) bhi "butter" ban jayega
+    const query = searchInp.value.toLowerCase().trim();
     renderStock(query);
 }
+
 
 // 2. Search clear karne ka function
 function clearStockSearch() {
