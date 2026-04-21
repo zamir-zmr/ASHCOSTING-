@@ -1818,11 +1818,11 @@ function renderRecipes() {
 
     gridDiv.innerHTML = filtered.map((r, i) => {
         let realIdx = recipes.indexOf(r);
-        let iconSize = isListView ? '24px' : '40px';
+        let iconSize = isListView ? '24px' : '80px';
         
         let photoContent = r.img 
             ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
-            : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f8fafc; color:#cbd5e1;">🍞</div>`;
+            : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f8fafc; color:#cbd5e1;">🖼️</div>`;
 
         return `
         <div class="card" 
