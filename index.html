@@ -1585,27 +1585,43 @@ function toggleManage() {
 // 2. Panel Functions - History support ke saath
 
 // --- 1. MODAL & PANEL LOGIC ---
-
 window.onpopstate = function(event) {
-    document.querySelectorAll('.panel, .modal-overlay').forEach(el => el.style.display = 'none');
+    // 1. Saare open panels aur overlays ko band karein
+    document.querySelectorAll('.panel, .modal-overlay, .image-cropper-container').forEach(el => {
+        el.style.display = 'none';
+    });
     
+    // 2. Manage mode reset logic
     isManage = false;
     const b = document.getElementById('mBtn');
-    if(b) { b.innerText = "MANAGE"; b.classList.remove('active'); }
+    if(b) { 
+        b.innerText = "MANAGE"; 
+        b.classList.remove('active'); 
+    }
     
     const homeCont = document.getElementById('homeCont');
     if(homeCont) {
         homeCont.classList.remove('manage-mode');
     }
 
+    // 3. Agar piche koi panel ki history hai, toh use dikhayein
     if (event.state && event.state.panel) {
         let panel = document.getElementById(event.state.panel);
-        if(panel) panel.style.display = 'flex';
-        if(homeCont) homeCont.style.display = 'none';
-    } else {
+        if(panel) {
+            panel.style.display = 'flex';
+            if(homeCont) homeCont.style.display = 'none';
+        }
+    } 
+    else {
+        // 4. FIX: Agar event.state null hai, iska matlab hum HOME par hain
         if(homeCont) homeCont.style.display = 'block';
+        
+        // Sabse important line: History ko poori tarah saaf kar dein
+        // Taaki ab user back dabaye toh App Exit ho jaye
+        history.replaceState(null, "");
     }
 };
+
 
 function openPanel(id) { 
     history.pushState({ panel: id }, ""); 
@@ -1789,7 +1805,7 @@ function toggleView() {
 
 
 
-
+// --- 1. RENDER RECIPES (Professional & Fixed Layout) ---
 function renderRecipes() {
     let filtered = (currentFilter === 'ALL') ? recipes : recipes.filter(r => r.category === currentFilter);
     const gridDiv = document.getElementById('recipeGrid');
@@ -1800,24 +1816,128 @@ function renderRecipes() {
         gridDiv.classList.remove('list-view-active');
     }
 
-    // .join('') ke sath map ke andar ka sara space khatam kar diya gaya hai
     gridDiv.innerHTML = filtered.map((r, i) => {
         let realIdx = recipes.indexOf(r);
-        let iconSize = isListView ? '30px' : '60px'; // Icon size thoda optimize kiya
+        let iconSize = isListView ? '24px' : '50px';
         
         let photoContent = r.img 
-            ? `<img src="${r.img}" style="display:block; width:100%; height:100%; object-fit:cover;" onerror="this.style.opacity='0'">` 
-            : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f1f2f6; color:#dfe6e9; line-height:1;">🖼️</div>`;
+            ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
+            : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f8fafc; color:#cbd5e1;">🍞</div>`;
 
-        // Return ke baad backticks ke beech ka gap bilkul khatam kar diya hai
-        return `<div class="card" onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})" style="margin:0;"><div class="card-img-box" style="margin:0; padding:0; display:flex; overflow:hidden;">${photoContent}</div><div class="card-info" style="margin:0; padding:5px 10px; display:flex; flex-direction:column; justify-content:center;"><span class="card-cat-tag" style="margin:0; line-height:1;">${r.category || 'NO CAT'}</span><b style="margin:0; line-height:1.2;">${r.name}</b></div></div>`;
+        return `
+        <div class="card" 
+             style="position:relative; margin:0; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.05); display:flex; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:270px;'}"
+             onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
+            
+            <div onclick="event.stopPropagation(); showRecipeItems(${realIdx})" 
+                 style="position:absolute; ${isListView ? 'right:12px; top:50%; transform:translateY(-50%);' : 'top:10px; right:10px;'} width:34px; height:34px; background:#f1f5f9; border-radius:10px; display:flex; align-items:center; justify-content:center; z-index:10; color:#00D2D3;">
+                 <i class="fas fa-file-invoice" style="font-size:16px;"></i>
+            </div>
+            
+            <div style="${isListView ? 'width:62px; height:62px; min-width:62px;' : 'width:100%; height:145px;'} border-radius:10px; overflow:hidden; background:#f1f5f9;">
+                ${photoContent}
+            </div>
+            
+            <div style="padding:10px; flex:1; display:flex; flex-direction:column; justify-content:center; overflow:hidden;">
+                <span style="color:#00D2D3; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">${r.category || 'BAKERY'}</span>
+                <b style="font-size:14px; color:#1e293b; line-height:1.2; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.name}</b>
+                <div style="font-size:10px; color:#94a3b8; margin-top:3px; font-weight:600;">${r.items ? r.items.length : 0} Items Included</div>
+            </div>
+        </div>`;
     }).join('');
 }
 
-// 2. This is the function for your button click
+// --- 2. SHOW RECIPE ITEMS (Super Compressed Header for More Space) ---
+function showRecipeItems(idx) {
+    const r = recipes[idx];
+    
+    // 1. History mein ek state add karein taaki back button se overlay band ho
+    history.pushState({ action: "closeOverlay" }, "");
+
+    const overlay = document.createElement('div');
+    overlay.id = "recipeShowLayout";
+    overlay.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:10000; display:flex; flex-direction:column; font-family: sans-serif; overflow:hidden;";
+    
+    // Function jo overlay ko band karega
+    const closeOverlay = () => {
+        if (document.getElementById('recipeShowLayout')) {
+            document.getElementById('recipeShowLayout').remove();
+            // Window listener ko saaf karein
+            window.removeEventListener('popstate', handleBackPress);
+        }
+    };
+
+    // 2. Back button press hone par kya hoga
+    const handleBackPress = (event) => {
+        closeOverlay();
+    };
+
+    // Listener lagayein
+    window.addEventListener('popstate', handleBackPress);
+
+    let calculatedTotal = 0;
+    let itemsHTML = (r.items || []).map(it => {
+        let itemCost = ((it.price / it.total) * it.used) || 0;
+        calculatedTotal += itemCost;
+        return `
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 15px; border-bottom:1px solid #f8fafc;">
+            <div style="flex:1;">
+                <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
+                <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
+                    ${it.used}<span style="font-size:9px; color:#94a3b8;">${it.unit || 'g'}</span>
+                </div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-weight:800; color:#10b981; font-size:13px; line-height:1;">${Number(itemCost).toFixed(3)}</div>
+                <div style="font-size:8px; color:#cbd5e1; font-weight:700;">OMR</div>
+            </div>
+        </div>`;
+    }).join('');
+
+    overlay.innerHTML = `
+        <div style="padding:30px 15px 8px 15px; background:#1e293b; color:white; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+            <div>
+                <h2 style="margin:0; font-size:14px; font-weight:800; line-height:1.2;">${r.name}</h2>
+                <div style="font-size:8px; color:#00D2D3; font-weight:700; text-transform:uppercase;">Costing Sheet</div>
+            </div>
+            <div id="closeBtnIcon" style="width:28px; height:28px; background:rgba(255,255,255,0.1); border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                <i class="fas fa-times" style="font-size:14px;"></i>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; padding:4px 15px; background:#f1f5f9; font-size:8px; font-weight:800; color:#64748b; border-bottom:1px solid #e2e8f0; flex-shrink:0;">
+            <span>INGREDIENT & QTY</span>
+            <span>SUBTOTAL</span>
+        </div>
+
+        <div style="flex:1; overflow-y:auto; background:#fff;">
+            ${itemsHTML || '<div style="padding:20px; text-align:center; color:#cbd5e1; font-size:11px;">Empty</div>'}
+        </div>
+
+        <div style="padding:10px 15px; background:#fff; border-top:1px solid #f1f5f9; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:flex-end; align-items:center;">
+                <div style="text-align:right;">
+                    <div style="font-size:9px; color:#94a3b8; font-weight:700; text-transform:uppercase; margin-bottom:2px;">Total Recipe Cost</div>
+                    <div style="font-size:22px; font-weight:900; color:#1e293b; line-height:1;">
+                        ${Number(calculatedTotal).toFixed(3)} <span style="font-size:12px; color:#00D2D3;">OMR</span>
+                    </div>
+                </div>
+            </div>
+            <button id="closeBtnBottom" 
+                    style="width:100%; padding:12px; border:none; background:#1e293b; color:white; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                CLOSE PREVIEW
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+
+    // Button clicks par back action trigger karein taaki listener apne aap handle kar le
+    document.getElementById('closeBtnIcon').onclick = () => history.back();
+    document.getElementById('closeBtnBottom').onclick = () => history.back();
+}
 
 
-// 3. Your updated renderRecipes function
 
 
 // --- 3. IMPORTANT: SYNC HELPER (Ye add karna zaroori hai) ---
@@ -2880,53 +3000,34 @@ function showImportSummary(log) {
     document.body.insertAdjacentHTML('beforeend', popup);
 }
 
-window.onpopstate = function(event) {
-    // 1.  karein ki kya koi Panel ya Overlay khula hai?
-    const sharePanel = document.getElementById('sharePanel');
-    const overlays = document.querySelectorAll('.modal-overlay, .panel, .image-cropper-container');
-    
-    let panelWasOpen = false;
-
-    // Agar Share Panel khula hai to band karo
-    if (sharePanel && sharePanel.style.display !== 'none') {
-        sharePanel.style.display = 'none';
-        panelWasOpen = true;
-    }
-
-    // Baaki kisi bhi modal ya panel ko band karo
-    overlays.forEach(el => {
-        if (el.style.display !== 'none' && el.style.display !== '') {
-            el.style.display = 'none';
-            panelWasOpen = true;
-        }
-    });
-
-    if (panelWasOpen) {
-        // Agar humne koi panel band kiya hai, to wapas pushState karein 
-        // taaki agla back press phir se handle ho sake (app close na ho)
-        window.history.pushState({ page: 'main' }, 'Main', window.location.pathname);
-    } else {
-        // 2. Agar koi panel nahi khula tha, to Home Screen dikhao
-        // Agar aapke app mein showSection function hai:
-        if (typeof showSection === 'function') {
-            showSection('home'); 
-        }
-        
-        // Wapas state push karein taaki user Home par hi rahe aur exit na ho
-        window.history.pushState({ page: 'main' }, 'Main', window.location.pathname);
-        
-        // Optional: User ko feedback dene ke liye
-        // toast("Press back again to exit"); 
-    }
-};
-
-function openSharePanel() {
-    document.getElementById('sharePanel').style.display = 'flex';
-    openSmartShare();
-    window.history.pushState({panel: "share"}, "");
+// ✅ FINAL OVERRIDE - Yeh sab pehle wale functions ko replace karega
+function openPanel(id) { 
+    history.pushState({ panel: id }, ""); 
+    document.querySelectorAll('.panel, .modal-overlay, #sharePanel').forEach(el => el.style.display = 'none');
+    document.getElementById(id).style.display = 'flex'; 
+    document.getElementById('homeCont').style.display = 'none';
 }
 
+function openSharePanel() { 
+    history.pushState({ panel: 'sharePanel' }, "");
+    document.getElementById('sharePanel').style.display = 'flex';
+    openSmartShare();
+}
+function closePanel(id) { history.back(); }
+function smartClose() { history.back(); }
 
+window.onpopstate = function(event) {
+    document.querySelectorAll('.panel, .modal-overlay, #sharePanel').forEach(el => el.style.display = 'none');
+    isManage = false;
+    const b = document.getElementById('mBtn');
+    if(b) { b.innerText = "MANAGE"; b.classList.remove('active'); }
+    const h = document.getElementById('homeCont');
+    if(h) { h.classList.remove('manage-mode'); h.style.display = 'block'; }
+    if(event.state && event.state.panel) {
+        const p = document.getElementById(event.state.panel);
+        if(p) { p.style.display = 'flex'; if(h) h.style.display = 'none'; }
+    }
+};
 
 <!-- i phone effect after long press card
  -->
