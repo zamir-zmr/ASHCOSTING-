@@ -886,6 +886,55 @@
     margin: 1px 0 !important; /* Top/Bottom margin 1px */
     align-items: center;
 }
+/* Cards: Ultra Professional Single Entry */
+
+
+
+/* Cards: Professional Staggered Zoom-In */
+@keyframes cardEntrance {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.85) translateY(30px);
+        filter: blur(8px);
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+    }
+}
+
+/* Overlay: App-Style Slide & Scale (Khulne wala) */
+@keyframes overlayPremiumIn {
+    0% { 
+        opacity: 0;
+        transform: scale(1.05) translateY(40px);
+        backdrop-filter: blur(0px);
+    }
+    100% { 
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* Card Press Effect */
+.card {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.card:active {
+    transform: scale(0.94) !important;
+}
+
+/* Items List Entry */
+@keyframes itemSlide {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.recipe-item-row {
+    animation: itemSlide 0.3s ease forwards;
+}
+
 
 
 </style>
@@ -1806,6 +1855,10 @@ function toggleView() {
 
 
 // --- 1. RENDER RECIPES (Professional & Fixed Layout) ---
+
+
+
+// --- 1. MAIN SCREEN: RENDER RECIPES GRID ---
 function renderRecipes() {
     let filtered = (currentFilter === 'ALL') ? recipes : recipes.filter(r => r.category === currentFilter);
     const gridDiv = document.getElementById('recipeGrid');
@@ -1824,29 +1877,29 @@ function renderRecipes() {
             ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
             : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f8fafc; color:#cbd5e1;">🖼️</div>`;
 
+        let delay = i < 12 ? i * 0.04 : 0;
+
         return `
         <div class="card" 
-             style="position:relative; margin:0; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.05); display:flex; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'}"
+             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; animation: cardEntrance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: ${delay}s; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'}"
              onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
             
             <div onclick="event.stopPropagation(); showRecipeItems(${realIdx})" 
-                 style="position:absolute; ${isListView ? 'right:12px; top:50%; transform:translateY(-50%);' : 'top:8px; right:8px;'} width:32px; height:32px; background:rgba(255,255,255,0.9); backdrop-filter:blur(4px); border-radius:8px; display:flex; align-items:center; justify-content:center; z-index:10; color:#00D2D3; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-                 <i class="fas fa-file-invoice" style="font-size:14px;"></i>
+                 style="position:absolute; ${isListView ? 'right:12px; top:50%; transform:translateY(-50%);' : 'top:8px; right:8px;'} width:34px; height:34px; background:rgba(255,255,255,0.95); backdrop-filter:blur(5px); border-radius:10px; display:flex; align-items:center; justify-content:center; z-index:10; color:#00D2D3; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+                 <i class="fas fa-file-invoice" style="font-size:15px;"></i>
             </div>
             
-            <div style="${isListView ? 'width:62px; height:62px; min-width:62px;' : 'width:100%; height:145px;'} overflow:hidden; background:#f1f5f9;">
+            <div style="${isListView ? 'width:62px; height:62px; min-width:62px;' : 'width:100%; height:135px;'} overflow:hidden; background:#f1f5f9; border-radius:12px;">
                 ${photoContent}
             </div>
             
             <div style="padding:6px 10px; flex:1; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:${isListView ? 'left' : 'center'};">
-                <span style="color:#00D2D3; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; align-self:${isListView ? 'flex-start' : 'center'};">
+                <span style="color:#00D2D3; font-size:7px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">
                     ${r.category || 'BAKERY'}
                 </span>
-
-                <b style="font-size:11px; color:#1e293b; line-height:1.1; margin-top:1px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; white-space:normal;">
+                <b style="font-size:11px; color:#1e293b; line-height:1.1; margin-top:1px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break: break-word;">
                     ${r.name}
                 </b>
-
                 <div style="font-size:9px; color:#94a3b8; font-weight:600; margin-top:1px;">
                     ${r.items ? r.items.length : 0} Items
                 </div>
@@ -1855,21 +1908,27 @@ function renderRecipes() {
     }).join('');
 }
 
-// --- 2. SHOW RECIPE ITEMS (Super Compressed Header for More Space) ---
-
+// --- 2. OVERLAY: SHOW RECIPE COSTING DETAILS ---
 function showRecipeItems(idx) {
     const r = recipes[idx];
-    
-    // History back support
     history.pushState({ action: "closeOverlay" }, "");
 
     const overlay = document.createElement('div');
     overlay.id = "recipeShowLayout";
-    overlay.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:10000; display:flex; flex-direction:column; font-family: sans-serif; overflow:hidden;";
+    overlay.style = `
+        position:fixed; top:0; left:0; width:100%; height:100%; 
+        background:#fff; z-index:10000; display:flex; 
+        flex-direction:column; font-family: sans-serif; overflow:hidden;
+        animation: overlayPremiumIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    `;
     
     const closeOverlay = () => {
-        if (document.getElementById('recipeShowLayout')) {
-            document.getElementById('recipeShowLayout').remove();
+        const el = document.getElementById('recipeShowLayout');
+        if (el) {
+            el.style.opacity = "0";
+            el.style.transform = "scale(1.05) translateY(20px)";
+            el.style.transition = "0.2s ease-in"; // Closing fast
+            setTimeout(() => el.remove(), 200);
             window.removeEventListener('popstate', handleBackPress);
         }
     };
@@ -1877,21 +1936,16 @@ function showRecipeItems(idx) {
     const handleBackPress = () => closeOverlay();
     window.addEventListener('popstate', handleBackPress);
 
-    // Photo logic for header
-    let headerPhoto = r.img 
-        ? `<img src="${r.img}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:2px solid rgba(255,255,255,0.2);">` 
-        : `<div style="width:50px; height:50px; background:rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:30px;">🖼️</div>`;
-
     let calculatedTotal = 0;
-    let itemsHTML = (r.items || []).map(it => {
+    let itemsHTML = (r.items || []).map((it, i) => {
         let itemCost = ((it.price / it.total) * it.used) || 0;
         calculatedTotal += itemCost;
         return `
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 15px; border-bottom:1px solid #f8fafc;">
+        <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:6px 18px; border-bottom:1px solid #f8fafc; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s;">
             <div style="flex:1;">
                 <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
                 <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
-                    ${it.used}<span style="font-size:9px; color:#94a3b8;">${it.unit || 'g'}</span>
+                    ${it.used}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || 'g'}</span>
                 </div>
             </div>
             <div style="text-align:right;">
@@ -1902,47 +1956,81 @@ function showRecipeItems(idx) {
     }).join('');
 
     overlay.innerHTML = `
-        <div style="padding:30px 15px 10px 15px; background:#1e293b; color:white; display:flex; align-items:center; gap:12px; flex-shrink:0;">
-            ${headerPhoto}
-            <div style="flex:1;">
-                <h2 style="margin:0; font-size:14px; font-weight:800; line-height:1.2; text-transform:uppercase;">${r.name}</h2>
-                <div style="font-size:8px; color:#00D2D3; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Costing Analysis</div>
+        <div style="padding:32px 18px 12px 18px; background:#1e293b; color:white; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 25px 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
+            <div style="width:55px; height:55px; border-radius:12px; overflow:hidden; border:2px solid #00D2D3; flex-shrink:0; background: #2d3748;">
+                ${r.img ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px;">🖼️</div>`}
             </div>
-            <div id="closeBtnIcon" style="width:30px; height:30px; background:rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+            <div style="flex:1; overflow:hidden;">
+                <h2 style="margin:0; font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.name}</h2>
+                <div style="font-size:9px; color:#00D2D3; font-weight:700; text-transform:uppercase;">Technical Costing</div>
+            </div>
+            <div id="closeBtnIcon" style="width:34px; height:34px; background:rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
                 <i class="fas fa-times" style="font-size:16px;"></i>
             </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; padding:4px 15px; background:#f1f5f9; font-size:8px; font-weight:800; color:#64748b; border-bottom:1px solid #e2e8f0; flex-shrink:0;">
-            <span>ITEM & QUANTITY</span>
-            <span>SUBTOTAL</span>
+        <div style="flex:1; overflow-y:auto; padding-top:5px; background: #fff;">
+            ${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:30px; font-size:12px;">No items found.</p>'}
         </div>
 
-        <div style="flex:1; overflow-y:auto; background:#fff;">
-            ${itemsHTML || '<div style="padding:20px; text-align:center; color:#cbd5e1; font-size:11px;">No items found</div>'}
-        </div>
-
-        <div style="padding:10px 15px; background:#fff; border-top:1px solid #f1f5f9; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
-            <div style="display:flex; justify-content:flex-end; align-items:center;">
+        <div style="padding:12px 20px; background:#fff; border-top:1px solid #f1f5f9; border-radius:30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);">
+            <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:10px;">
                 <div style="text-align:right;">
-                    <div style="font-size:9px; color:#94a3b8; font-weight:700; text-transform:uppercase; margin-bottom:2px;">Total Recipe Cost</div>
-                    <div style="font-size:22px; font-weight:900; color:#1e293b; line-height:1;">
-                        ${Number(calculatedTotal).toFixed(3)} <span style="font-size:12px; color:#00D2D3;">OMR</span>
-                    </div>
+                    <span style="font-size:10px; color:#94a3b8; font-weight:800; letter-spacing:0.5px; display:block; margin-bottom:2px;">NET PRODUCTION COST</span>
+                    <span style="font-size:26px; font-weight:900; color:#1e293b; line-height:1;">${Number(calculatedTotal).toFixed(3)}</span>
+                    <span style="font-size:12px; color:#00D2D3; font-weight:800; margin-left:2px;">OMR</span>
                 </div>
             </div>
-            <button id="closeBtnBottom" 
-                    style="width:100%; padding:12px; border:none; background:#1e293b; color:white; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;">
-                CLOSE PREVIEW
+            <button id="closeBtnBottom" style="width:100%; padding:14px; border:none; background:#1e293b; color:white; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:1px; cursor:pointer;">
+                DONE
             </button>
         </div>
     `;
     
     document.body.appendChild(overlay);
-
     document.getElementById('closeBtnIcon').onclick = () => history.back();
     document.getElementById('closeBtnBottom').onclick = () => history.back();
 }
+
+// --- 3. SUPER FAST NOTIFICATION (Toast Logic) ---
+function showFastToast(msg) {
+    // Purane toast remove karein
+    const oldToast = document.getElementById('fastToast');
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement('div');
+    toast.id = "fastToast";
+    toast.innerHTML = `<i class="fas fa-check-circle" style="margin-right:8px;"></i> ${msg}`;
+    
+    // Fast Animation Styles
+    toast.style = `
+        position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+        background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 50px;
+        font-size: 13px; font-weight: 700; z-index: 20000; display: flex; align-items: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2); pointer-events: none;
+        animation: toastPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    `;
+    
+    document.body.appendChild(toast);
+
+    // 1.2 seconds baad hide karein (Bahut fast)
+    setTimeout(() => {
+        toast.style.animation = "toastOut 0.2s ease-in forwards";
+        setTimeout(() => toast.remove(), 200);
+    }, 1200);
+}
+
+// CSS Animations (Inhe apne CSS file ya style tag mein add karein)
+/*
+@keyframes toastPop {
+    from { opacity: 0; transform: translate(-50%, 20px) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    to { opacity: 0; transform: translate(-50%, -20px) scale(0.8); }
+}
+*/
 
 
 
