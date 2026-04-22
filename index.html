@@ -838,6 +838,80 @@
 }
 
 
+/* Floating Search Bar Styles */
+/* Top Left Floating Search */
+
+
+.header-search-container {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%); /* Center alignment */
+    z-index: 2000;
+    width: auto;
+}
+
+.search-bar-modern {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 4px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.search-bar-modern.active {
+    width: 280px; 
+    border: 1.5px solid #10b981;
+}
+
+.search-trigger-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #10b981;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#recipeSearchInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    transition: all 0.4s;
+    opacity: 0;
+}
+
+.search-bar-modern.active #recipeSearchInput {
+    width: 100%;
+    padding: 0 15px;
+    opacity: 1;
+}
+
+/* Rotation Effect */
+.icon-rotate { transition: transform 0.4s; }
+.rotate-active { transform: rotate(90deg); }
+
+
+
+
+
 
 
 /* Floating Button Style */
@@ -1172,12 +1246,39 @@ DATA</button>
 
 <div class="cat-filter-wrapper" id="catFilterBar"></div>
 
+
+
+<div class="header-search-container">
+    <div id="searchWrapper" class="search-bar-modern">
+        <button onclick="toggleSearch()" class="search-trigger-btn">
+            <div id="searchIconWrapper" class="icon-rotate">
+                <i id="searchIcon" class="fas fa-search"></i>
+            </div>
+        </button>
+        <input type="text" id="recipeSearchInput" placeholder="Search premium recipes..." oninput="handleSearch(this.value)">
+    </div>
+</div>
+
+
+
+
 <div class="container" id="homeCont">
     <button id="viewToggleBtn" onclick="toggleView()" class="toggle-btn-premium floating-toggle">
         <div id="iconWrapper" class="icon-rotate">
             <i id="viewIcon" class="fas fa-th-large"></i>
         </div>
     </button>
+
+    <div class="search-container-floating">
+        <div id="searchWrapper" class="search-bar-wrapper">
+            <input type="text" id="recipeSearchInput" placeholder="Search recipe..." oninput="handleSearch(this.value)">
+            <button onclick="toggleSearch()" class="toggle-btn-premium search-trigger">
+                <div id="searchIconWrapper" class="icon-rotate">
+                    <i id="searchIcon" class="fas fa-search"></i>
+                </div>
+            </button>
+        </div>
+    </div>
 
     <div id="recipeGrid" class="grid"></div>
 </div>
@@ -1868,42 +1969,68 @@ function toggleView() {
     renderRecipes();
 }
 
+let searchQuery = "";
+let isSearchActive = false; // Flag to stop animation during search
 
+function toggleSearch() {
+    const wrapper = document.getElementById('searchWrapper');
+    const input = document.getElementById('recipeSearchInput');
+    const icon = document.getElementById('searchIcon');
+    const iconWrap = document.getElementById('searchIconWrapper');
+    
+    wrapper.classList.toggle('active');
+    iconWrap.classList.toggle('rotate-active');
+    
+    if (wrapper.classList.contains('active')) {
+        input.focus();
+        icon.className = 'fas fa-times'; 
+    } else {
+        input.value = '';
+        searchQuery = '';
+        icon.className = 'fas fa-search';
+        renderRecipes(); 
+    }
+}
 
-// --- 1. RENDER RECIPES (Professional & Fixed Layout) ---
-
-
-
-// --- 1. MAIN SCREEN: RENDER RECIPES GRID ---
+function handleSearch(val) {
+    searchQuery = val.toLowerCase();
+    // Jab search ho raha ho, tab animation band rahega
+    isSearchActive = (searchQuery.length > 0); 
+    renderRecipes();
+}
 
 function renderRecipes() {
-    let filtered = (currentFilter === 'ALL') ? recipes : recipes.filter(r => r.category === currentFilter);
-    const gridDiv = document.getElementById('recipeGrid');
+    // 1. Unified Filter
+    let filtered = recipes.filter(r => {
+        const matchesCategory = (currentFilter === 'ALL' || r.category === currentFilter);
+        const matchesSearch = r.name.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+    });
 
-    if (isListView) {
-        gridDiv.classList.add('list-view-active');
-    } else {
-        gridDiv.classList.remove('list-view-active');
+    const gridDiv = document.getElementById('recipeGrid');
+    gridDiv.className = isListView ? 'grid list-view-active' : 'grid';
+
+    if (filtered.length === 0) {
+        gridDiv.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:60px; color:#94a3b8; font-weight:600;">No recipes found...</div>`;
+        return;
     }
 
     gridDiv.innerHTML = filtered.map((r, i) => {
         let realIdx = recipes.indexOf(r);
         let iconSize = isListView ? '24px' : '80px';
         
+        // Control Animation: Only animate if search is NOT active
+        let cardAnim = isSearchActive ? '' : `animation: cardEntrance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: ${i < 12 ? i * 0.04 : 0}s;`;
+
         let photoContent = r.img 
             ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
             : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f8fafc; color:#cbd5e1;">🖼️</div>`;
 
-        let delay = i < 12 ? i * 0.04 : 0;
-
-        // --- DANGER EFFECT LOGIC (iPhone style shake) ---
-        // Agar isManage true hai, to vibration/shake animation apply hogi
-        let dangerEffect = isManage ? 'animation: dangerShake 0.3s infinite alternate;' : '';
-        let dangerBorder = isManage ? 'border: 1px solid rgba(239, 68, 68, 0.3);' : '';
+        let dangerEffect = isManage ? 'animation: dangerShake 0.3s infinite alternate; border: 1px solid rgba(239, 68, 68, 0.3);' : '';
 
         return `
         <div class="card" 
-             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; animation: cardEntrance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: ${delay}s; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect} ${dangerBorder}"
+             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; ${cardAnim} ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect}"
              onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
             
             <div onclick="event.stopPropagation(); showRecipeItems(${realIdx})" 
@@ -1916,19 +2043,37 @@ function renderRecipes() {
             </div>
             
             <div style="padding:6px 10px; flex:1; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:${isListView ? 'left' : 'center'};">
-                <span style="color:#00D2D3; font-size:7px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">
-                    ${r.category || 'BAKERY'}
-                </span>
-                <b style="font-size:11px; color:#1e293b; line-height:1.1; margin-top:1px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break: break-word;">
-                    ${r.name}
-                </b>
-                <div style="font-size:9px; color:#94a3b8; font-weight:600; margin-top:1px;">
-                    ${r.items ? r.items.length : 0} Items
-                </div>
+                <span style="color:#00D2D3; font-size:7px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">${r.category || 'BAKERY'}</span>
+                <b style="font-size:11px; color:#1e293b; line-height:1.1; margin-top:1px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${r.name}</b>
+                <div style="font-size:9px; color:#94a3b8; font-weight:600; margin-top:1px;">${r.items ? r.items.length : 0} Items</div>
             </div>
         </div>`;
     }).join('');
 }
+
+
+// --- 1. RENDER RECIPES (Professional & Fixed Layout) ---
+
+
+
+// --- 1. MAIN SCREEN: RENDER RECIPES GRID ---
+
+
+
+
+// 1. Toggle Search Bar (Expand/Collapse)
+
+
+// 2. Handle Search Input
+
+
+
+// Search Bar Toggle Karne ke liye
+
+
+// Typing handle karne ke liye
+
+
 
 
 // --- 2. OVERLAY: SHOW RECIPE COSTING DETAILS ---
@@ -2332,16 +2477,10 @@ function clearPhoto() { tempImg = ''; updatePreview(); }
 
 // Real-time Search Logic
 // 1. Search filter function
-
 function filterStockItems() {
-    const searchInp = document.getElementById('stockSearchInput');
-    if (!searchInp) return;
-    
-    // .trim() lagane se "butter " (space) bhi "butter" ban jayega
-    const query = searchInp.value.toLowerCase().trim();
+    const query = document.getElementById('stockSearchInput').value.toLowerCase();
     renderStock(query);
 }
-
 
 // 2. Search clear karne ka function
 function clearStockSearch() {
