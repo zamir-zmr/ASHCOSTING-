@@ -844,10 +844,10 @@
 
 .header-search-container {
     position: fixed;
-    top: 15px;
+    top: 125px;
     left: 50%;
     transform: translateX(-50%); /* Center alignment */
-    z-index: 2000;
+    z-index: 200;
     width: auto;
 }
 
@@ -1269,16 +1269,7 @@ DATA</button>
         </div>
     </button>
 
-    <div class="search-container-floating">
-        <div id="searchWrapper" class="search-bar-wrapper">
-            <input type="text" id="recipeSearchInput" placeholder="Search recipe..." oninput="handleSearch(this.value)">
-            <button onclick="toggleSearch()" class="toggle-btn-premium search-trigger">
-                <div id="searchIconWrapper" class="icon-rotate">
-                    <i id="searchIcon" class="fas fa-search"></i>
-                </div>
-            </button>
-        </div>
-    </div>
+
 
     <div id="recipeGrid" class="grid"></div>
 </div>
