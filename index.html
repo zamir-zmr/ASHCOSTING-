@@ -217,6 +217,13 @@
     filter: brightness(1.1);
 }
 
+         /* .btn-pill { padding: 10px 15px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; transition: 0.2s; }
+         
+         .btn-pill:active { 
+             transform: scale(0.92); 
+             filter: brightness(1.1);
+         } */
+ 
 
 
 
@@ -339,12 +346,7 @@
         .cat-item { padding: 8px 18px; background: white; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1.5px solid #eee; cursor: pointer; transition: 0.2s; }
         .cat-item.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(0,210,211,0.3); }
 
-        .btn-pill { padding: 10px 15px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; transition: 0.2s; }
         
-        .btn-pill:active { 
-    transform: scale(0.92); 
-    filter: brightness(1.1);
-}
 
         
         .btn-manage { background: white; color: #2D3436; }
@@ -1228,9 +1230,10 @@ DATA</button>
     </div>
 
     <div class="h-btns" style="gap: 0px;">
-        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CAT</button>
+        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CATEGORY</button>
         <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
-        <button class="btn-add" onclick="openInputModal('recipe')">+</button>
+        
+        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openInputModal('recipe')">Add Recipe</button>
     </div>
 </div>
 
