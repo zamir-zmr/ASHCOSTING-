@@ -313,25 +313,6 @@
 
 
 
-/* Plus button ko bhi perfect round karne ke liye */
-.btn-add { 
-    background: white; 
-    color: var(--primary); 
-    width: 40px; 
-    height: 40px; 
-    border-radius: 50% !important; 
-    font-size: 24px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border: none; 
-    font-weight: 900;
-    flex-shrink: 0; 
-}
-
-
-
-        
 
         /* --- CATEGORY FILTER BAR --- */
         .cat-filter-wrapper { padding: 10px 15px; background: #f8fafc; display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid #eee; }
@@ -350,7 +331,24 @@
         .btn-manage { background: white; color: #2D3436; }
         .btn-manage.active { background: var(--danger); color: white; }
         .btn-stock { background: #2D3436; color: white; }
-        .btn-add { background: white; color: var(--primary); width: 42px; height: 42px; border-radius: 50%; font-size: 26px; display: flex; align-items: center; justify-content: center; border:none; font-weight: 900; }
+        
+        .btn-add { background: white; color: var(--primary); width: 35px; height: 35px; border-radius: 50%; font-size: 26px; display: flex; align-items: center; justify-content: center; border:#ffe404; font-weight: 900; }
+        
+/*         .btn-add { 
+    background: white; 
+    color: var(--primary); 
+    width: 30px; 
+    height: 30px; 
+    border-radius: 50% !important; 
+    font-size: 24px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border: #ffe404; 
+    font-weight: 900;
+    flex-shrink: 0; 
+}
+ */
 
         .container { padding: 15px 15px; height: calc(100vh - 145px); overflow-y: auto; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -844,9 +842,9 @@
 
 .header-search-container {
     position: fixed;
-    top: 125px;
-    left: 50%;
-    transform: translateX(-50%); /* Center alignment */
+    top: 120px;
+    right: 20%;
+    transform: translateY(100%); /* Center alignment */
     z-index: 200;
     width: auto;
 }
