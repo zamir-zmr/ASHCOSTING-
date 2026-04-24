@@ -440,10 +440,12 @@
 }
 
         
+        .panel-nav { background: white; padding: 7px;
+        padding-right: 30px;
+        margin-left: 15px;
         
-        
-        
-        .panel-nav { background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; font-weight: bold; }
+        display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; font-weight: bold; }
+
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .input-modal { background: white; border-radius: 35px; padding: 25px; width: 100%; max-width: 350px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         
@@ -846,8 +848,8 @@
 
 .header-search-container {
     position: fixed;
-    top: 120px;
-    right: 20%;
+    top: 75px;
+    right: 15%;
     transform: translateY(100%); /* Center alignment */
     z-index: 200;
     width: auto;
@@ -1226,10 +1228,10 @@ DATA</button>
 
 
         <!-- <button class="btn-pill" style="background:#000; color:#fff;" onclick="openBackupPanel()">BACKUP</button> -->
-        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:0px;" onclick="toggleManage()">MANAGE</button>
+        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:5px;" onclick="toggleManage()">MANAGE</button>
     </div>
 
-    <div class="h-btns" style="gap: 0px;">
+    <div class="h-btns" style="gap: 5px;">
         <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CATEGORY</button>
         <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
         
@@ -1323,8 +1325,15 @@ DATA</button>
 </div>
 
 
+
 <div id="stockPanel" class="panel">
-    <div class="panel-nav" style="padding: 10px 15px;">
+    <div class="panel-nav" style="
+    padding: 5px;
+        padding-right: 30px;
+        margin-left: 15px;
+    
+    
+    ">
         STOCK MATERIALS 
         <span onclick="closePanel('stockPanel')" style="cursor:pointer; padding:5px;">✕</span>
     </div>
@@ -3409,7 +3418,7 @@ window.addEventListener('click', (e) => {
 
 </div>
             
-        <button class="btn-purple" style="width:100%; padding: 14px; border-radius: 14px; background: #8b5cf6; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
+        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 14px; background: #8b5cf6; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
             <i class="fas fa-magic"></i> GENERATE BACKUP CODE
         </button>
 
@@ -3436,7 +3445,9 @@ window.addEventListener('click', (e) => {
                           onfocus="this.select();"></textarea>
             </div>
           
-            <button class="btn-green" style="width:100%; padding: 15px; border-radius: 16px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
+            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 16px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; 
+            margin-bottom: 35px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
                 <i class="fas fa-file-import"></i> ADD TO APP
             </button>
         </div>
