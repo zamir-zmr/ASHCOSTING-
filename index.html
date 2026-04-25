@@ -2055,28 +2055,6 @@ function renderRecipes() {
 }
 
 
-// --- 1. RENDER RECIPES (Professional & Fixed Layout) ---
-
-
-
-// --- 1. MAIN SCREEN: RENDER RECIPES GRID ---
-
-
-
-
-// 1. Toggle Search Bar (Expand/Collapse)
-
-
-// 2. Handle Search Input
-
-
-
-// Search Bar Toggle Karne ke liye
-
-
-// Typing handle karne ke liye
-
-
 
 
 // --- 2. OVERLAY: SHOW RECIPE COSTING DETAILS ---
@@ -2901,40 +2879,48 @@ function showToast(msg, isError = false) {
     // --- SMART SHARE LOGIC ---
 
 // --- OPTION 2: DOWNLOAD AS JSON FILE (APK Compatible Version) ---
+
 function downloadJSONFile() {
     let selected = { s: [], r: [], c: [] }; 
+    // Sabhi checkboxes ko select karein
     let chks = document.querySelectorAll('.share-chk');
     let catsNeeded = new Set();
     
     chks.forEach(c => {
-        if(c.ed) {
+        // ERROR FIX: c.ed ki jagah c.checked use karein
+        if(c.checked) { 
             let idx = parseInt(c.getAttribute('data-idx'));
             let type = c.getAttribute('data-type');
+            
             if(type === 'stock') {
-                selected.s.push({...stock[idx], img: ""});
+                // Image remove karke data size chhota rakha hai backup ke liye
+                if(stock[idx]) selected.s.push({...stock[idx], img: ""});
             } else if(type === 'recipe') {
                 let rec = recipes[idx];
-                selected.r.push({...rec, img: ""});
-                if(rec.category) catsNeeded.add(rec.category);
+                if(rec) {
+                    selected.r.push({...rec, img: ""});
+                    if(rec.category) catsNeeded.add(rec.category);
+                }
             }
         }
     });
 
+    // Categories ko add karein jo recipes ke liye zaroori hain
     catsNeeded.forEach(cn => { 
         if(cats.includes(cn)) selected.c.push(cn); 
     });
 
+    // Agar kuch select nahi kiya to error dikhayein
     if(selected.s.length === 0 && selected.r.length === 0) {
-        return showToast("First, select Items or Recipes!", true);
+        return showToast("Pehle Items ya Recipes select karein!", true);
     }
 
-    // JSON String taiyar karein
-    const dataStr = JSON.stringify(selected, null, 2);
-    
-    // APK COMPATIBILITY FIX: 
-    // Blob ki jagah hum Data URI aur Base64 use kar rahe hain jo APK mein better chalta hai
     try {
-        const fileName = "CostingApp_Backup_" + new Date().toISOString().slice(0,10) + ".json";
+        const dataStr = JSON.stringify(selected, null, 2);
+        const fileName = "AshCostinApp_Backup_" + new Date().toISOString().slice(0,10) + ".json";
+        
+        // APK/Mobile Compatibility Fix:
+        // Direct Blob ki jagah Base64 approach best hai mobile browsers ke liye
         const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
         const dataUri = 'data:application/json;charset=utf-8;base64,' + base64Data;
 
@@ -2946,12 +2932,13 @@ function downloadJSONFile() {
         link.click();
         document.body.removeChild(link);
         
-        showToast("JSON File Downloaded! ");
+        showToast("📥 JSON File Downloaded!");
     } catch (err) {
         console.error("Download Error:", err);
-        showToast("Download failed. Use 'GENERATE CODE' instead.", true);
+        showToast("Download fail hua. 'GENERATE CODE' use karein.", true);
     }
 }
+
 
 // --- OPTION 2: IMPORT FROM JSON FILE ---
 function importJSONFile(input) {
@@ -3364,21 +3351,32 @@ window.addEventListener('click', (e) => {
 
 
 <div id="sharePanel" class="share-panel" style="font-family: 'Segoe UI', Roboto, sans-serif;">
-    <div class="share-box" style="background: #bef1f5; border-radius: 24px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #f0f0f0;">
-      
-      
+    <div class="share-box" style="background: #bef1f5; border-radius: 24px; padding: 0px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #f0f0f0; display: flex; flex-direction: column; max-height: 100vh;">
 
-   <div class="share" style="background: #abf5fb; border-radius: 24px; padding: 10px; box-shadow: 0 20px 20px rgba(0,0,0,0.15); 
-   margin-bottom : 5px;
-   border: 2.5px solid #f0f0f0;">
+   <!-- STICKY DATA HEADER -->
+   <div class="share" style="background: #abf5fb; 
+   
+   border-radius: 80px; border: 1px solid #cbd5e1;
+   
+   padding: 10px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+   margin-bottom: 0px;
+   margin-left : 5px;
+   margin-right : 5px;
+   margin-top :5px;
 
-        <span style="position:absolute; right:40px; top:30px; font-size:24px; font-weight:bold; color:#000000; cursor:pointer; transition: 0.3s;" onclick="document.getElementById('sharePanel').style.display='none'">✕</span>
+   border: 2.5px solid #f0f0f0;
+   position: sticky; top: 0; z-index: 100; flex-shrink: 0;">
+
+        <span style="position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:24px; font-weight:bold; color:#000000; cursor:pointer; transition: 0.3s;" onclick="document.getElementById('sharePanel').style.display='none'">✕</span>
         
         <h2 style="padding:0px; 
         margin-bottom : 1px;
         margin-top : 5px;
         color: #1e293b; font-size: 20px; font-weight: 800; letter-spacing: 1px;">DATA</h2>
         </div>
+
+   <!-- SCROLLABLE CONTENT -->
+   <div style="overflow-y: auto; flex: 1; padding: 15px 20px; padding-bottom: 20px;">
         
                 <div style="background: #f8fafc; padding: 5px 5px; border-radius: 14px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
           
@@ -3398,6 +3396,12 @@ window.addEventListener('click', (e) => {
             <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
             <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">SELECT ALL</button>
         </div>
+        
+<!--          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+   
+   <button class="btn-blue" style="flex:1; background:#2ecc71;" onclick="downloadJSONFile()">📥 DOWNLOAD JSON</button>
+</div>
+ -->
 
         <div style="margin-top:15px; border: 2px dashed #0bd2ff; padding: 15px; border-radius: 18px; text-align: center; background: #f1f5f9; transition: 0.3s;">
             <p style="font-size: 11px; font-weight: 700; margin-bottom: 8px; color: #475569;">UPLOAD BACKUP FILE (.JSON)</p>
@@ -3465,6 +3469,7 @@ window.addEventListener('click', (e) => {
                 <i class="fas fa-file-import"></i> ADD TO APP
             </button>
         </div>
+        </div><!-- end scrollable content -->
     </div>
 </div>
 
