@@ -1373,7 +1373,6 @@ DATA</button>
 
 
 
-
     <div id="editorPanel" class="panel">
       
     <div class="panel-nav">
@@ -1397,15 +1396,21 @@ DATA</button>
     <div style="flex:1; overflow-y:auto; padding:15px;">
         <div id="suggestions"></div>
         <div id="ingredientList" style="margin-top:0px;"></div>
-        <!-- <button class="btn-pill" style="width:100%; border:2px dashed #ccc; background:none; margin-top:15px;" onclick="addEmptyRow()">+ Add Manual Row</button> -->
+        
+        
     </div>
 
         
         
         
-        <div style="background:white; padding:15px; border-top:3px solid var(--primary); border-radius:25px 25px 0 0;">
+        <div style="background:white; padding:15px; border-top:3px solid var(--primary); 
+        border-radius:25px 25px 0 0;
+        margin-bottom: 40px">
+          
             <div class="calc-row"
-            style="padding-top:0px; margin-top:0px;"
+            style="padding-top:0px; margin-top:0px; 
+            
+            "
             ><span>Recipe Cost:</span> <b id="recipeTotalDisplay">0.000</b></div>
             <div class="calc-row"
             style="padding-top:0px; margin-top:0px;"
@@ -1422,9 +1427,12 @@ DATA</button>
             <div class="calc-row" style="font-size:18px; color:#2ecc71; border-top:1px solid #eee; padding-top:0px; margin-top:0px;">
                 <b>GRAND TOTAL:</b> <b id="grandTotal">0.000 OMR</b>
             </div>
-            <button class="btn-pill" style="width:100%; background:var(--primary); color:white; margin-top:0px; padding:5px;" onclick="saveAndExit()">FINISH</button>
+            <button class="btn-pill" style="width:100%; background:var(--primary); color:white; margin-top:0px; 
+
+            padding:5px;" onclick="saveAndExit()">FINISH</button>
         </div>
     </div>
+
 
 <div id="stockViewModal" class="modal-overlay" onclick="if(event.target === this) smartClose()">
     <div class="input-modal" style="text-align:center; max-height: 90vh; overflow-y: auto; padding: 20px;">
@@ -2001,6 +2009,7 @@ function handleSearch(val) {
     isSearchActive = (searchQuery.length > 0); 
     renderRecipes();
 }
+
 
 function renderRecipes() {
     // 1. Unified Filter
