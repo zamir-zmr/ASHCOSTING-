@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1020,555 +1020,7 @@
     animation: itemSlide 0.3s ease forwards;
 }
 
-#stockPanel {
-  display: none;
-  flex-direction: column;
-  background: #f0f4f8;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 1000;
-  overflow: hidden;
-}
 
-.stock-header {
-  background: #0f172a;
-  padding: 20px 18px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  border-radius: 0 0 22px 22px;
-  border-bottom: 3px solid #0d9488;
-}
-
-.stock-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.stock-header-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #0d9488;
-  text-transform: uppercase;
-}
-
-.stock-header-title {
-  font-size: 20px;
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: -0.3px;
-}
-
-.stock-close {
-  width: 36px;
-  height: 36px;
-  background: #1e293b;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 1.5px solid #334155;
-  color: #94a3b8;
-  font-size: 15px;
-}
-
-.stock-search-wrap {
-  padding: 14px 14px 0;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.stock-search-icon {
-  position: absolute;
-  left: 26px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 13px;
-  color: #94a3b8;
-  pointer-events: none;
-}
-
-.stock-search {
-  width: 100%;
-  height: 42px;
-  border-radius: 14px;
-  border: 1.5px solid #e2e8f0;
-  background: #ffffff;
-  font-size: 13px;
-  padding: 0 14px 0 38px;
-  box-sizing: border-box;
-  outline: none;
-  color: #1a1f2e;
-  -webkit-appearance: none;
-}
-
-.stock-search:focus {
-  border-color: #0d9488;
-  box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
-}
-
-.stock-addbtn {
-  margin: 12px 14px 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: #0d9488;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  width: calc(100% - 28px);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.stock-addbtn:active {
-  background: #0f766e;
-  transform: scale(0.98);
-}
-
-/* ── Item Card ── */
-.stock-item {
-  background: #ffffff;
-  border-radius: 18px;
-  border: 1.5px solid #e8edf5;
-  display: flex;
-  align-items: center;
-  padding: 10px 12px 10px 12px;
-  gap: 12px;
-  margin: 10px 14px 0;
-}
-
-.stock-item-img-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: 15px;
-  background: #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 2px solid #e2e8f0;
-  padding: 2px;
-  box-sizing: border-box;
-}
-
-.stock-item-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.stock-item-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.stock-item-name {
-  font-size: 14px;
-  font-weight: 800;
-  color: #0f172a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.2px;
-}
-
-.stock-item-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 5px;
-}
-
-.stock-item-price {
-  font-size: 11px;
-  font-weight: 700;
-  color: #0f766e;
-  background: #f0fdfa;
-  padding: 3px 8px;
-  border-radius: 7px;
-  border: 1px solid #ccfbf1;
-}
-
-.stock-item-base {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 600;
-}
-
-.stock-item-dot {
-  font-size: 10px;
-  color: #cbd5e1;
-}
-
-.stock-item-edit {
-  width: 36px;
-  height: 36px;
-  background: #f8fafc;
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid #e2e8f0;
-  cursor: pointer;
-  flex-shrink: 0;
-  color: #64748b;
-  font-size: 13px;
-}
-
-.stock-item-edit:active {
-  background: #e8edf5;
-}
-
-
-#catPanel {
-  display: none;
-  flex-direction: column;
-  background: #f0f4f8;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 1000;
-  overflow: hidden;
-}
-
-.cat-header {
-  background: #0f172a;
-  padding: 20px 18px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  border-radius: 0 0 22px 22px;
-  border-bottom: 3px solid #6366f1;
-}
-
-.cat-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.cat-header-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #6366f1;
-  text-transform: uppercase;
-}
-
-.cat-header-title {
-  font-size: 20px;
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: -0.3px;
-}
-
-.cat-close {
-  width: 36px;
-  height: 36px;
-  background: #1e293b;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 1.5px solid #334155;
-  color: #94a3b8;
-  font-size: 15px;
-}
-
-.cat-add-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 14px 0;
-  flex-shrink: 0;
-}
-
-.cat-add-input {
-  flex: 1;
-  height: 44px;
-  border-radius: 14px;
-  border: 1.5px solid #e2e8f0;
-  background: #ffffff;
-  font-size: 13px;
-  padding: 0 14px;
-  box-sizing: border-box;
-  outline: none;
-  color: #0f172a;
-  -webkit-appearance: none;
-}
-
-.cat-add-input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-}
-
-.cat-add-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  background: #6366f1;
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.cat-add-btn:active {
-  background: #4f46e5;
-  transform: scale(0.96);
-}
-
-.cat-section-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: #94a3b8;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  padding: 14px 14px 6px;
-}
-
-.cat-item-card {
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1.5px solid #e8edf5;
-  display: flex;
-  align-items: center;
-  padding: 12px 12px 12px 14px;
-  gap: 12px;
-  margin: 8px 14px 0;
-  touch-action: pan-y;
-}
-
-.cat-item-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #eef2ff;
-  border: 1.5px solid #e0e7ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.cat-item-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.cat-item-icon i {
-  font-size: 15px;
-  color: #6366f1;
-}
-
-.cat-item-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.cat-item-name {
-  font-size: 14px;
-  font-weight: 800;
-  color: #0f172a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.cat-item-sub {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 600;
-  margin-top: 3px;
-}
-
-.cat-item-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.cat-btn-edit {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: #eff6ff;
-  border: 1.5px solid #dbeafe;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #3b82f6;
-  font-size: 13px;
-}
-
-.cat-btn-edit:active {
-  background: #dbeafe;
-}
-
-.cat-btn-del {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: #fff1f2;
-  border: 1.5px solid #fecdd3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #f43f5e;
-  font-size: 13px;
-}
-
-.cat-btn-del:active {
-  background: #fecdd3;
-}
-
-.cat-drag-handle {
-  color: #cbd5e1;
-  font-size: 14px;
-  padding: 0 4px;
-  cursor: grab;
-  flex-shrink: 0;
-}
-
-/* ── Edit Modal ── */
-.cat-edit-modal {
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 28px 22px 22px;
-  width: 100%;
-  max-width: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-}
-
-.cat-edit-title {
-  font-size: 20px;
-  font-weight: 900;
-  color: #6366f1;
-  margin: 0 0 20px;
-  text-align: center;
-}
-
-.cat-edit-img-wrap {
-  width: 120px;
-  height: 120px;
-  border-radius: 20px;
-  border: 2.5px dashed #c7d2fe;
-  background: #f5f3ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  margin-bottom: 22px;
-  flex-shrink: 0;
-  overflow: visible;
-}
-
-.cat-edit-img-wrap:active {
-  background: #ede9fe;
-}
-
-.cat-edit-field {
-  width: 100%;
-  margin-bottom: 22px;
-}
-
-.cat-edit-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: #94a3b8;
-  letter-spacing: 1.5px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.cat-edit-input {
-  width: 100%;
-  height: 48px;
-  border-radius: 14px;
-  border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
-  font-size: 15px;
-  font-weight: 700;
-  color: #0f172a;
-  padding: 0 16px;
-  box-sizing: border-box;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-.cat-edit-input:focus {
-  border-color: #6366f1;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-}
-
-.cat-edit-btns {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.cat-edit-back {
-  flex: 1;
-  height: 48px;
-  border-radius: 14px;
-  border: 2px solid #e2e8f0;
-  background: #fff;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-}
-
-.cat-edit-back:active {
-  background: #f1f5f9;
-}
-
-.cat-edit-save {
-  flex: 1;
-  height: 48px;
-  border-radius: 14px;
-  border: none;
-  background: #6366f1;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-}
-
-.cat-edit-save:active {
-  background: #4f46e5;
-  transform: scale(0.97);
-}
 
 </style>
 
@@ -1873,92 +1325,52 @@ DATA</button>
 </div>
 
 
-<div id="stockPanel" class="panel" style="display:none;">
 
-  <div class="stock-header">
-    <div class="stock-header-left">
-      <span class="stock-header-label">Inventory</span>
-      <span class="stock-header-title">Stock Materials</span>
+<div id="stockPanel" class="panel">
+    <div class="panel-nav" style="
+    padding: 5px;
+        padding-right: 30px;
+        margin-left: 15px;
+    
+    
+    ">
+        STOCK MATERIALS 
+        <span onclick="closePanel('stockPanel')" style="cursor:pointer; padding:5px;">✕</span>
     </div>
-    <span class="stock-close" onclick="closePanel('stockPanel')">
-      <i class="fas fa-times"></i>
-    </span>
-  </div>
-
-  <div class="stock-search-wrap">
-    <i class="fas fa-search stock-search-icon"></i>
-    <input type="text" id="stockSearchInput" class="stock-search"
-      placeholder="Search materials..."
-      oninput="filterStockItems()">
-  </div>
-
-  <button class="stock-addbtn" onclick="openInputModal('stock')">
-    <i class="fas fa-plus"></i> ADD MATERIAL
-  </button>
-
-  <div class="panel-content" style="overflow-y:auto; flex:1; padding-bottom:20px;">
-    <div id="stockList"></div>
-  </div>
-
-</div>
-
-<div id="catPanel" class="panel" style="display:none;">
-
-  <div class="cat-header">
-    <div class="cat-header-left">
-      <span class="cat-header-label">Settings</span>
-      <span class="cat-header-title">Categories</span>
+    
+    <div style="padding: 5px 15px 0 15px;">
+        <div style="position: relative; display: flex; align-items: center;">
+            <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
+            <input type="text" id="stockSearchInput" placeholder="Search materials..." 
+                oninput="filterStockItems()" 
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px; outline: none;">
+        </div>
     </div>
-    <span class="cat-close" onclick="closePanel('catPanel')">
-      <i class="fas fa-times"></i>
-    </span>
-  </div>
 
-  <div class="cat-add-wrap">
-    <input type="text" id="newCatInp" class="cat-add-input" placeholder="New category name...">
-    <button class="cat-add-btn" onclick="addCategory()">
-      <i class="fas fa-plus"></i>
+    <button class="btn-pill" style="width:calc(100% - 30px); background:var(--primary); color:white; padding: 10px; margin: 8px 15px 0 15px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openInputModal('stock')">
+        <i class="fas fa-plus"></i> ADD MATERIAL
     </button>
-  </div>
-
-  <div class="panel-content" style="overflow-y:auto; flex:1; padding-bottom:20px;">
-    <div id="catManagerList"></div>
-  </div>
-
+    
+    <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
+        <div id="stockList"></div>
+    </div>
 </div>
 
-
-<!-- Category Edit Modal -->
-<div id="catEditOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.55); z-index:5500; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;">
-
-  <div class="cat-edit-modal">
-
-    <h2 class="cat-edit-title">Category Details</h2>
-
-    <div class="cat-edit-img-wrap" onclick="if(!document.getElementById('catEditImgPreview').src || document.getElementById('catEditImgPreview').style.display==='none') triggerCatImg()">
-      <img id="catEditImgPreview" src="" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:16px;">
-      <div id="catEditImgPlaceholder" style="display:flex; flex-direction:column; align-items:center; gap:6px;">
-        <i class="fas fa-camera" style="font-size:28px; color:#6366f1;"></i>
-        <span style="font-size:11px; font-weight:700; color:#94a3b8;">ADD PHOTO</span>
-      </div>
-      <div id="catEditImgRemove" onclick="removeCatImg(event)" style="display:none; position:absolute; top:-8px; right:-8px; width:26px; height:26px; background:#ef4444; border-radius:50%; align-items:center; justify-content:center; cursor:pointer; border:2px solid #fff; z-index:10;">
-        <i class="fas fa-times" style="color:#fff; font-size:11px;"></i>
-      </div>
-    </div>
-    <input type="file" id="catImgInput" accept="image/*" style="display:none;" onchange="handleCatImg(this)">
-
-    <div class="cat-edit-field">
-      <label class="cat-edit-label">CATEGORY NAME</label>
-      <input type="text" id="catEditNameInp" class="cat-edit-input" placeholder="Category name...">
+<div id="catPanel" class="panel">
+    <div class="panel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')">✕</span></div>
+    
+    <div style="padding:15px; background:white; border-bottom:1px solid #eee;">
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="newCatInp" placeholder="New Category Name..." style="margin:0;">
+            <button class="btn-pill" style="background:var(--primary); color:white;" onclick="addCategory()">ADD</button>
+        </div>
     </div>
 
-    <div class="cat-edit-btns">
-      <button class="cat-edit-back" onclick="closeCatEdit()">BACK</button>
-      <button class="cat-edit-save" onclick="saveCatEdit()">SAVE</button>
+    <div class="panel-content">
+        <div id="catManagerList"></div>
     </div>
-
-  </div>
 </div>
+
 
 
 
@@ -2089,16 +1501,6 @@ function initApp() {
                 renderCatFilters();
             }
         });
-
-        // CATS IMAGES SYNC
-        db.ref('shared_cats_img').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                catsImg = data;
-                localStorage.setItem('ASH_CI', JSON.stringify(catsImg));
-                renderCatFilters();
-            }
-        });
     }
 
     // 2. Initial Renders
@@ -2153,197 +1555,48 @@ function uploadAppLogo(input) {
 function saveData() { 
     localStorage.setItem('ASH_R', JSON.stringify(recipes)); 
     localStorage.setItem('ASH_S', JSON.stringify(stock)); 
-    localStorage.setItem('ASH_C', JSON.stringify(cats));
-    localStorage.setItem('ASH_CI', JSON.stringify(catsImg));
+    localStorage.setItem('ASH_C', JSON.stringify(cats)); 
 }
 
 // --- NEW SYNC HELPER FOR CATEGORIES ---
 function syncCatsToCloud() {
-    saveData(); // Local save (catsImg bhi save hoga)
+    saveData(); // Local save
     if (typeof db !== 'undefined') {
-        db.ref('shared_categories').set(cats);
-        db.ref('shared_cats_img').set(catsImg); // Photos bhi sync
-        console.log("Categories + Images Synced to Cloud ");
+        db.ref('shared_categories').set(cats); // Madam ke phone ke liye
+        console.log("Categories Synced to Cloud ");
     }
 }
 
 /* --- CATEGORY LOGIC --- */
 
-let catEditIdx = null;
-let catTempImg = null;
-
-// LocalStorage se data load karna safely
-if (typeof catsImg === 'undefined') {
-    var catsImg = JSON.parse(localStorage.getItem('ASH_CI')) || [];
-}
-
-// 1. RENDER ALL CATEGORIES & FILTERS
 function renderCatFilters() {
-    // Top Filter Bar Update
-    let html = `<div class="cat-item ${currentFilter === 'ALL' ? 'active' : ''}" onclick="filterBy('ALL')">ALL</div>`;
-    cats.forEach(c => {
-        html += `<div class="cat-item ${currentFilter === c ? 'active' : ''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`;
-    });
-    const filterBar = document.getElementById('catFilterBar');
-    if (filterBar) filterBar.innerHTML = html;
-
-    // Recipe Select Dropdown Update
+    // Top bar aur dropdown ka logic
+    let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
+    cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
+    document.getElementById('catFilterBar').innerHTML = html;
+    
     let drop = `<option value="">No Category</option>`;
     cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
-    const catSelect = document.getElementById('recipeCatSelect');
-    if (catSelect) catSelect.innerHTML = drop;
+    document.getElementById('recipeCatSelect').innerHTML = drop;
 
-    // Category Manager List Update
-    const mgr = document.getElementById('catManagerList');
-    if (!mgr) return;
+    // Category Manager List
+    document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
+    <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
+        
+        <div style="display:flex; align-items:center; flex:1;">
+            <b class="cat-name-text" style="color:var(--accent)">${c}</b>
+        </div>
 
-    if (cats.length === 0) {
-        mgr.innerHTML = `
-          <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
-            <i class="fas fa-tag" style="font-size:36px; margin-bottom:12px; display:block; color:#cbd5e1;"></i>
-            <div style="font-size:13px; font-weight:700;">No categories yet</div>
-          </div>`;
-        return;
-    }
+        <div style="display:flex; gap:15px; align-items:center;">
+            <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); editCategory(${i})"></i>
+            
+            <i class="fas fa-trash" style="color:var(--danger); font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); deleteCat(${i})"></i>
+        </div>
+    </div>`).join('');
 
-    let listHTML = `<div class="cat-section-label">All Categories (${cats.length})</div>`;
-
-    listHTML += cats.map((c, i) => {
-        const img = catsImg[i] || null;
-        const iconHTML = img
-            ? `<img src="${img}" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">`
-            : `<i class="fas fa-tag"></i>`;
-
-        return `
-        <div class="cat-item-card draggable-item" data-name="${c}" data-img="${img ? 'HAS_IMG' : ''}">
-            <div class="cat-item-icon" data-imgval="${img ? encodeURIComponent(img) : ''}">${iconHTML}</div>
-            <div class="cat-item-body">
-                <div class="cat-item-name cat-name-text">${c}</div>
-                <div class="cat-item-sub">Category</div>
-            </div>
-            <div class="cat-item-actions">
-                <div class="cat-btn-edit" onclick="event.stopPropagation(); editCategory(${i})">
-                    <i class="fas fa-pen-to-square"></i>
-                </div>
-                <div class="cat-btn-del" onclick="event.stopPropagation(); deleteCat(${i})">
-                    <i class="fas fa-trash"></i>
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-
-    mgr.innerHTML = listHTML;
-    setTimeout(initCatSortable, 200);
+    setTimeout(initCatSortable, 200); 
 }
 
-// 2. EDIT CATEGORY MODAL
-function editCategory(i) {
-    catEditIdx = i;
-    const name = cats[i];
-    const img = catsImg[i] || null;
-
-    catTempImg = null; // Reset temp change flag
-
-    document.getElementById('catEditNameInp').value = name;
-
-    const preview = document.getElementById('catEditImgPreview');
-    const placeholder = document.getElementById('catEditImgPlaceholder');
-    const removeBtn = document.getElementById('catEditImgRemove');
-
-    if (img) {
-        preview.src = img;
-        preview.style.display = 'block';
-        placeholder.style.display = 'none';
-        removeBtn.style.display = 'flex';
-    } else {
-        preview.src = '';
-        preview.style.display = 'none';
-        placeholder.style.display = 'flex';
-        removeBtn.style.display = 'none';
-    }
-
-    history.pushState({ modal: 'catEdit' }, '');
-    document.getElementById('catEditOverlay').style.display = 'flex';
-}
-
-function closeCatEdit() {
-    document.getElementById('catEditOverlay').style.display = 'none';
-    catEditIdx = null;
-    catTempImg = null;
-}
-
-// 3. IMAGE HANDLING
-function triggerCatImg() {
-    window._catFilePickerOpen = true;
-    document.getElementById('catImgInput').click();
-    setTimeout(() => { window._catFilePickerOpen = false; }, 2000);
-}
-
-function handleCatImg(input) {
-    if (!input.files || !input.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        catTempImg = e.target.result; 
-        const preview = document.getElementById('catEditImgPreview');
-        const placeholder = document.getElementById('catEditImgPlaceholder');
-        const removeBtn = document.getElementById('catEditImgRemove');
-        preview.src = catTempImg;
-        preview.style.display = 'block';
-        placeholder.style.display = 'none';
-        removeBtn.style.display = 'flex';
-    };
-    reader.readAsDataURL(input.files[0]);
-    input.value = ''; 
-}
-
-function removeCatImg(e) {
-    e.stopPropagation();
-    catTempImg = '__REMOVED__';
-    const preview = document.getElementById('catEditImgPreview');
-    const placeholder = document.getElementById('catEditImgPlaceholder');
-    const removeBtn = document.getElementById('catEditImgRemove');
-    preview.src = '';
-    preview.style.display = 'none';
-    placeholder.style.display = 'flex';
-    removeBtn.style.display = 'none';
-}
-
-// 4. SAVE EDITS (FIXED PHOTO SAVING)
-function saveCatEdit() {
-    const newName = document.getElementById('catEditNameInp').value.trim();
-    if (!newName) { showToast("Category name required!", true); return; }
-    if (catEditIdx === null) return;
-
-    const oldName = cats[catEditIdx];
-    cats[catEditIdx] = newName;
-
-    // Image logic update
-    if (catTempImg === '__REMOVED__') {
-        catsImg[catEditIdx] = null;
-    } else if (catTempImg !== null) {
-        catsImg[catEditIdx] = catTempImg;
-    }
-
-    // Recipe category update
-    recipes.forEach(r => {
-        if (r.category === oldName) r.category = newName;
-    });
-
-    // Save ALL data back to storage
-    localStorage.setItem('ASH_CI', JSON.stringify(catsImg));
-    saveData();
-    syncCatsToCloud();
-
-    if (typeof db !== 'undefined') {
-        db.ref('shared_recipes_list').set(recipes);
-    }
-
-    renderCatFilters();
-    showToast(`"${newName}" Updated & Saved!`);
-    closeCatEdit();
-}
-
-// 5. DRAG & DROP SORTABLE
 function initCatSortable() {
     let el = document.getElementById('catManagerList');
     if (!el || typeof Sortable === 'undefined') return;
@@ -2352,95 +1605,110 @@ function initCatSortable() {
 
     el.sortableInstance = Sortable.create(el, {
         animation: 150,
-        delay: 800,
-        delayOnTouchOnly: true,
-        touchStartThreshold: 10,
-        forceFallback: false,
+        delay: 500,             
+        delayOnTouchOnly: true, 
+        touchStartThreshold: 5, 
         ghostClass: 'sortable-ghost',
-        scroll: true,
-        scrollSensitivity: 60,
-        scrollSpeed: 10,
         onEnd: function() {
-            let newCats = [];
-            let newCatsImg = [];
-            el.querySelectorAll('.cat-item-card').forEach((item, newIdx) => {
-                const name = item.querySelector('.cat-name-text').innerText.trim();
-                const iconEl = item.querySelector('.cat-item-icon');
-                const encoded = iconEl ? (iconEl.getAttribute('data-imgval') || '') : '';
-                const imgVal = encoded ? decodeURIComponent(encoded) : null;
-                newCats.push(name);
-                newCatsImg.push(imgVal || null);
+            let newOrder = [];
+            el.querySelectorAll('.cat-name-text').forEach(item => {
+                newOrder.push(item.innerText.trim());
             });
-            cats = newCats;
-            catsImg = newCatsImg;
-
-            localStorage.setItem('ASH_CI', JSON.stringify(catsImg));
-            saveData();
-            syncCatsToCloud();
-            refreshOtherUI();
-            showToast("Order Saved Permanently");
+            cats = newOrder;
+            
+            // --- SYNC FIX ---
+            syncCatsToCloud(); // Ab drag karne ke baad Madam ke phone par order change hoga
+            refreshOtherUI(); 
+            showToast("Order Saved & Synced ");
         }
     });
 }
 
-// 6. UI REFRESHERS
 function refreshTopFilters() {
     let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
     cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
-    const bar = document.getElementById('catFilterBar');
-    if(bar) bar.innerHTML = html;
+    document.getElementById('catFilterBar').innerHTML = html;
 }
 
 function refreshOtherUI() {
-    refreshTopFilters();
+    let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
+    cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
+    document.getElementById('catFilterBar').innerHTML = html;
+    
     let drop = `<option value="">No Category</option>`;
     cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
-    const sel = document.getElementById('recipeCatSelect');
-    if(sel) sel.innerHTML = drop;
+    document.getElementById('recipeCatSelect').innerHTML = drop;
 }
 
-function filterBy(c) { 
-    currentFilter = c; 
-    if(typeof renderRecipes === 'function') renderRecipes(); 
-    renderCatFilters(); 
-}
+function filterBy(c) { currentFilter = c; renderRecipes(); renderCatFilters(); }
 
-// 7. ADD CATEGORY (FIXED PLUS ACTION)
 function addCategory() {
-    let inputField = document.getElementById('newCatInp');
-    if(!inputField) return;
+    let val = document.getElementById('newCatInp').value.trim();
     
-    let val = inputField.value.trim();
-    
+    // 1. Khali input check
     if(!val) {
         showToast("Please enter a category name!", true);
         return;
     }
 
+    // 2. Duplicate check
     let exists = cats.find(c => c.toLowerCase() === val.toLowerCase());
     if(exists) {
         showToast(`'${val}' already exists!`, true);
         return; 
     }
 
-    // Add to Arrays
-    cats.push(val);
-    catsImg.push(null); 
+    // 3. Category add karna
+    cats.push(val); 
+    document.getElementById('newCatInp').value = ''; 
     
-    // Clear Input
-    inputField.value = ''; 
+    // --- SYNC FIX ---
+    syncCatsToCloud(); // Nayi category Madam ko turant dikhegi
     
-    // Save & Sync
-    localStorage.setItem('ASH_CI', JSON.stringify(catsImg));
-    saveData();
-    syncCatsToCloud();
     renderCatFilters(); 
-    showToast(`${val} Category Added!`);
+    
+    // --- UPDATED TOAST WITH CATEGORY NAME ---
+    showToast(`${val} Category Saved & Synced`);
 }
 
+function editCategory(i) {
+    let oldName = cats[i];
+    
+    showCustomModal({
+        title: "RENAME CATEGORY",
+        msg: "Enter The New Name Below",
+        showInput: true,
+        val: oldName,
+        onYes: (newName) => {
+            let finalName = newName ? newName.trim() : "";
+            
+            if (!finalName || finalName === oldName) return;
 
+            let exists = cats.find((c, idx) => c.toLowerCase() === finalName.toLowerCase() && idx !== i);
+            if(exists) {
+                showToast(`'${finalName}' Already Exists!`, true);
+                setTimeout(() => editCategory(i), 100); 
+                return; 
+            }
 
+            // Sabhi recipes mein category name update karein
+            recipes.forEach(r => { if (r.category === oldName) r.category = finalName; });
+            cats[i] = finalName; 
+            
+            // --- SYNC FIX ---
+            syncCatsToCloud(); // Rename hote hi Madam ke phone par bhi update hoga
+            if (typeof db !== 'undefined') {
+                db.ref('shared_recipes_list').set(recipes); // Recipes bhi sync karni padegi category rename ke liye
+            }
 
+            renderCatFilters(); 
+            renderRecipes();
+            showToast("Category Updated & Synced!");
+        }
+    });
+}
+
+// Function for deleting (Aapne deleteCat manga tha pichle message mein)
 
 
 
@@ -2487,30 +1755,6 @@ function toggleManage() {
 
 // --- 1. MODAL & PANEL LOGIC ---
 window.onpopstate = function(event) {
-    // catEditOverlay back press se band karo
-    // Lekin Android file picker se aane wale popstate ko ignore karo
-    const catEditOvl = document.getElementById('catEditOverlay');
-    if (catEditOvl && catEditOvl.style.display === 'flex') {
-        // Agar file picker abhi active hai to ignore karo
-        if (window._catFilePickerOpen) {
-            window._catFilePickerOpen = false;
-            history.pushState({ modal: 'catEdit' }, ''); // State wapas push karo
-            return;
-        }
-        catEditOvl.style.display = 'none';
-        catEditIdx = null; catTempImg = null;
-        return;
-    }
-    // searchPanel back press se band karo
-    const sp = document.getElementById('searchPanel');
-    if (sp && sp.style.display === 'flex') {
-        sp.style.display = 'none';
-        window.fromEverythingSearch = false;
-        window.lastSearchQuery = '';
-        const h = document.getElementById('homeCont');
-        if (h) h.style.display = 'block';
-        return;
-    }
     // 1. Saare open panels aur overlays ko band karein
     document.querySelectorAll('.panel, .modal-overlay, .image-cropper-container').forEach(el => {
         el.style.display = 'none';
@@ -3232,70 +2476,53 @@ function clearStockSearch() {
 
 // 3. Render function (with original index support)
 
-function openPanel(id) {
-    const panel = document.getElementById(id);
-    if (panel) panel.style.display = 'flex';
-    if (id === 'stockPanel') renderStock();
-}
-
-function closePanel(id) {
-    const panel = document.getElementById(id);
-    if (panel) panel.style.display = 'none';
-}
-
-function filterStockItems() {
-    const q = document.getElementById('stockSearchInput').value;
-    renderStock(q);
-}
-
 function renderStock(searchQuery = "") {
     const list = document.getElementById('stockList');
-    if (!list) return;
-
-    const filteredStock = stock.filter(s =>
-        s.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    if (filteredStock.length === 0) {
-        list.innerHTML = `
-          <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
-            <i class="fas fa-box-open" style="font-size:36px; margin-bottom:12px; display:block; color:#cbd5e1;"></i>
-            <div style="font-size:13px; font-weight:700;">No materials found</div>
-          </div>`;
-        return;
-    }
-
+    if(!list) return;
+    
+    const filteredStock = stock.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    
     list.innerHTML = filteredStock.map((s) => {
         const i = stock.indexOf(s);
-
-        const itemImg = s.img
-            ? `<img src="${s.img}" alt="${s.name}">`
-            : `<i class="fas fa-box" style="color:#0d9488; font-size:20px;"></i>`;
+        
+        // Photo check: Agar photo hai to wo dikhao, nahi to icon
+        const itemImg = s.img ? 
+            `<img src="${s.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">` : 
+            `<i class="fas fa-box" style="color: var(--primary); font-size: 18px;"></i>`;
 
         return `
-        <div class="stock-item"
-             ontouchstart="startLongPress(${i})"
-             ontouchend="cancelLongPress()"
-             onmousedown="startLongPress(${i})"
+        <div class="draggable-item" 
+             style="display:flex; justify-content:space-between; padding:12px; background: #ffffff; border-radius: 20px; margin-bottom:12px; align-items:center; 
+                    border: 1.5px solid #f1f5f9; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
+             ontouchstart="startLongPress(${i})" 
+             ontouchend="cancelLongPress()" 
+             onmousedown="startLongPress(${i})" 
              onmouseup="cancelLongPress()">
-
-            <div class="stock-item-img-wrap">${itemImg}</div>
-
-            <div class="stock-item-body">
-                <div class="stock-item-name">${s.name}</div>
-                <div class="stock-item-meta">
-                    <span class="stock-item-price">${(s.price || 0).toFixed(3)} OMR</span>
-                    <span class="stock-item-dot">•</span>
-                    <span class="stock-item-base">${s.base || 1000}g</span>
+             
+            <div style="display:flex; align-items:center; flex:1;">
+                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #e2e8f0; overflow: hidden;">
+                    ${itemImg}
+                </div>
+                
+                <div>
+                    <b style="color:#0f172a; display:block; font-size:15px; font-weight: 800; letter-spacing: -0.3px;">${s.name}</b>
+                    <div style="display: flex; align-items: center; margin-top: 3px;">
+                        <span style="color: #0d9488; font-size: 11px; font-weight: 700; background: #f0fdfa; padding: 2px 6px; border-radius: 6px;">
+                            ${(s.price || 0).toFixed(3)} OMR
+                        </span>
+                        <span style="margin: 0 6px; color: #cbd5e1; font-size: 10px;">•</span>
+                        <small style="color: #64748b; font-size: 11px; font-weight: 600;">${s.base || 1000}g</small>
+                    </div>
                 </div>
             </div>
-
-            <div class="stock-item-edit" onclick="handleEditClick(${i})">
-                <i class="fas fa-pen-to-square"></i>
+            
+            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
+                <i class="fas fa-pen-to-square" style="color: #475569; font-size: 14px;"></i>
             </div>
         </div>`;
     }).join('');
 }
+
 // 4. Naya function jo Edit click hone par search clear karega
 function handleEditClick(index) {
     event.stopPropagation();
@@ -3551,6 +2778,7 @@ function handleDeleteAction() {
 
 
 function deleteCat(i) {
+    // Pehle category ka naam nikal lete hain taaki toast mein dikha sakein
     let catName = cats[i] || "Category";
 
     showCustomModal({
@@ -3558,17 +2786,24 @@ function deleteCat(i) {
         msg: `Are you sure you want to delete \n "${catName}" ?`,
         showInput: false,
         onYes: () => {
+            // Array se delete karne se pehle naam humne upar save kar liya hai
             cats.splice(i, 1);
-            catsImg.splice(i, 1);
 
             if (typeof db !== 'undefined') {
-                db.ref('shared_categories').set(cats.length === 0 ? [] : cats);
-                db.ref('shared_cats_img').set(catsImg.length === 0 ? [] : catsImg);
+                // Last category delete hone par [] bhejien
+                let catSync = (cats.length === 0) ? [] : cats;
+                db.ref('shared_categories').set(catSync)
+                  .then(() => {
+                      // --- UPDATED TOAST WITH NAME ---
+                      showToast(`${catName} Category Deleted & Synced`);
+
+                      if(typeof initApp === "function") initApp();
+                  });
             }
 
             saveData();
-            renderCatFilters();
-            showToast(`${catName} Deleted & Synced`);
+            if(typeof renderCatFilters === "function") renderCatFilters();
+            if(typeof smartClose === "function") smartClose();
         }
     });
 }
@@ -4049,26 +3284,6 @@ function closePanel(id) { history.back(); }
 function smartClose() { history.back(); }
 
 window.onpopstate = function(event) {
-    const catEditOvl = document.getElementById('catEditOverlay');
-    if (catEditOvl && catEditOvl.style.display === 'flex') {
-        if (window._catFilePickerOpen) {
-            window._catFilePickerOpen = false;
-            history.pushState({ modal: 'catEdit' }, '');
-            return;
-        }
-        catEditOvl.style.display = 'none';
-        catEditIdx = null; catTempImg = null;
-        return;
-    }
-    const sp = document.getElementById('searchPanel');
-    if (sp && sp.style.display === 'flex') {
-        sp.style.display = 'none';
-        window.fromEverythingSearch = false;
-        window.lastSearchQuery = '';
-        const hh = document.getElementById('homeCont');
-        if (hh) hh.style.display = 'block';
-        return;
-    }
     document.querySelectorAll('.panel, .modal-overlay, #sharePanel').forEach(el => el.style.display = 'none');
     isManage = false;
     const b = document.getElementById('mBtn');
