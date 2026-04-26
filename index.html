@@ -3391,7 +3391,7 @@ window.addEventListener('click', (e) => {
         </div>
 
 
-        <div style="display: flex; gap: 8px; margin: 15px 0;">
+        <div style="display: flex; gap: 8px; margin: 5px 0;">
             <button id="btn-stock" onclick="bulkSelect('stock')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📦 ITEMS</button>
             <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
             <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">SELECT ALL</button>
@@ -3403,14 +3403,15 @@ window.addEventListener('click', (e) => {
 </div>
  -->
 
-        <div style="margin-top:15px; border: 2px dashed #0bd2ff; padding: 15px; border-radius: 18px; text-align: center; background: #f1f5f9; transition: 0.3s;">
-            <p style="font-size: 11px; font-weight: 700; margin-bottom: 8px; color: #475569;">UPLOAD BACKUP FILE (.JSON)</p>
+        <div style="margin-top:0px; border: 2px dashed #0bd2ff; padding: 15px; border-radius: 18px; text-align: center; background: #f1f5f9; transition: 0.3s;">
+            <i class="fas fa-cloud-upload-alt" style="color: #06b6d4; font-size: 20px; margin-bottom: 0px;"></i>
+                <p style="font-size: 10px; font-weight: 800; color: #475569; margin-bottom: 0px; text-transform: uppercase;">Import Backup JSON</p>
             <input type="file" id="importFile" accept=".json" style="font-size: 12px; width: 100%; color: #64748b;" onchange="importJSONFile(this)">
         </div>
 
-<div id="shareItemsList" style="max-height: 450px; overflow-y: auto; margin: 20px 0; padding: 5px;">
+<div id="shareItemsList" style="max-height: 450px; overflow-y: auto; margin: 0px 0; padding: 5px;">
     
-    <div style="background: white; border-radius: 12px; margin-bottom: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+    <div style="background: white; border-radius: 12px; margin-bottom: 0px; padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="font-family: monospace; font-weight: bold; color: #b2bec3; font-size: 13px; width: 25px;">1</span>
             <div style="display: flex; flex-direction: column;">
@@ -3421,7 +3422,7 @@ window.addEventListener('click', (e) => {
         <input type="checkbox" style="width: 22px; height: 22px; cursor: pointer; accent-color: #3b82f6;">
     </div>
     
-    <div style="background: white; border-radius: 12px; margin-bottom: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+    <div style="background: white; border-radius: 12px; margin-bottom: 0px; padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="font-family: monospace; font-weight: bold; color: #b2bec3; font-size: 13px; width: 25px;">2</span>
             <div style="display: flex; flex-direction: column;">
@@ -3434,11 +3435,12 @@ window.addEventListener('click', (e) => {
 
 </div>
             
-        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 14px; background: #8b5cf6; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
-            <i class="fas fa-magic"></i> GENERATE BACKUP CODE
+        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 14px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 35px;
+        cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
+            <i class="fas fa-code"></i> GENERATE BACKUP CODE
         </button>
 
-        <div style="position: relative; margin-bottom: 15px; width: 100%;">
+        <div style="position: relative; margin-bottom: 7px; width: 100%;">
             <textarea id="shareCodeOutput" 
                       style="width:100%; height:70px; border-radius:14px; padding:12px; font-size:12px; border:1px solid #e2e8f0; background:#f8fafc; color: #334155;
                   border:2px solid #3b82f6;
@@ -3446,16 +3448,19 @@ window.addEventListener('click', (e) => {
                       placeholder="The code will come here..." readonly></textarea>
         </div>
 
-        <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 12px; background: #1e293b; color: white; border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
+        <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 12px; 
+        
+        color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;
+        border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
             <i class="fas fa-copy"></i> COPY GENERATED CODE
         </button>
 
         <div style="margin:20px 0; border-top:1px dashed #e2e8f0;"></div>
 
         <div>
-            <p style="font-size:13px; font-weight:700; color: #1e293b; margin-bottom:10px;">Paste & Add:</p>
+            <p style="font-size:13px; font-weight:700; color: #1e293b; margin-bottom:1px;">Restore Data</p>
             
-            <div style="position: relative; margin-bottom: 15px; width: 100%;">
+            <div style="position: relative; margin-bottom: 1px; width: 100%;">
                 <textarea id="shareRestoreInput" 
                           style="width:100%; height:100px; border-radius:18px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" 
                           placeholder="Paste the code here..."
@@ -3466,7 +3471,7 @@ window.addEventListener('click', (e) => {
             <button class="btn-green" style="width:100%; padding: 8px; border-radius: 16px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; 
             margin-bottom: 35px;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
-                <i class="fas fa-file-import"></i> ADD TO APP
+                🚀 <i class="fas fa-file-import"></i> ADD DATA TO APP
             </button>
         </div>
         </div><!-- end scrollable content -->
