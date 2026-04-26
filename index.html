@@ -1020,7 +1020,428 @@
     animation: itemSlide 0.3s ease forwards;
 }
 
+#stockPanel {
+  display: none;
+  flex-direction: column;
+  background: #f0f4f8;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  overflow: hidden;
+}
 
+.stock-header {
+  background: #0f172a;
+  padding: 20px 18px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-radius: 0 0 22px 22px;
+  border-bottom: 3px solid #0d9488;
+}
+
+.stock-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stock-header-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #0d9488;
+  text-transform: uppercase;
+}
+
+.stock-header-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.stock-close {
+  width: 36px;
+  height: 36px;
+  background: #1e293b;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1.5px solid #334155;
+  color: #94a3b8;
+  font-size: 15px;
+}
+
+.stock-search-wrap {
+  padding: 14px 14px 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.stock-search-icon {
+  position: absolute;
+  left: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.stock-search {
+  width: 100%;
+  height: 42px;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 13px;
+  padding: 0 14px 0 38px;
+  box-sizing: border-box;
+  outline: none;
+  color: #1a1f2e;
+  -webkit-appearance: none;
+}
+
+.stock-search:focus {
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+}
+
+.stock-addbtn {
+  margin: 12px 14px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #0d9488;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  width: calc(100% - 28px);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.stock-addbtn:active {
+  background: #0f766e;
+  transform: scale(0.98);
+}
+
+/* ── Item Card ── */
+.stock-item {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1.5px solid #e8edf5;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px 10px 12px;
+  gap: 12px;
+  margin: 10px 14px 0;
+}
+
+.stock-item-img-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid #e2e8f0;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.stock-item-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.stock-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.stock-item-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+.stock-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.stock-item-price {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f766e;
+  background: #f0fdfa;
+  padding: 3px 8px;
+  border-radius: 7px;
+  border: 1px solid #ccfbf1;
+}
+
+.stock-item-base {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.stock-item-dot {
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+.stock-item-edit {
+  width: 36px;
+  height: 36px;
+  background: #f8fafc;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #e2e8f0;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.stock-item-edit:active {
+  background: #e8edf5;
+}
+
+
+#catPanel {
+  display: none;
+  flex-direction: column;
+  background: #f0f4f8;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.cat-header {
+  background: #0f172a;
+  padding: 20px 18px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-radius: 0 0 22px 22px;
+  border-bottom: 3px solid #6366f1;
+}
+
+.cat-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cat-header-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #6366f1;
+  text-transform: uppercase;
+}
+
+.cat-header-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.cat-close {
+  width: 36px;
+  height: 36px;
+  background: #1e293b;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1.5px solid #334155;
+  color: #94a3b8;
+  font-size: 15px;
+}
+
+.cat-add-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 0;
+  flex-shrink: 0;
+}
+
+.cat-add-input {
+  flex: 1;
+  height: 44px;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 13px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  outline: none;
+  color: #0f172a;
+  -webkit-appearance: none;
+}
+
+.cat-add-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+.cat-add-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #6366f1;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cat-add-btn:active {
+  background: #4f46e5;
+  transform: scale(0.96);
+}
+
+.cat-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 14px 14px 6px;
+}
+
+/* ── Category Item Card ── */
+.cat-item-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid #e8edf5;
+  display: flex;
+  align-items: center;
+  padding: 12px 12px 12px 14px;
+  gap: 12px;
+  margin: 8px 14px 0;
+  touch-action: pan-y;
+}
+
+.cat-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #eef2ff;
+  border: 1.5px solid #e0e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 15px;
+  color: #6366f1;
+}
+
+.cat-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cat-item-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cat-item-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.cat-item-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cat-btn-edit {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #eff6ff;
+  border: 1.5px solid #dbeafe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #3b82f6;
+  font-size: 13px;
+}
+
+.cat-btn-edit:active {
+  background: #dbeafe;
+}
+
+.cat-btn-del {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #fff1f2;
+  border: 1.5px solid #fecdd3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #f43f5e;
+  font-size: 13px;
+}
+
+.cat-btn-del:active {
+  background: #fecdd3;
+}
+
+.cat-drag-handle {
+  color: #cbd5e1;
+  font-size: 14px;
+  padding: 0 4px;
+  cursor: grab;
+  flex-shrink: 0;
+}
 
 </style>
 
@@ -1325,52 +1746,60 @@ DATA</button>
 </div>
 
 
+<div id="stockPanel" class="panel" style="display:none;">
 
-<div id="stockPanel" class="panel">
-    <div class="panel-nav" style="
-    padding: 5px;
-        padding-right: 30px;
-        margin-left: 15px;
-    
-    
-    ">
-        STOCK MATERIALS 
-        <span onclick="closePanel('stockPanel')" style="cursor:pointer; padding:5px;">✕</span>
+  <div class="stock-header">
+    <div class="stock-header-left">
+      <span class="stock-header-label">Inventory</span>
+      <span class="stock-header-title">Stock Materials</span>
     </div>
-    
-    <div style="padding: 5px 15px 0 15px;">
-        <div style="position: relative; display: flex; align-items: center;">
-            <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
-            <input type="text" id="stockSearchInput" placeholder="Search materials..." 
-                oninput="filterStockItems()" 
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px; outline: none;">
-        </div>
-    </div>
+    <span class="stock-close" onclick="closePanel('stockPanel')">
+      <i class="fas fa-times"></i>
+    </span>
+  </div>
 
-    <button class="btn-pill" style="width:calc(100% - 30px); background:var(--primary); color:white; padding: 10px; margin: 8px 15px 0 15px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openInputModal('stock')">
-        <i class="fas fa-plus"></i> ADD MATERIAL
+  <div class="stock-search-wrap">
+    <i class="fas fa-search stock-search-icon"></i>
+    <input type="text" id="stockSearchInput" class="stock-search"
+      placeholder="Search materials..."
+      oninput="filterStockItems()">
+  </div>
+
+  <button class="stock-addbtn" onclick="openInputModal('stock')">
+    <i class="fas fa-plus"></i> ADD MATERIAL
+  </button>
+
+  <div class="panel-content" style="overflow-y:auto; flex:1; padding-bottom:20px;">
+    <div id="stockList"></div>
+  </div>
+
+</div>
+
+
+<div id="catPanel" class="panel" style="display:none;">
+
+  <div class="cat-header">
+    <div class="cat-header-left">
+      <span class="cat-header-label">Settings</span>
+      <span class="cat-header-title">Categories</span>
+    </div>
+    <span class="cat-close" onclick="closePanel('catPanel')">
+      <i class="fas fa-times"></i>
+    </span>
+  </div>
+
+  <div class="cat-add-wrap">
+    <input type="text" id="newCatInp" class="cat-add-input" placeholder="New category name...">
+    <button class="cat-add-btn" onclick="addCategory()">
+      <i class="fas fa-plus"></i>
     </button>
-    
-    <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
-        <div id="stockList"></div>
-    </div>
+  </div>
+
+  <div class="panel-content" style="overflow-y:auto; flex:1; padding-bottom:20px;">
+    <div id="catManagerList"></div>
+  </div>
+
 </div>
-
-<div id="catPanel" class="panel">
-    <div class="panel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')">✕</span></div>
-    
-    <div style="padding:15px; background:white; border-bottom:1px solid #eee;">
-        <div style="display:flex; gap:10px;">
-            <input type="text" id="newCatInp" placeholder="New Category Name..." style="margin:0;">
-            <button class="btn-pill" style="background:var(--primary); color:white;" onclick="addCategory()">ADD</button>
-        </div>
-    </div>
-
-    <div class="panel-content">
-        <div id="catManagerList"></div>
-    </div>
-</div>
-
 
 
 
@@ -1570,33 +1999,62 @@ function syncCatsToCloud() {
 /* --- CATEGORY LOGIC --- */
 
 function renderCatFilters() {
-    // Top bar aur dropdown ka logic
+    // Top filter bar
     let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
-    cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
+    cats.forEach(c => {
+        html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`;
+    });
     document.getElementById('catFilterBar').innerHTML = html;
-    
+
+    // Recipe dropdown
     let drop = `<option value="">No Category</option>`;
     cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
     document.getElementById('recipeCatSelect').innerHTML = drop;
 
-    // Category Manager List
-    document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-    <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
-        
-        <div style="display:flex; align-items:center; flex:1;">
-            <b class="cat-name-text" style="color:var(--accent)">${c}</b>
-        </div>
+    // Category manager list
+    const mgr = document.getElementById('catManagerList');
+    if (!mgr) return;
 
-        <div style="display:flex; gap:15px; align-items:center;">
-            <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); editCategory(${i})"></i>
-            
-            <i class="fas fa-trash" style="color:var(--danger); font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); deleteCat(${i})"></i>
-        </div>
-    </div>`).join('');
+    if (cats.length === 0) {
+        mgr.innerHTML = `
+          <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
+            <i class="fas fa-tag" style="font-size:36px; margin-bottom:12px; display:block; color:#cbd5e1;"></i>
+            <div style="font-size:13px; font-weight:700;">No categories yet</div>
+          </div>`;
+        return;
+    }
 
-    setTimeout(initCatSortable, 200); 
+    // Section label
+    let listHTML = `<div class="cat-section-label">All Categories (${cats.length})</div>`;
+
+    listHTML += cats.map((c, i) => `
+        <div class="cat-item-card draggable-item" data-name="${c}">
+
+
+
+            <div class="cat-item-icon">
+                <i class="fas fa-tag"></i>
+            </div>
+
+            <div class="cat-item-body">
+                <div class="cat-item-name cat-name-text">${c}</div>
+                <div class="cat-item-sub">Category</div>
+            </div>
+
+            <div class="cat-item-actions">
+                <div class="cat-btn-edit" onclick="event.stopPropagation(); editCategory(${i})">
+                    <i class="fas fa-pen-to-square"></i>
+                </div>
+                <div class="cat-btn-del" onclick="event.stopPropagation(); deleteCat(${i})">
+                    <i class="fas fa-trash"></i>
+                </div>
+            </div>
+        </div>`).join('');
+
+    mgr.innerHTML = listHTML;
+
+    setTimeout(initCatSortable, 200);
 }
-
 function initCatSortable() {
     let el = document.getElementById('catManagerList');
     if (!el || typeof Sortable === 'undefined') return;
@@ -2476,53 +2934,70 @@ function clearStockSearch() {
 
 // 3. Render function (with original index support)
 
+function openPanel(id) {
+    const panel = document.getElementById(id);
+    if (panel) panel.style.display = 'flex';
+    if (id === 'stockPanel') renderStock();
+}
+
+function closePanel(id) {
+    const panel = document.getElementById(id);
+    if (panel) panel.style.display = 'none';
+}
+
+function filterStockItems() {
+    const q = document.getElementById('stockSearchInput').value;
+    renderStock(q);
+}
+
 function renderStock(searchQuery = "") {
     const list = document.getElementById('stockList');
-    if(!list) return;
-    
-    const filteredStock = stock.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    
+    if (!list) return;
+
+    const filteredStock = stock.filter(s =>
+        s.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    if (filteredStock.length === 0) {
+        list.innerHTML = `
+          <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
+            <i class="fas fa-box-open" style="font-size:36px; margin-bottom:12px; display:block; color:#cbd5e1;"></i>
+            <div style="font-size:13px; font-weight:700;">No materials found</div>
+          </div>`;
+        return;
+    }
+
     list.innerHTML = filteredStock.map((s) => {
         const i = stock.indexOf(s);
-        
-        // Photo check: Agar photo hai to wo dikhao, nahi to icon
-        const itemImg = s.img ? 
-            `<img src="${s.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">` : 
-            `<i class="fas fa-box" style="color: var(--primary); font-size: 18px;"></i>`;
+
+        const itemImg = s.img
+            ? `<img src="${s.img}" alt="${s.name}">`
+            : `<i class="fas fa-box" style="color:#0d9488; font-size:20px;"></i>`;
 
         return `
-        <div class="draggable-item" 
-             style="display:flex; justify-content:space-between; padding:12px; background: #ffffff; border-radius: 20px; margin-bottom:12px; align-items:center; 
-                    border: 1.5px solid #f1f5f9; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
-             ontouchstart="startLongPress(${i})" 
-             ontouchend="cancelLongPress()" 
-             onmousedown="startLongPress(${i})" 
+        <div class="stock-item"
+             ontouchstart="startLongPress(${i})"
+             ontouchend="cancelLongPress()"
+             onmousedown="startLongPress(${i})"
              onmouseup="cancelLongPress()">
-             
-            <div style="display:flex; align-items:center; flex:1;">
-                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #e2e8f0; overflow: hidden;">
-                    ${itemImg}
-                </div>
-                
-                <div>
-                    <b style="color:#0f172a; display:block; font-size:15px; font-weight: 800; letter-spacing: -0.3px;">${s.name}</b>
-                    <div style="display: flex; align-items: center; margin-top: 3px;">
-                        <span style="color: #0d9488; font-size: 11px; font-weight: 700; background: #f0fdfa; padding: 2px 6px; border-radius: 6px;">
-                            ${(s.price || 0).toFixed(3)} OMR
-                        </span>
-                        <span style="margin: 0 6px; color: #cbd5e1; font-size: 10px;">•</span>
-                        <small style="color: #64748b; font-size: 11px; font-weight: 600;">${s.base || 1000}g</small>
-                    </div>
+
+            <div class="stock-item-img-wrap">${itemImg}</div>
+
+            <div class="stock-item-body">
+                <div class="stock-item-name">${s.name}</div>
+                <div class="stock-item-meta">
+                    <span class="stock-item-price">${(s.price || 0).toFixed(3)} OMR</span>
+                    <span class="stock-item-dot">•</span>
+                    <span class="stock-item-base">${s.base || 1000}g</span>
                 </div>
             </div>
-            
-            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
-                <i class="fas fa-pen-to-square" style="color: #475569; font-size: 14px;"></i>
+
+            <div class="stock-item-edit" onclick="handleEditClick(${i})">
+                <i class="fas fa-pen-to-square"></i>
             </div>
         </div>`;
     }).join('');
 }
-
 // 4. Naya function jo Edit click hone par search clear karega
 function handleEditClick(index) {
     event.stopPropagation();
