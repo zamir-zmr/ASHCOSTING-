@@ -2744,7 +2744,7 @@ function showCustomModal({title, msg, showInput, val, onYes}) {
     
     document.getElementById('confirmOverlay').style.display = 'flex';
     
-    // Sabse important: onYes function ko callback mein save karna
+    // Callback save karna
     confirmCallback = onYes; 
 }
 
@@ -2754,16 +2754,15 @@ function closeConfirm(isYes) {
     const inputVal = document.getElementById('confirmInput').value;
 
     if(isYes && typeof confirmCallback === 'function') {
-        // Agar OK dabaya, toh delete ya rename function chalao
         confirmCallback(inputVal); 
     }
 
-    // Modal band karo aur callback khali karo
+    // Modal band karo
     overlay.style.display = 'none';
     confirmCallback = null;
 }
 
-// 3. OK Button ko JavaScript se connect karna (Ye line miss mat karna)
+// 3. Event Listeners Setup
 document.addEventListener('DOMContentLoaded', () => {
     const okBtn = document.getElementById('confirmYesBtn');
     if(okBtn) {
@@ -2771,12 +2770,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 4. Delete Function (Fixed Hindi Version)
-
-
-
+// 4. Delete Action (Recipe & Stock)
 function handleDeleteAction() {
-    // 1. RECIPE DELETE LOGIC
     if (mode === 'recipe') {
         let recipeName = recipes[activeIdx] ? (recipes[activeIdx].name || "Recipe") : "Recipe";
 
@@ -2785,29 +2780,18 @@ function handleDeleteAction() {
             msg: `Are you sure you want to delete\n"${recipeName}"?`,
             showInput: false,
             onYes: () => {
-                // Local array se delete
                 recipes.splice(activeIdx, 1);
-                
-                // Cloud sync
                 if (typeof db !== 'undefined') {
                     db.ref('shared_recipes_list').set(recipes);
                 }
-                
-                // Save and Refresh
                 saveData(); 
                 initApp();
-                
-                // UI Close
                 document.getElementById('inputModalOverlay').style.display = 'none';
-                smartClose(); 
-                
-                // Specific Toast for Recipe
+                if(typeof smartClose === "function") smartClose(); 
                 showToast(`${recipeName} Recipe Deleted & Synced`);
             }
         });
     } 
-    
-    // 2. STOCK DELETE LOGIC
     else if (mode === 'stock') {
         let stockName = stock[activeIdx] ? (stock[activeIdx].name || "Item") : "Item";
 
@@ -2816,36 +2800,22 @@ function handleDeleteAction() {
             msg: `Are you sure you want to delete\n"${stockName}"?`,
             showInput: false,
             onYes: () => {
-                // Local array se delete
                 stock.splice(activeIdx, 1);
-                
-                // Cloud sync
                 if (typeof db !== 'undefined') {
                     db.ref('shared_stock_list').set(stock);
                 }
-                
-                // Save and Refresh
                 saveData(); 
                 initApp();
-                
-                // UI Close
                 document.getElementById('inputModalOverlay').style.display = 'none';
-                smartClose(); 
-                
-                // Specific Toast for Stock
+                if(typeof smartClose === "function") smartClose(); 
                 showToast(`${stockName} Deleted from Stock & Synced`);
             }
         });
     }
 }
 
-
-
-
-
-
+// 5. Delete Category (FIXED: Category Layout mein rukne ke liye)
 function deleteCat(i) {
-    // Pehle category ka naam nikal lete hain taaki toast mein dikha sakein
     let catName = cats[i] || "Category";
 
     showCustomModal({
@@ -2853,32 +2823,38 @@ function deleteCat(i) {
         msg: `Are you sure you want to delete \n "${catName}" ?`,
         showInput: false,
         onYes: () => {
-            // Array se delete karne se pehle naam humne upar save kar liya hai
             cats.splice(i, 1);
 
             if (typeof db !== 'undefined') {
-                // Last category delete hone par [] bhejien
                 let catSync = (cats.length === 0) ? [] : cats;
                 db.ref('shared_categories').set(catSync)
                   .then(() => {
-                      // --- UPDATED TOAST WITH NAME ---
                       showToast(`${catName} Category Deleted & Synced`);
-
-                      if(typeof initApp === "function") initApp();
+                      
+                      // FIX: Yahan smartClose() nahi bulana hai agar wahi rehna hai
+                      // Sirf category list ko refresh karein
+                      if(typeof manageCategories === "function") {
+                          manageCategories(); 
+                      } else if(typeof renderCatFilters === "function") {
+                          renderCatFilters();
+                      }
                   });
             }
 
             saveData();
-            if(typeof renderCatFilters === "function") renderCatFilters();
-            if(typeof smartClose === "function") smartClose();
+            
+            // Background update ke liye
+            if(typeof initApp === "function") initApp();
         }
     });
 }
 
-// Ye line batati hai ki jab "OK" button dabega tab confirm logic chalna chahiye
-document.getElementById('confirmYesBtn').onclick = () => closeConfirm(true);
+// OK Button connection check
+const finalOkBtn = document.getElementById('confirmYesBtn');
+if(finalOkBtn) {
+    finalOkBtn.onclick = () => closeConfirm(true);
+}
 
-      
     
     
     // Logo ko gallery se upload aur save karne ka function
