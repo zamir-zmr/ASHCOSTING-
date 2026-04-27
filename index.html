@@ -1020,6 +1020,57 @@
     animation: itemSlide 0.3s ease forwards;
 }
 
+#catFilterBar {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px; /* Gap kam kar diya gaya hai */
+    padding: 20px 10px; /* Jump ke liye space */
+    scrollbar-width: none;
+    background: transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+#catFilterBar::-webkit-scrollbar { display: none; }
+
+.cat-item {
+    padding: 6px 14px; /* Chota aur compact size */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px; /* Clean Rounded Pill */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 14px; /* Chote words jaisa aapne kaha */
+    font-weight: 800; /* Bold aur professional */
+    color: #64748b;
+    text-transform: uppercase; /* Tezi se padhne ke liye uppercase */
+    transition: all 0.2s ease;
+}
+
+/* High Intensity Jump Animation */
+.cat-item.active {
+    background: #019117 !important;
+    border-color: #019117;
+    color: #ffffff !important;
+    box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
+    
+    /* Stronger Jump Animation */
+    animation: mega-jump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+
+@keyframes mega-jump {
+    0% { transform: scale(1) translateY(0); }
+    20% { transform: scale(1.3, 0.7) translateY(4px); } /* Neeche dabna */
+    50% { transform: scale(0.8, 1.4) translateY(-25px); } /* Ooncha Jump */
+    80% { transform: scale(1.1, 0.9) translateY(2px); } /* Bounce back */
+    100% { transform: scale(1) translateY(0); } /* Khada ho jana */
+}
+
+
+
 
 
 </style>
@@ -1577,33 +1628,55 @@ function syncCatsToCloud() {
 
 /* --- CATEGORY LOGIC --- */
 
+// Helper to get icons based on name
+function getIconForCat(name) {
+    let n = name.toLowerCase();
+    if(n === 'all') return 'fa-border-all';
+    if(n.includes('cake')) return 'fa-birthday-cake';
+    if(n.includes('pastry')) return 'fa-cookie-bite';
+    if(n.includes('bread') || n.includes('bakery')) return 'fa-bread-slice';
+    if(n.includes('drink')) return 'fa-glass-martini-alt';
+    return 'fa-tag'; // default icon
+}
+
 function renderCatFilters() {
-    // Top bar aur dropdown ka logic
+    // Top bar with Super Jump Logic
     let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
-    cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
+    
+    cats.forEach(c => {
+        html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">
+            ${c.toUpperCase()}
+        </div>`;
+    });
     document.getElementById('catFilterBar').innerHTML = html;
     
+    // Category Dropdown (Original Logic)
     let drop = `<option value="">No Category</option>`;
     cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
-    document.getElementById('recipeCatSelect').innerHTML = drop;
+    if(document.getElementById('recipeCatSelect')) {
+        document.getElementById('recipeCatSelect').innerHTML = drop;
+    }
 
-    // Category Manager List
-    document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-    <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
-        
-        <div style="display:flex; align-items:center; flex:1;">
-            <b class="cat-name-text" style="color:var(--accent)">${c}</b>
-        </div>
-
-        <div style="display:flex; gap:15px; align-items:center;">
-            <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); editCategory(${i})"></i>
-            
-            <i class="fas fa-trash" style="color:var(--danger); font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); deleteCat(${i})"></i>
-        </div>
-    </div>`).join('');
+    // Category Manager List (Original Logic)
+    if(document.getElementById('catManagerList')) {
+        document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
+        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
+            <div style="display:flex; align-items:center; flex:1;">
+                <b class="cat-name-text" style="color:var(--accent)">${c}</b>
+            </div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); editCategory(${i})"></i>
+                <i class="fas fa-trash" style="color:var(--danger); font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); deleteCat(${i})"></i>
+            </div>
+        </div>`).join('');
+    }
 
     setTimeout(initCatSortable, 200); 
 }
+
+function refreshTopFilters() { renderCatFilters(); }
+function refreshOtherUI() { renderCatFilters(); }
+
 
 function initCatSortable() {
     let el = document.getElementById('catManagerList');
@@ -1632,21 +1705,6 @@ function initCatSortable() {
     });
 }
 
-function refreshTopFilters() {
-    let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
-    cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
-    document.getElementById('catFilterBar').innerHTML = html;
-}
-
-function refreshOtherUI() {
-    let html = `<div class="cat-item ${currentFilter==='ALL'?'active':''}" onclick="filterBy('ALL')">ALL</div>`;
-    cats.forEach(c => html += `<div class="cat-item ${currentFilter===c?'active':''}" onclick="filterBy('${c}')">${c.toUpperCase()}</div>`);
-    document.getElementById('catFilterBar').innerHTML = html;
-    
-    let drop = `<option value="">No Category</option>`;
-    cats.forEach(c => drop += `<option value="${c}">${c}</option>`);
-    document.getElementById('recipeCatSelect').innerHTML = drop;
-}
 
 function filterBy(c) { currentFilter = c; renderRecipes(); renderCatFilters(); }
 
