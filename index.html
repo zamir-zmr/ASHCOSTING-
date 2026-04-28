@@ -1670,7 +1670,7 @@ function renderCatFilters() {
     // Category Manager List (Original Logic)
     if(document.getElementById('catManagerList')) {
         document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
+        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:5px; align-items:center; border:3px solid #08cdcd; touch-action: pan-y;">
             <div style="display:flex; align-items:center; flex:1;">
                 <b class="cat-name-text" style="color:var(--accent)">${c}</b>
             </div>
@@ -2570,14 +2570,14 @@ function renderStock(searchQuery = "") {
         return `
         <div class="draggable-item" 
              style="display:flex; justify-content:space-between; padding:12px; background: #fff; border-radius: 20px; margin-bottom:12px; align-items:center; 
-                    border: 5.5px solid #f9fdd5; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
+                    border: 2.5px solid #08cdcd; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
              ontouchstart="startLongPress(${i})" 
              ontouchend="cancelLongPress()" 
              onmousedown="startLongPress(${i})" 
              onmouseup="cancelLongPress()">
              
             <div style="display:flex; align-items:center; flex:1;">
-                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #e2e8f0; overflow: hidden;">
+                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #08cdcd; overflow: hidden;">
                     ${itemImg}
                 </div>
                 
