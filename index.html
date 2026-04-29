@@ -1062,92 +1062,91 @@ const firebaseConfig = {
 };
 
 // 2. Initialize Firebase
+
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
 
 function Lock() {
+  
+  // ==========================================
+  // 👇 IS LINE KO 'ON' YA 'OFF' KAREIN 👇
+  // ==========================================
+  const APP_MASTER_LOCK = 'ON'; 
+  
+  /*YAHA "ON"  firebase me "ACTIVE"*/
+/*<!--   tabhi app chalega
+ -->  */  // ==========================================
+
+  
+  // ==========================================
+
   let deviceId = localStorage.getItem('ash_device_id');
-
-
-if (!deviceId) {
-    // ASH ki jagah CA ya COST likh sakte hain
-    deviceId = 'ASH-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  if (!deviceId) {
+    deviceId = 'ASH-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     localStorage.setItem('ash_device_id', deviceId); 
-}
+  }
 
-  // Value listener with silent error handling
+  // Real-time Database Listener
   db.ref('allowed_devices/' + deviceId).on('value', (snapshot) => {
     const val = snapshot.val();
+    
+    // Firebase status check
+    const isAllowedInFirebase =
+    (val === "Active" || 
+    val === "ACTIVE" || 
+    val === "ASHCOSTING" || 
+    val === true);
 
-    // for Active, True, or your specific tag ASH786
-    const isAllowed = (
-      val === "Active" ||
-      val === "ACTIVE" ||
-      val === "ASHCOSTING" || 
-      val === true
-    );
+    // LOGIC: 
+    // 1. Agar Master Lock 'ON' hai, toh seedha lock screen dikhao.
+    // 2. Agar Master Lock 'OFF' hai, tab Firebase check karo.
+    
+    if (APP_MASTER_LOCK === 'OFF') {
+      showLockScreen(deviceId, "NOT REQUIRED1");
+    } else {
+      if (isAllowedInFirebase) {
+        removeLockScreen();
+      } else {
+        showLockScreen(deviceId, val);
+      }
+    }
+  });
+}
 
-    if (!isAllowed) {
-      // Agar pehle se lock screen nahi hai, tabhi add karein (is-se refresh loop nahi banega)
-      if (!document.getElementById('lock-screen-')) {
-          const lockHtml = `
-          <div id="lock-screen-" style="height:100vh;background:#121212;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:fixed;top:0;left:0;width:100%;z-index:99999;font-family:sans-serif;padding:20px;box-sizing:border-box;">
+function showLockScreen(id, status) {
+    if (!document.getElementById('lock-screen-')) {
+        const lockHtml = `
+        <div id="lock-screen-" style="height:100vh;background:#121212;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:fixed;top:0;left:0;width:100%;z-index:99999;font-family:sans-serif;padding:20px;">
+          <h1 style="color:#00D2D3;font-size:26px;">REGISTATION REQUIRED </h1>
+          <div style="background:#1e1e1e;padding:25px;border-radius:20px;border:1px solid #333;margin:15px;max-width:350px;width:100%;">
+            <span style="color:#888;font-size:11px;">DEVICE ID</span><br>
+            <strong style="font-size:22px;color:#fff;display:block;margin:15px 0;background:#121212;padding:12px;border-radius:10px;border:1px dashed #00D2D3;">${id}</strong>
             
-            <div style="margin-bottom:20px;">
-              <h1 style="color:#00D2D3;font-size:26px;letter-spacing:1px;margin:0;">REGISTRATION REQUIRED</h1>
-              <div style="height:2px;background:linear-gradient(90deg,transparent,#00D2D3,transparent);width:200px;margin:10px auto;"></div>
-            </div>
-
-            <div style="background:#1e1e1e;padding:25px;border-radius:20px;border:1px solid #333;margin:15px;box-shadow:0 10px 30px rgba(0,0,0,0.5);width:100%;max-width:350px;box-sizing:border-box;">
-              <span style="color:#888;font-size:11px;text-transform:uppercase;">YOUR DEVICE ID</span><br>
-              <strong style="font-size:22px;color:#fff;font-family:monospace;display:block;margin:15px 0;background:#121212;padding:12px;border-radius:10px;border:1px dashed #00D2D3;">${deviceId}</strong>
-              
-              <div style="text-align:left; border-top:1px solid #333; padding-top:15px; font-size:14px;">
+            <div style="text-align:left; border-top:1px solid #333; padding-top:15px; font-size:14px;">
                 <p style="margin:8px 0;"><span style="color:#00D2D3;font-weight:bold;">Developer:</span> Zamir Ansari</p>
                 <p style="margin:8px 0;"><span style="color:#00D2D3;font-weight:bold;">WhatsApp:</span> +968 79347742</p>
                 <p style="margin:8px 0;"><span style="color:#00D2D3;font-weight:bold;">Email:</span> ansarizamir634@gmail.com</p>
               </div>
-            </div>
-
             
-</style>
-
-
-            <div style="margin-top:30px;padding:10px 20px;border-radius:50px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);">
-              <span id="app-status-text" style="color:#ff4757;font-size:12px;font-weight:bold;">APP STATUS: ${val || 'NOT REGISTERED'}</span>
-            </div>
-          </div>`;
+            
+            <!-- <button onclick="window.open('https://wa.me/96879347742')" style="margin-top:15px; width:100%; padding:12px; border-radius:10px; border:none; background:#00D2D3; font-weight:bold; cursor:pointer;">Contact WhatsApp</button> -->
+          </div>
           
-          document.body.insertAdjacentHTML('afterbegin', lockHtml);
-      } else {
-          // Agar lock screen dikh rahi hai, to bas status text update karein
-          document.getElementById('app-status-text').innerText = `APP STATUS: ${val || 'NOT REGISTERED'}`;
-      }
+          
+          <div style="margin-top:30px;padding:10px 20px;border-radius:50px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);">
+              <span id="app-status-text" style="color:#ff4757;font-size:12px;font-weight:bold;">APP STATUS: ${status || 'NOT REGISTERED2'}</span>
+            </div>`;
+        document.body.insertAdjacentHTML('afterbegin', lockHtml);
+    } else {
+        document.getElementById('app-status-text').innerText = `STATUS: ${status || 'LOCKED'}`;
+    }
+}
 
-      window.smartWhatsApp = function() {
-          const phone = "96879347742";
-          const text = encodeURIComponent("Hello Zamir, please activate my device. ID: " + deviceId);
-          const waUrl = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + text;
-          let link = document.createElement('a');
-          link.href = waUrl;
-          link.target = '_blank';
-          link.click();
-      };
-    }
-    
-    else {
-      console.log("DEVICE UNLOCKED");
-      // Fix: location.reload() ki jagah lock screen ko remove karein taaki "Site cannot reach" na aaye
-      const lockScreen = document.getElementById('lock-screen-');
-      if (lockScreen) {
-          lockScreen.remove(); 
-      }
-    }
-  }, (error) => {
-    console.warn("Firebase Error Suppressed:", error.message);
-  });
+function removeLockScreen() {
+    const lock = document.getElementById('lock-screen-');
+    if (lock) lock.remove();
 }
 
 Lock();
