@@ -145,16 +145,10 @@
 
 
 /* Table Header (Text Only) */
-
 .row-header {
     display: grid;
-    /* --- YAHAN DHAYAN DEIN --- */
-    /* Column 1: 35px  -> [ICON/DEL] ke liye */
-    /* Column 2: 2.5fr -> [ITEM NAME] ke liye (Ise badhane se baaki sab RIGHT jayenge) */
-    /* Column 3: 1fr   -> [PRICE] ke liye */
-    /* Column 4: 1fr   -> [QTY] ke liye */
-    /* Column 5: 1fr   -> [UNIT] ke liye */
-    /* Column 6: 1fr   -> [TOTAL/COST] ke liye */
+
+
     
     grid-template-columns: 55px 2.4fr 1fr 1fr 1fr 1fr; 
     
@@ -164,17 +158,11 @@
     font-weight: 900;
     font-size: 10px;
     color: #64748b;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 2px solid #c6d500;
     text-align: center;
 }
 
-/* Row-item ka code bhi EXACT SAME hona chahiye alignment ke liye */
-.row-item {
-    display: grid;
-    grid-template-columns: 35px 2.5fr 1fr 1fr 1fr 1fr; /* Header jaisa same */
-    gap: 5px;
-    align-items: center;
-}
+
 
 
 /* Row Item alignment with Serial Number */.row-item { 
@@ -1473,7 +1461,8 @@ DATA</button>
         <div>COST</div>
     </div>
     
-    <div style="flex:1; overflow-y:auto; padding:15px;">
+    
+      <div style="flex:1; overflow-y:auto; padding:0px 15px 15px 15px;">
         <div id="suggestions"></div>
         <div id="ingredientList" style="margin-top:0px;"></div>
         
@@ -2377,7 +2366,7 @@ function renderTable() {
         }
 
         html += `
-        <div class="row-item" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1px solid #f0f0f0; border-left: 4px solid #00D2D3; border-radius: 6px; box-shadow: none;">
+        <div class="row-item" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 6px; box-shadow: none;">
             
             <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             
