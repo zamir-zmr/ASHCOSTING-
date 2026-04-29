@@ -400,6 +400,8 @@
 
 /* Line 226 se replace karein */
 
+
+
 .panel { 
     position: fixed; 
     inset: 0; 
@@ -441,9 +443,19 @@
         
         border: 2px solid #ffffff; font-weight: bold; }
 
-
+        .catpanel-nav { background: #a6f2f8; padding: 15px;
+        padding-right: 30px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
         
-        .panel-nav { background: #a6f2f8; padding: 15px;
+        display: flex; justify-content: space-between; align-items: center;
+        border-radius: 30px;
+        
+        border: 2px solid #ffffff; font-weight: bold; }
+
+        .editorpanel-nav { background: #a6f2f8; padding: 15px;
         padding-right: 30px;
         margin-left: 5px;
         margin-right: 5px;
@@ -1425,7 +1437,7 @@ DATA</button>
   <div style="padding:1px; background:#07c1c1;
   ">
   
-    <div class="panel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')">✕</span></div>
+    <div class="catpanel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')">✕</span></div>
     </div>
     
     <div style="padding:15px; background:#bef1f5; border-bottom:1px solid #eee;">
@@ -1444,7 +1456,7 @@ DATA</button>
 
     <div id="editorPanel" class="panel">
       
-    <div class="panel-nav">
+    <div class="editorpanel-nav">
         <span id="activeTitle"></span> 
         <span onclick="saveAndExit()">✕</span>  
     </div>
