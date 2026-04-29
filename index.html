@@ -1680,7 +1680,7 @@ function renderCatFilters() {
     // Category Manager List (Original Logic)
     if(document.getElementById('catManagerList')) {
         document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
+        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:3px solid #08cdcd; touch-action: pan-y;">
             <div style="display:flex; align-items:center; flex:1;">
                 <b class="cat-name-text" style="color:var(--accent)">${c}</b>
             </div>
