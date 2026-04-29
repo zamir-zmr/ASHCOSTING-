@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">        
-    <title>SWEETHOUSE</title>
+    <title>ASHCOSTING</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SWEETHOUSE">
+    <meta name="apple-mobile-web-app-title" content="CostingApp">
     
     <link rel="apple-touch-icon" href="https://i.ibb.co/vzS8m8S/logo.png">
     
@@ -145,7 +145,6 @@
 
 
 /* Table Header (Text Only) */
-
 .row-header {
     display: grid;
 
@@ -163,13 +162,7 @@
     text-align: center;
 }
 
-/* Row-item ka code bhi EXACT SAME hona chahiye alignment ke liye */
-.row-item {
-    display: grid;
-    grid-template-columns: 35px 2.5fr 1fr 1fr 1fr 1fr; /* Header jaisa same */
-    gap: 5px;
-    align-items: center;
-}
+
 
 
 /* Row Item alignment with Serial Number */.row-item { 
@@ -212,13 +205,15 @@
     filter: brightness(1.1);
 }
 
-/*         .btn-pill { padding: 10px 15px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; transition: 0.2s; }
- */        
-/*         .btn-pill:active { 
-    transform: scale(0.92); 
-    filter: brightness(1.1);
-}
- */
+         /* .btn-pill { padding: 10px 15px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; transition: 0.2s; }
+         
+         .btn-pill:active { 
+             transform: scale(0.92); 
+             filter: brightness(1.1);
+         } */
+ 
+
+
 
 
 /* Professional Heavy Coin + Global Yellow Glow */
@@ -313,6 +308,24 @@
 
 
 
+/* Plus button ko bhi perfect round karne ke liye */
+.btn-add { 
+    background: white; 
+    color: var(--primary); 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50% !important; 
+    font-size: 24px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border: none; 
+    font-weight: 900;
+    flex-shrink: 0; 
+}
+
+
+
         
 
         /* --- CATEGORY FILTER BAR --- */
@@ -321,30 +334,13 @@
         .cat-item { padding: 8px 18px; background: white; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1.5px solid #eee; cursor: pointer; transition: 0.2s; }
         .cat-item.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(0,210,211,0.3); }
 
-
+        
 
         
         .btn-manage { background: white; color: #2D3436; }
         .btn-manage.active { background: var(--danger); color: white; }
         .btn-stock { background: #2D3436; color: white; }
-        .btn-add { background: white; color: var(--primary); width: 35px; height: 35px; border-radius: 50%; font-size: 26px; display: flex; align-items: center; justify-content: center; border:#ffe404; font-weight: 900; }
-        
-/*         .btn-add { 
-    background: white; 
-    color: var(--primary); 
-    width: 30px; 
-    height: 30px; 
-    border-radius: 50% !important; 
-    font-size: 24px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border: #ffe404; 
-    font-weight: 900;
-    flex-shrink: 0; 
-}
- */
-        
+        .btn-add { background: white; color: var(--primary); width: 42px; height: 42px; border-radius: 50%; font-size: 26px; display: flex; align-items: center; justify-content: center; border:none; font-weight: 900; }
 
         .container { padding: 15px 15px; height: calc(100vh - 145px); overflow-y: auto; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -403,6 +399,7 @@
 
 
 /* Line 226 se replace karein */
+
 .panel { 
     position: fixed; 
     inset: 0; 
@@ -457,7 +454,8 @@
         border-radius: 30px;
         
         border: 2px solid #ffffff; font-weight: bold; }
-        
+
+
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .input-modal { background: white; border-radius: 35px; padding: 25px; width: 100%; max-width: 350px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         
@@ -762,6 +760,7 @@
 }
 
 /* Long press ke waqt selection highlight */
+
 .sortable-chosen {
     background: #f8f8f8 !important;
     border: 3px solid #ff0606 !important;
@@ -1082,6 +1081,9 @@
 }
 
 
+
+
+
 </style>
 
 
@@ -1091,125 +1093,128 @@
 
     </style>
     
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
 <script>
+
+// Aapka Actual Config
+
+
 // 1. Firebase Configuration
+// 1. Firebase Configuration
+// 1. Firebase Configuration
+
+
 const firebaseConfig = {
-  apiKey: "AIzaSyA0rirztMO13FyXcKYz1aEB1ERYH-HQUbA",
-  authDomain: "sweethouse-e3e49.firebaseapp.com",
-  databaseURL: "https://sweethouse-e3e49-default-rtdb.firebaseio.com",
-  projectId: "sweethouse-e3e49",
-  storageBucket: "sweethouse-e3e49.firebasestorage.app",
-  messagingSenderId: "579322038108",
-  appId: "1:579322038108:web:166b7fdb103080f56d6399",
+  apiKey: "AIzaSyA3bsKfP7CxS0Sb0CY6xu_vFogVcxbJCII",
+  authDomain: "ashcostingapp.firebaseapp.com",
+  databaseURL: "https://ashcostingapp-default-rtdb.firebaseio.com",
+  projectId: "ashcostingapp",
+  storageBucket: "ashcostingapp.firebasestorage.app",
+  messagingSenderId: "576053214259",
+  appId: "1:576053214259:web:e47a6c38721d62580fb746"
 };
 
+// 2. Initialize Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
 
 function Lock() {
-  
-  // ==========================================
-  // 👇 IS LINE KO 'ON' YA 'OFF' KAREIN 👇
-  // ==========================================
-  const APP_MASTER_LOCK = 'ON'; 
-  
-  /*YAHA "ON"  firebase me "ACTIVE"*/
-/*<!--   tabhi app chalega
- -->  */  // ==========================================
-
-  
-  // ==========================================
-
   let deviceId = localStorage.getItem('ash_device_id');
-  if (!deviceId) {
-    deviceId = 'SH-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+
+if (!deviceId) {
+    // ASH ki jagah CA ya COST likh sakte hain
+    deviceId = 'ASH-' + Math.random().toString(36).substr(2,6).toUpperCase();
     localStorage.setItem('ash_device_id', deviceId); 
-  }
-
-  // Real-time Database Listener
-  db.ref('allowed_devices_sweethouse/' + deviceId).on('value', (snapshot) => {
-    const val = snapshot.val();
-    
-    // Firebase status check
-    const isAllowedInFirebase =
-    (val === "Active" || 
-    val === "ACTIVE" || 
-    val === "SWEETHOUSE" || 
-    val === true);
-
-    // LOGIC: 
-    // 1. Agar Master Lock 'ON' hai, toh seedha lock screen dikhao.
-    // 2. Agar Master Lock 'OFF' hai, tab Firebase check karo.
-    
-    if (APP_MASTER_LOCK === 'OFF') {
-      showLockScreen(deviceId, "NOT REQUIRED1");
-    } else {
-      if (isAllowedInFirebase) {
-        removeLockScreen();
-      } else {
-        showLockScreen(deviceId, val);
-      }
-    }
-  });
 }
 
-function showLockScreen(id, status) {
-    if (!document.getElementById('lock-screen-')) {
-        const lockHtml = `
-        <div id="lock-screen-" style="height:100vh;background:#121212;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:fixed;top:0;left:0;width:100%;z-index:99999;font-family:sans-serif;padding:20px;">
-          <h1 style="color:#00D2D3;font-size:26px;">REGISTATION REQUIRED </h1>
-          <div style="background:#1e1e1e;padding:25px;border-radius:20px;border:1px solid #333;margin:15px;max-width:350px;width:100%;">
-            <span style="color:#888;font-size:11px;">DEVICE ID</span><br>
-            <strong style="font-size:22px;color:#fff;display:block;margin:15px 0;background:#121212;padding:12px;border-radius:10px;border:1px dashed #00D2D3;">${id}</strong>
+  // Value listener with silent error handling
+  db.ref('allowed_devices/' + deviceId).on('value', (snapshot) => {
+    const val = snapshot.val();
+
+    // for Active, True, or your specific tag ASH786
+    const isAllowed = (
+      val === "Active" ||
+      val === "ACTIVE" ||
+      val === "ASHCOSTING" || 
+      val === true
+    );
+
+    if (!isAllowed) {
+      // Agar pehle se lock screen nahi hai, tabhi add karein (is-se refresh loop nahi banega)
+      if (!document.getElementById('lock-screen-')) {
+          const lockHtml = `
+          <div id="lock-screen-" style="height:100vh;background:#121212;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:fixed;top:0;left:0;width:100%;z-index:99999;font-family:sans-serif;padding:20px;box-sizing:border-box;">
             
-            <div style="text-align:left; border-top:1px solid #333; padding-top:15px; font-size:14px;">
+            <div style="margin-bottom:20px;">
+              <h1 style="color:#00D2D3;font-size:26px;letter-spacing:1px;margin:0;">REGISTRATION REQUIRED</h1>
+              <div style="height:2px;background:linear-gradient(90deg,transparent,#00D2D3,transparent);width:200px;margin:10px auto;"></div>
+            </div>
+
+            <div style="background:#1e1e1e;padding:25px;border-radius:20px;border:1px solid #333;margin:15px;box-shadow:0 10px 30px rgba(0,0,0,0.5);width:100%;max-width:350px;box-sizing:border-box;">
+              <span style="color:#888;font-size:11px;text-transform:uppercase;">YOUR DEVICE ID</span><br>
+              <strong style="font-size:22px;color:#fff;font-family:monospace;display:block;margin:15px 0;background:#121212;padding:12px;border-radius:10px;border:1px dashed #00D2D3;">${deviceId}</strong>
+              
+              <div style="text-align:left; border-top:1px solid #333; padding-top:15px; font-size:14px;">
                 <p style="margin:8px 0;"><span style="color:#00D2D3;font-weight:bold;">Developer:</span> Zamir Ansari</p>
                 <p style="margin:8px 0;"><span style="color:#00D2D3;font-weight:bold;">WhatsApp:</span> +968 79347742</p>
                 <p style="margin:8px 0;"><span style="color:#00D2D3;font-weight:bold;">Email:</span> ansarizamir634@gmail.com</p>
               </div>
-            
-            
-            <!-- <button onclick="window.open('https://wa.me/96879347742')" style="margin-top:15px; width:100%; padding:12px; border-radius:10px; border:none; background:#00D2D3; font-weight:bold; cursor:pointer;">Contact WhatsApp</button> -->
-          </div>
-          
-          
-          <div style="margin-top:30px;padding:10px 20px;border-radius:50px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);">
-              <span id="app-status-text" style="color:#ff4757;font-size:12px;font-weight:bold;">APP STATUS: ${status || 'NOT REGISTERED2'}</span>
-            </div>`;
-        document.body.insertAdjacentHTML('afterbegin', lockHtml);
-    } else {
-        document.getElementById('app-status-text').innerText = `STATUS: ${status || 'LOCKED'}`;
-    }
-}
+            </div>
 
-function removeLockScreen() {
-    const lock = document.getElementById('lock-screen-');
-    if (lock) lock.remove();
+            
+</style>
+
+
+            <div style="margin-top:30px;padding:10px 20px;border-radius:50px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);">
+              <span id="app-status-text" style="color:#ff4757;font-size:12px;font-weight:bold;">APP STATUS: ${val || 'NOT REGISTERED'}</span>
+            </div>
+          </div>`;
+          
+          document.body.insertAdjacentHTML('afterbegin', lockHtml);
+      } else {
+          // Agar lock screen dikh rahi hai, to bas status text update karein
+          document.getElementById('app-status-text').innerText = `APP STATUS: ${val || 'NOT REGISTERED'}`;
+      }
+
+      window.smartWhatsApp = function() {
+          const phone = "96879347742";
+          const text = encodeURIComponent("Hello Zamir, please activate my device. ID: " + deviceId);
+          const waUrl = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + text;
+          let link = document.createElement('a');
+          link.href = waUrl;
+          link.target = '_blank';
+          link.click();
+      };
+    }
+    
+    else {
+      console.log("DEVICE UNLOCKED");
+      // Fix: location.reload() ki jagah lock screen ko remove karein taaki "Site cannot reach" na aaye
+      const lockScreen = document.getElementById('lock-screen-');
+      if (lockScreen) {
+          lockScreen.remove(); 
+      }
+    }
+  }, (error) => {
+    console.warn("Firebase Error Suppressed:", error.message);
+  });
 }
 
 Lock();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // --- Share Panel Update (Device ID Dikhane ke liye) ---
 
@@ -1293,8 +1298,6 @@ DATA</button>
         <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
         
         <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openInputModal('recipe')">Add Recipe</button>
-        
-
     </div>
 </div>
 
@@ -1309,7 +1312,6 @@ DATA</button>
 
 
 <div class="cat-filter-wrapper" id="catFilterBar"></div>
-
 
 
 
@@ -1418,6 +1420,7 @@ DATA</button>
     </div>
 </div>
 
+
 <div id="catPanel" class="panel">
   <div style="padding:1px; background:#07c1c1;
   ">
@@ -1439,7 +1442,6 @@ DATA</button>
 
 
 
-
     <div id="editorPanel" class="panel">
       
     <div class="panel-nav">
@@ -1448,10 +1450,7 @@ DATA</button>
     </div>
     
     <div style="padding: 0px 0 0px 0 0px;">
-        <input type="text" placeholder="🔍 Search stock..." oninput="showSuggest(this.value)" style="margin-bottom:0;
-        border-radius : 30px;
-        background : white;
-        ">
+        <input type="text" placeholder="🔍 Search stock..." oninput="showSuggest(this.value)" style="margin-bottom:0;">
     </div>
 
     <div class="row-header">
@@ -1504,6 +1503,7 @@ DATA</button>
         </div>
     </div>
 
+
 <div id="stockViewModal" class="modal-overlay" onclick="if(event.target === this) smartClose()">
     <div class="input-modal" style="text-align:center; max-height: 90vh; overflow-y: auto; padding: 20px;">
         
@@ -1548,7 +1548,7 @@ function initApp() {
     if (typeof db !== 'undefined') {
         
         // STOCK SYNC: Jab bhi Madam add karengi, aapka phone Bina Refresh kiye update hoga
-        db.ref('shared_sh_stock_list').on('value', (snapshot) => {
+        db.ref('shared_stock_list').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 stock = data;
@@ -1560,7 +1560,7 @@ function initApp() {
         });
 
         // RECIPES SYNC: Madam recipe banayengi toh aapko turant dikhega
-        db.ref('shared_sh_recipes_list').on('value', (snapshot) => {
+        db.ref('shared_recipes_list').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 recipes = data;
@@ -1571,7 +1571,7 @@ function initApp() {
         });
 
         // CATEGORIES SYNC
-        db.ref('shared_sh_categories').on('value', (snapshot) => {
+        db.ref('shared_categories').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 cats = data;
@@ -1640,12 +1640,10 @@ function saveData() {
 function syncCatsToCloud() {
     saveData(); // Local save
     if (typeof db !== 'undefined') {
-        db.ref('shared_sh_categories').set(cats); // Madam ke phone ke liye
+        db.ref('shared_categories').set(cats); // Madam ke phone ke liye
         console.log("Categories Synced to Cloud ");
     }
 }
-
-/* --- CATEGORY LOGIC --- */
 
 /* --- CATEGORY LOGIC --- */
 
@@ -1659,6 +1657,7 @@ function getIconForCat(name) {
     if(n.includes('drink')) return 'fa-glass-martini-alt';
     return 'fa-tag'; // default icon
 }
+
 
 function renderCatFilters() {
     // Top bar with Super Jump Logic
@@ -1681,7 +1680,7 @@ function renderCatFilters() {
     // Category Manager List (Original Logic)
     if(document.getElementById('catManagerList')) {
         document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:3px solid #08cdcd; touch-action: pan-y;">
+        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:1px solid #eee; touch-action: pan-y;">
             <div style="display:flex; align-items:center; flex:1;">
                 <b class="cat-name-text" style="color:var(--accent)">${c}</b>
             </div>
@@ -1694,7 +1693,6 @@ function renderCatFilters() {
 
     setTimeout(initCatSortable, 200); 
 }
-
 
 function refreshTopFilters() { renderCatFilters(); }
 function refreshOtherUI() { renderCatFilters(); }
@@ -1786,7 +1784,7 @@ function editCategory(i) {
             // --- SYNC FIX ---
             syncCatsToCloud(); // Rename hote hi Madam ke phone par bhi update hoga
             if (typeof db !== 'undefined') {
-                db.ref('shared_sh_recipes_list').set(recipes); // Recipes bhi sync karni padegi category rename ke liye
+                db.ref('shared_recipes_list').set(recipes); // Recipes bhi sync karni padegi category rename ke liye
             }
 
             renderCatFilters(); 
@@ -1980,7 +1978,7 @@ function submitInputModal() {
             });
 
             if (typeof db !== 'undefined') {
-                db.ref('shared_sh_recipes_list').set(recipes);
+                db.ref('shared_recipes_list').set(recipes);
             }
             stock[activeIdx] = item;
         } else {
@@ -1988,7 +1986,7 @@ function submitInputModal() {
         }
         
         if (typeof db !== 'undefined') {
-            db.ref('shared_sh_stock_list').set(stock);
+            db.ref('shared_stock_list').set(stock);
         }
         showToast(`${name} Updated in All Recipes`);
 
@@ -2011,7 +2009,7 @@ function submitInputModal() {
         else recipes.push(recipeData);
 
         if (typeof db !== 'undefined') {
-            db.ref('shared_sh_recipes_list').set(recipes);
+            db.ref('shared_recipes_list').set(recipes);
         }
         showToast(`${name} Recipe Saved & Synced`);
     }
@@ -2089,6 +2087,8 @@ function handleSearch(val) {
     isSearchActive = (searchQuery.length > 0); 
     renderRecipes();
 }
+
+
 
 function renderRecipes() {
     // 1. Unified Filter
@@ -2204,6 +2204,7 @@ function showRecipeItems(idx) {
         </div>`;
     }).join('');
 
+    
     overlay.innerHTML = `
         <div style="padding:5px 5px 5px 5px; background:#3bf1ff; color:#000000; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 25px 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
             <div style="width:90px; height:90px; border-radius:12px; overflow:hidden; border:2px solid #00D2D3; flex-shrink:0; background: #2d3748;">
@@ -2291,8 +2292,8 @@ function syncAllToCloud() {
     saveData(); // Pehle mobile mein save karega
     if (typeof db !== 'undefined') {
         // Firebase par update bhej raha hai taaki Madam ko bhi dikhe
-        db.ref('shared_sh_stock_list').set(stock);
-        db.ref('shared_sh_recipes_list').set(recipes);
+        db.ref('shared_stock_list').set(stock);
+        db.ref('shared_recipes_list').set(recipes);
         console.log("Cloud Sync Done ");
     }
 }
@@ -2323,7 +2324,6 @@ function addIng(n, p, b) {
 
 
 /* --- CALCULATIONS --- */
-
 function openEditor(i) {
     activeIdx = i; // --- 1. RENDER STOCK (MODIFIED) ---
 
@@ -2505,7 +2505,7 @@ function addIng(name, price, base) {
     // 3. FIREBASE & LOCAL SYNC
     saveData(); 
     if (typeof db !== 'undefined') {
-        db.ref('shared_sh_recipes_list').set(recipes);
+        db.ref('shared_recipes_list').set(recipes);
     }
 
     // 4. UI UPDATE
@@ -2519,7 +2519,7 @@ function addIng(name, price, base) {
 function syncRecipeToCloud() {
     saveData();
     if (typeof db !== 'undefined') {
-        db.ref('shared_sh_recipes_list').set(recipes);
+        db.ref('shared_recipes_list').set(recipes);
     }
 }
 
@@ -2610,7 +2610,6 @@ function renderStock(searchQuery = "") {
         </div>`;
     }).join('');
 }
-
 
 // 4. Naya function jo Edit click hone par search clear karega
 function handleEditClick(index) {
@@ -2849,7 +2848,7 @@ function deleteCat(i) {
 
             if (typeof db !== 'undefined') {
                 let catSync = (cats.length === 0) ? [] : cats;
-                db.ref('shared_sh_categories').set(catSync)
+                db.ref('shared_categories').set(catSync)
                   .then(() => {
                       showToast(`${catName} Category Deleted & Synced`);
                       
@@ -2877,8 +2876,6 @@ if(finalOkBtn) {
     finalOkBtn.onclick = () => closeConfirm(true);
 }
 
-
-      
     
     
     // Logo ko gallery se upload aur save karne ka function
@@ -2984,7 +2981,7 @@ function downloadJSONFile() {
 
     try {
         const dataStr = JSON.stringify(selected, null, 2);
-        const fileName = "SWEETHOUSE_CostingApp_Backup_" + new Date().toISOString().slice(0,10) + ".json";
+        const fileName = "AshCostinApp_Backup_" + new Date().toISOString().slice(0,10) + ".json";
         
         // APK/Mobile Compatibility Fix:
         // Direct Blob ki jagah Base64 approach best hai mobile browsers ke liye
@@ -3005,6 +3002,7 @@ function downloadJSONFile() {
         showToast("Download fail hua. 'GENERATE CODE' use karein.", true);
     }
 }
+
 
 // --- OPTION 2: IMPORT FROM JSON FILE ---
 function importJSONFile(input) {
@@ -3278,9 +3276,9 @@ function processSmartAdd() {
             // B. FIREBASE SYNC (Zaroori Fix)
             // Isse data Online jayega aur Madam ke phone par turant dikhega
             if (typeof db !== 'undefined') {
-                db.ref('shared_sh_stock_list').set(stock);
-                db.ref('shared_sh_recipes_list').set(recipes);
-                db.ref('shared_sh_categories').set(cats);
+                db.ref('shared_stock_list').set(stock);
+                db.ref('shared_recipes_list').set(recipes);
+                db.ref('shared_categories').set(cats);
                 console.log("JSON Data Synced to Cloud ");
             }
 
@@ -3449,7 +3447,7 @@ window.addEventListener('click', (e) => {
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
               
               <h2 
-            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F1</span>
+            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F2</span>
             </h2>
             </span>
             
@@ -3543,7 +3541,6 @@ window.addEventListener('click', (e) => {
         </div><!-- end scrollable content -->
     </div>
 </div>
-
 
 </div>
 </body>
