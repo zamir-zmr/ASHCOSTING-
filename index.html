@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3389,11 +3389,17 @@ function cancelPress() {
     clearTimeout(timer);
 }
 
-// Mode se bahar nikalne ke liye (Double click ya bahar click)
-window.addEventListener('click', (e) => {
-    if (!e.target.closest('.card')) {
-        container.classList.remove('manage-mode');
-    }
+// Mode se bahar nikalne ke liye - kuch bhi click karo manage band ho
+document.addEventListener('click', function(e) {
+    if (!isManage) return;
+    if (e.target.closest('#mBtn')) return;
+    if (e.target.closest('.card')) return;
+    isManage = false;
+    const b = document.getElementById('mBtn');
+    if(b) { b.innerText = "MANAGE"; b.classList.remove('active'); }
+    const hc = document.getElementById('homeCont');
+    if(hc) hc.classList.remove('manage-mode');
+    renderRecipes();
 });
 
 
