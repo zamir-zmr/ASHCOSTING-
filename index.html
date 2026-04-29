@@ -2117,7 +2117,7 @@ function renderRecipes() {
             ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
             : `<div style="font-size:${iconSize}; display:flex; align-items:center; justify-content:center; height:100%; width:100%; background:#f8fafc; color:#cbd5e1;">🖼️</div>`;
 
-        let dangerEffect = isManage ? 'animation: dangerShake 0.3s infinite alternate; border: 1px solid rgba(239, 68, 68, 0.3);' : '';
+        let dangerEffect = isManage ? 'animation: jiggle 0.3s infinite ease-in-out; border: 2px dashed #ff4757 !important;' : '';
 
         return `
         <div class="card" 
