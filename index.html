@@ -1455,14 +1455,21 @@ DATA</button>
 
 
     <div id="editorPanel" class="panel">
-      
+  <div style="padding:1px; background:#07c1c1;
+  ">
+  
     <div class="editorpanel-nav">
-        <span id="activeTitle"></span> 
-        <span onclick="saveAndExit()">✕</span>  
+      <span id="activeTitle"></span> 
+    <span onclick="saveAndExit()">
+      ✕</span></div>
     </div>
     
+    
     <div style="padding: 0px 0 0px 0 0px;">
-        <input type="text" placeholder="🔍 Search stock..." oninput="showSuggest(this.value)" style="margin-bottom:0;">
+        <input type="text" placeholder="🔍 Search stock..." oninput="showSuggest(this.value)" style="margin-bottom:0;
+        border-radius : 30px;
+        background : white;
+        ">
     </div>
 
     <div class="row-header">
@@ -1514,6 +1521,7 @@ DATA</button>
             padding:5px;" onclick="saveAndExit()">FINISH</button>
         </div>
     </div>
+
 
 
 <div id="stockViewModal" class="modal-overlay" onclick="if(event.target === this) smartClose()">
