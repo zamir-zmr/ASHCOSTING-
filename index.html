@@ -158,7 +158,10 @@
     font-weight: 900;
     font-size: 10px;
     color: #64748b;
-    border-bottom: 2px solid #c6d500;
+    margin-left : 15px;
+    margin-right : 15px;
+    border-radius : 5px;
+    border: 3px solid #00af9e;
     text-align: center;
 }
 
@@ -431,10 +434,8 @@
     
 }
 
-        .stockpanel-nav { background: #a6f2f8; 
-        font-size :20px;
-        color : black;
-        padding: 15px;
+        
+        .stockpanel-nav { background: #a6f2f8; padding: 5px;
         padding-right: 30px;
         margin-left: 5px;
         margin-right: 5px;
@@ -442,14 +443,33 @@
         margin-bottom: 5px;
         
         display: flex; justify-content: space-between; align-items: center;
-        border-radius: 30px;
+        border-radius: 15px;
+        font-size: 20px;
+        border: 3px solid #d8ff20; font-weight: Normal;  }
         
-        border: 2px solid #ffffff; font-weight: bold; }
+        .catpanel-nav { background: #a6f2f8; padding: 5px;
+        padding-right: 30px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        display: flex; justify-content: space-between; align-items: center;
+        border-radius: 15px;
+        font-size: 20px;
+        border: 3px solid #d8ff20; font-weight: Normal;  }
+        
+        .sharepanel-nav { background: #fff; padding: 5px;
+        padding-right: 30px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        display: flex; justify-content: space-between; align-items: center;
+        border-radius: 15px;
+        font-size: 20px;
+        border: 2px solid #f1ff22; font-weight: Normal;  }
 
-        .catpanel-nav { background: #a6f2f8; 
-        font-size :20px;
-        color : black;
-        padding: 15px;
+        .editorpanel-nav { background: #a6f2f8; padding: 5px;
         padding-right: 30px;
         margin-left: 5px;
         margin-right: 5px;
@@ -457,39 +477,9 @@
         margin-bottom: 5px;
         
         display: flex; justify-content: space-between; align-items: center;
-        border-radius: 30px;
-        
-        border: 2px solid #ffffff; font-weight: bold; }
-
-        .sharepanel-nav { background: #a6f2f8;
-        font-size :20px;
-        color : black;
-        padding: 15px;
-        padding-right: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        
-        display: flex; justify-content: space-between; align-items: center;
-        border-radius: 30px;
-        
-        border: 2px solid #ffffff; font-weight: bold; }
-
-        .editorpanel-nav { background: #a6f2f8; 
-        font-size :15px;
-        color : black;
-        padding: 15px;
-        padding-right: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        
-        display: flex; justify-content: space-between; align-items: center;
-        border-radius: 30px;
-        
-        border: 2px solid #ffffff; font-weight: bold; }
+        border-radius: 15px;
+        font-size: 17px;
+        border: 3px solid #d8ff20; font-weight: Normal;  }
 
 
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -1427,13 +1417,14 @@ DATA</button>
 <div id="stockPanel" class="panel">
     <div style="padding:1px; background:#07c1c1;
   ">
-  
-    <div class="stockpanel-nav">STOCK MATERIALS 
+      
+      <div class="stockpanel-nav">STOCK MATERIALS 
     <span onclick="closePanel('stockPanel')" style="cursor:pointer;"</span>
-  <i class="fas fa-times" style="font-size:20px;
+  <i class="fas fa-times" style="font-size:30px;
   color : black;
   "></i>
     </div>
+
     </div>
     
     <div style="padding: 5px 15px 0 15px;">
@@ -1455,13 +1446,12 @@ DATA</button>
     </div>
 </div>
 
-
 <div id="catPanel" class="panel">
   <div style="padding:1px; background:#07c1c1;
   ">
   
-    <div class="catpanel-nav">MANAGE CATEGORIES <span onclick="closePanel('catPanel')"</span>
-  <i class="fas fa-times" style="font-size:20px;
+    <div class="catpanel-nav">CATEGORIES <span onclick="closePanel('catPanel')"</span>
+  <i class="fas fa-times" style="font-size:30px;
   color : black;
   "></i>
     </div>
@@ -1481,6 +1471,7 @@ DATA</button>
 
 
 
+
     <div id="editorPanel" class="panel">
   <div style="padding:1px; background:#07c1c1;
   ">
@@ -1489,7 +1480,7 @@ DATA</button>
       <span id="activeTitle"></span> 
     <span onclick="saveAndExit()"
       </span>
-  <i class="fas fa-times" style="font-size:20px;
+  <i class="fas fa-times" style="font-size:30px;
   color : black;
   "></i>
     </div>
@@ -3481,13 +3472,12 @@ document.addEventListener('click', function(e) {
 
    <!-- STICKY DATA HEADER -->
    
-   <div style="padding:1px; background:#07c1c1;">    
-   <div class="sharepanel-nav">DATA 
+   <div style="padding:1px; background:#07c1c1;">
+    <div class="sharepanel-nav">DATA 
     <span onclick="document.getElementById('sharePanel').style.display='none'"
     </span>
-  <i class="fas fa-times" style="font-size:20px;"></i>
+  <i class="fas fa-times" style="font-size:30px;"></i>
     </div>
-
     </div>
 
    <!-- SCROLLABLE CONTENT -->
