@@ -44,25 +44,21 @@
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
         
-        body { margin: 0; background: var(--bg); color: #2D3436; overflow: hidden; user-select: none; }
+        body { margin: 0; background: var(--bg); color: #2D3436; overflow: hidden; user-select: none; 
+          
+          
 
-/* Editor panel ke andar copy-paste menu disable karne ke liye */
-#editorPanel {
     -webkit-user-select: none;
-    user-select: none;
     -webkit-touch-callout: none;
-}
-/* Input fields mein type karne ki ijazat hai, lekin selection/copy menu nahi */
-#editorPanel input {
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-    pointer-events: auto;
-}
-#editorPanel input[type="number"] {
-    -webkit-user-select: none;
     user-select: none;
 }
+
+/* Taki user inputs mein type kar sake aur text select kar sake */
+input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 
 
 .btn-reset { 
@@ -1036,6 +1032,13 @@
 
 
 
+.recipe-item { /* Aapki list item ki class */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Standard */
+    -webkit-touch-callout: none; /* iOS long press menu rokne ke liye */
+}
+
 
 
 </style>
@@ -1399,7 +1402,7 @@ DATA</button>
 
 
 
-    <div id="editorPanel" class="panel" oncontextmenu="return false" onselectstart="return false">
+    <div id="editorPanel" class="panel">
   <div style="padding:1px; background:#07c1c1;
   ">
   
@@ -1417,7 +1420,7 @@ DATA</button>
     
     
     <div style="padding: 0px 0 0px 0 0px;">
-        <input type="text" placeholder="🔍 Search stock..." oninput="showSuggest(this.value)" oncontextmenu="return false" onselectstart="return false" style="margin-bottom:0;
+        <input type="text" placeholder="🔍 Search stock..." oninput="showSuggest(this.value)" style="margin-bottom:0;
         border-radius : 30px;
         background : white;
         ">
@@ -1454,16 +1457,16 @@ DATA</button>
             ><span>Recipe Cost:</span> <b id="recipeTotalDisplay">0.000</b></div>
             <div class="calc-row"
             style="padding-top:0px; margin-top:0px;"
-            ><span>Packaging:</span> <input type="number" id="packInp" class="calc-input" oninput="calcTotal()" oncontextmenu="return false" onselectstart="return false"></div>
+            ><span>Packaging:</span> <input type="number" id="packInp" class="calc-input" oninput="calcTotal()"></div>
             <div class="calc-row"
             style="padding-top:0px; margin-top:0px;"
-            ><span>Effort %:</span> <input type="number" id="effInp" class="calc-input" oninput="calcTotal()" oncontextmenu="return false" onselectstart="return false"></div>
+            ><span>Effort %:</span> <input type="number" id="effInp" class="calc-input" oninput="calcTotal()"></div>
             <div class="calc-row" style="color:var(--primary); font-weight:bold;
             padding-top:0px; margin-top:0px;
             "><span>Sub-Total:</span> <span id="allTotalDisplay">0.000</span></div>
             <div class="calc-row"
             style="padding-top:0px; margin-top:0px;"
-            ><span>Margin %:</span> <input type="number" id="sellInp" class="calc-input" oninput="calcTotal()" oncontextmenu="return false" onselectstart="return false"></div>
+            ><span>Margin %:</span> <input type="number" id="sellInp" class="calc-input" oninput="calcTotal()"></div>
             <div class="calc-row" style="font-size:18px; color:#2ecc71; border-top:1px solid #eee; padding-top:0px; margin-top:0px;">
                 <b>GRAND TOTAL:</b> <b id="grandTotal">0.000 OMR</b>
             </div>
@@ -2347,14 +2350,14 @@ function renderTable() {
             <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             
             <div style="padding-left: 6px; border-right: 1px solid #eee; overflow: hidden;">
-                <input type="text" value="${it.name}" oninput="upd(${i},'name',this.value)" oncontextmenu="return false" onselectstart="return false" style="width: 100%; font-size: 12px; border:none; background:transparent; font-weight: 600; color: #2d3436; outline: none; height: 24px;">
+                <input type="text" value="${it.name}" oninput="upd(${i},'name',this.value)" style="width: 100%; font-size: 12px; border:none; background:transparent; font-weight: 600; color: #2d3436; outline: none; height: 24px;">
             </div>
             
-            <input type="number" value="${it.price}" oninput="upd(${i},'price',this.value)" oncontextmenu="return false" onselectstart="return false" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
+            <input type="number" value="${it.price}" oninput="upd(${i},'price',this.value)" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
             
-            <input type="number" value="${it.total}" oninput="upd(${i},'total',this.value)" oncontextmenu="return false" onselectstart="return false" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
+            <input type="number" value="${it.total}" oninput="upd(${i},'total',this.value)" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
             
-            <input type="number" value="${it.used}" oninput="upd(${i},'used',this.value)" oncontextmenu="return false" onselectstart="return false" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
+            <input type="number" value="${it.used}" oninput="upd(${i},'used',this.value)" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
             
             <div style="text-align: right; padding-right: 5px;">
                 <b style="font-size: 11px; color: #00D2D3;">${((it.price / it.total) * it.used || 0).toFixed(3)}</b>
@@ -2444,7 +2447,6 @@ function showSuggest(q) {
         // onclick="addIng(...)" ko hum yahan handle karenge
         return `
             <div style="padding:12px; border-bottom:1px solid #eee; font-weight:bold; cursor:pointer;" 
-                 oncontextmenu="return false"
                  onclick="addIng('${f.name.replace(/'/g, "\\'")}', ${f.price}, ${b})"> 
                 ${f.name} 
                 <span style="float:right; color:var(--primary)">
@@ -3416,7 +3418,7 @@ document.addEventListener('click', function(e) {
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
               
               <h2 
-            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F2</span>
+            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F1</span>
             </h2>
             </span>
             
