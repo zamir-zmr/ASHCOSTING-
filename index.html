@@ -571,87 +571,6 @@
     75% { transform: translateX(-10px); }
 }
 
-/* ===== LANGUAGE BUTTON & DROPDOWN ===== */
-.lang-wrapper {
-    position: relative;
-    display: inline-block;
-}
-.lang-btn {
-    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-    color: white;
-    border: none;
-    padding: 6px 9px;
-    border-radius: 8px;
-    font-size: 9px;
-    font-weight: 800;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    box-shadow: 0 3px 8px rgba(108,92,231,0.4);
-    transition: 0.2s;
-    letter-spacing: 0.3px;
-}
-.lang-btn:active { transform: scale(0.92); }
-.lang-btn .lang-arrow {
-    font-size: 8px;
-    transition: transform 0.25s;
-}
-.lang-btn.open .lang-arrow { transform: rotate(180deg); }
-
-.lang-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    right: 0;
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 12px 35px rgba(0,0,0,0.18);
-    z-index: 99999;
-    min-width: 155px;
-    overflow: hidden;
-    display: none;
-    border: 1.5px solid #e8e0ff;
-    animation: dropIn 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.lang-dropdown.show { display: block; }
-
-@keyframes dropIn {
-    from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-    to   { opacity: 1; transform: translateY(0)    scale(1); }
-}
-
-.lang-dropdown-header {
-    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-    color: white;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 8px 14px;
-    letter-spacing: 0.5px;
-}
-
-.lang-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #2d3436;
-    cursor: pointer;
-    border-bottom: 1px solid #f1f5f9;
-    transition: background 0.15s;
-}
-.lang-option:last-child { border-bottom: none; }
-.lang-option:active { background: #f0eeff; }
-.lang-option.active-lang {
-    background: #f0eeff;
-    color: #6c5ce7;
-}
-.lang-option .lang-flag { font-size: 18px; line-height: 1; }
-.lang-option .lang-name { flex: 1; }
-.lang-option .lang-check { color: #6c5ce7; font-size: 14px; font-weight: 900; }
-
 <style>
 
 
@@ -1301,7 +1220,7 @@ function openSmartShare() {
             <img id="appLogoImg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; z-index:4; border-radius:50%;">
             <input type="file" id="logoInput" hidden accept="image/*" onchange="uploadAppLogo(this)">
         </div>
-<button class="btn-pill" id="hBtnData" style="background:#7d5fff; color:#fff;" onclick="openSmartShare()">
+<button class="btn-pill" style="background:#7d5fff; color:#fff;" onclick="openSmartShare()">
 DATA</button>
 
 
@@ -1309,50 +1228,11 @@ DATA</button>
         <button class="btn-pill btn-manage" id="mBtn" style="margin-left:5px;" onclick="toggleManage()">MANAGE</button>
     </div>
 
-    <div class="h-btns" style="gap: 5px; align-items:center;">
-        <!-- LANGUAGE BUTTON -->
-        <div class="lang-wrapper" id="langWrapper">
-            <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown()">
-                🌐 <span id="langBtnLabel">EN</span> <span class="lang-arrow">▼</span>
-            </button>
-            <div class="lang-dropdown" id="langDropdown">
-                <div class="lang-dropdown-header">🌐 SELECT LANGUAGE</div>
-                <div class="lang-option active-lang" id="lang-en" onclick="setLanguage('en')">
-                    <span class="lang-flag">🇬🇧</span>
-                    <span class="lang-name">English</span>
-                    <span class="lang-check" id="check-en">✓</span>
-                </div>
-                <div class="lang-option" id="lang-ar" onclick="setLanguage('ar')">
-                    <span class="lang-flag">🇸🇦</span>
-                    <span class="lang-name">العربية</span>
-                    <span class="lang-check" id="check-ar" style="display:none">✓</span>
-                </div>
-                <div class="lang-option" id="lang-ur" onclick="setLanguage('ur')">
-                    <span class="lang-flag">🇵🇰</span>
-                    <span class="lang-name">اردو</span>
-                    <span class="lang-check" id="check-ur" style="display:none">✓</span>
-                </div>
-                <div class="lang-option" id="lang-hi" onclick="setLanguage('hi')">
-                    <span class="lang-flag">🇮🇳</span>
-                    <span class="lang-name">हिन्दी</span>
-                    <span class="lang-check" id="check-hi" style="display:none">✓</span>
-                </div>
-                <div class="lang-option" id="lang-fr" onclick="setLanguage('fr')">
-                    <span class="lang-flag">🇫🇷</span>
-                    <span class="lang-name">Français</span>
-                    <span class="lang-check" id="check-fr" style="display:none">✓</span>
-                </div>
-                <div class="lang-option" id="lang-es" onclick="setLanguage('es')">
-                    <span class="lang-flag">🇪🇸</span>
-                    <span class="lang-name">Español</span>
-                    <span class="lang-check" id="check-es" style="display:none">✓</span>
-                </div>
-            </div>
-        </div>
-        <button class="btn-pill" style="background:#fff; color:var(--accent);" id="hBtnCategory" onclick="openPanel('catPanel')">CATEGORY</button>
-        <button class="btn-pill btn-stock" id="hBtnStock" onclick="openPanel('stockPanel')">STOCK</button>
+    <div class="h-btns" style="gap: 5px;">
+        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CATEGORY</button>
+        <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
         
-        <button class="btn-pill" style="background:#fff; color:var(--accent);" id="hBtnAddRecipe" onclick="openInputModal('recipe')">Add Recipe</button>
+        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openInputModal('recipe')">Add Recipe</button>
     </div>
 </div>
 
@@ -1616,429 +1496,7 @@ let longPressTimer;
 
 
 
-// ============================================
-// LANGUAGE / TRANSLATION SYSTEM
-// ============================================
-
-const TRANSLATIONS = {
-    en: {
-        // Header buttons
-        btnData: "DATA", btnManage: "MANAGE", btnCategory: "CATEGORY",
-        btnStock: "STOCK", btnAddRecipe: "Add Recipe",
-        // Stock Panel
-        stockPanelTitle: "STOCK MATERIALS",
-        searchMaterials: "Search materials...",
-        btnAddMaterial: "ADD MATERIAL",
-        // Category Panel
-        catPanelTitle: "CATEGORIES",
-        catPlaceholder: "New Category Name...",
-        btnAdd: "ADD",
-        // Editor Panel labels
-        colDel: "DEL", colItem: "ITEM", colPrice: "PRICE",
-        colTotalG: "TOTAL G", colUsedG: "USED G", colCost: "COST",
-        lblRecipeCost: "Recipe Cost:", lblPackaging: "Packaging:",
-        lblEffort: "Effort %:", lblSubTotal: "Sub-Total:",
-        lblMargin: "Margin %:", lblGrandTotal: "GRAND TOTAL:",
-        btnFinish: "FINISH",
-        // Input Modal
-        modalItemDetails: "Item Details", modalRecipeDetails: "Recipe Details",
-        placeholderName: "Name", placeholderPrice: "Price",
-        placeholderBaseQty: "Base Quantity", lblCategory: "CATEGORY:",
-        btnDeletePerm: "DELETE PERMANENTLY", btnBack: "BACK", btnSave: "SAVE",
-        // Share Panel
-        shareTitle: "DATA",
-        btnItems: "📦 ITEMS", btnRecipes: "📜 RECIPES", btnSelectAll: "SELECT ALL",
-        importBackup: "Import Backup JSON",
-        btnGenerateCode: "GENERATE BACKUP CODE",
-        placeholderCode: "The code will come here...",
-        btnCopyCode: "COPY GENERATED CODE",
-        lblRestoreData: "Restore Data",
-        placeholderPaste: "Paste the code here...",
-        btnAddData: "🚀 ADD DATA TO APP",
-        // Recipe view overlay
-        netCost: "NET PRODUCTION COST",
-        noItems: "No items found.",
-        // Search
-        searchRecipes: "Search recipes...",
-        // Confirm popup
-        btnCancel: "CANCEL", btnOk: "OK",
-        confirmWrite: "Write New Here...",
-        // Toast messages (keep short)
-        toastEnterName: "Please enter a name!",
-        toastEnterPrice: "Enter valid price!",
-        toastEnterQty: "Enter valid quantity!",
-        toastSelectCat: "Select Category!",
-    },
-    ar: {
-        btnData: "البيانات", btnManage: "إدارة", btnCategory: "الفئة",
-        btnStock: "المخزون", btnAddRecipe: "إضافة وصفة",
-        stockPanelTitle: "مواد المخزون",
-        searchMaterials: "ابحث عن المواد...",
-        btnAddMaterial: "إضافة مادة",
-        catPanelTitle: "الفئات",
-        catPlaceholder: "اسم الفئة الجديدة...",
-        btnAdd: "إضافة",
-        colDel: "حذف", colItem: "عنصر", colPrice: "سعر",
-        colTotalG: "إجمالي غ", colUsedG: "مستخدم غ", colCost: "تكلفة",
-        lblRecipeCost: "تكلفة الوصفة:", lblPackaging: "التعبئة:",
-        lblEffort: "%الجهد:", lblSubTotal: "المجموع الفرعي:",
-        lblMargin: "%الهامش:", lblGrandTotal: "المجموع الكلي:",
-        btnFinish: "إنهاء",
-        modalItemDetails: "تفاصيل العنصر", modalRecipeDetails: "تفاصيل الوصفة",
-        placeholderName: "الاسم", placeholderPrice: "السعر",
-        placeholderBaseQty: "الكمية الأساسية", lblCategory: "الفئة:",
-        btnDeletePerm: "حذف نهائي", btnBack: "رجوع", btnSave: "حفظ",
-        shareTitle: "البيانات",
-        btnItems: "📦 عناصر", btnRecipes: "📜 وصفات", btnSelectAll: "تحديد الكل",
-        importBackup: "استيراد ملف JSON",
-        btnGenerateCode: "إنشاء كود النسخ الاحتياطي",
-        placeholderCode: "سيظهر الكود هنا...",
-        btnCopyCode: "نسخ الكود",
-        lblRestoreData: "استعادة البيانات",
-        placeholderPaste: "الصق الكود هنا...",
-        btnAddData: "🚀 إضافة البيانات",
-        netCost: "صافي تكلفة الإنتاج",
-        noItems: "لم يتم العثور على عناصر.",
-        searchRecipes: "ابحث عن الوصفات...",
-        btnCancel: "إلغاء", btnOk: "موافق",
-        confirmWrite: "اكتب هنا...",
-        toastEnterName: "الرجاء إدخال الاسم!",
-        toastEnterPrice: "أدخل سعراً صحيحاً!",
-        toastEnterQty: "أدخل كمية صحيحة!",
-        toastSelectCat: "اختر الفئة!",
-    },
-    ur: {
-        btnData: "ڈیٹا", btnManage: "منظم", btnCategory: "زمرہ",
-        btnStock: "اسٹاک", btnAddRecipe: "ریسپی شامل کریں",
-        stockPanelTitle: "اسٹاک مواد",
-        searchMaterials: "مواد تلاش کریں...",
-        btnAddMaterial: "مواد شامل کریں",
-        catPanelTitle: "زمرہ جات",
-        catPlaceholder: "نئے زمرے کا نام...",
-        btnAdd: "شامل کریں",
-        colDel: "حذف", colItem: "آئٹم", colPrice: "قیمت",
-        colTotalG: "کل گ", colUsedG: "استعمال گ", colCost: "لاگت",
-        lblRecipeCost: "ریسپی لاگت:", lblPackaging: "پیکجنگ:",
-        lblEffort: "%محنت:", lblSubTotal: "ذیلی کل:",
-        lblMargin: "%منافع:", lblGrandTotal: "کل رقم:",
-        btnFinish: "مکمل",
-        modalItemDetails: "آئٹم کی تفصیل", modalRecipeDetails: "ریسپی کی تفصیل",
-        placeholderName: "نام", placeholderPrice: "قیمت",
-        placeholderBaseQty: "بنیادی مقدار", lblCategory: "زمرہ:",
-        btnDeletePerm: "مستقل حذف کریں", btnBack: "واپس", btnSave: "محفوظ",
-        shareTitle: "ڈیٹا",
-        btnItems: "📦 آئٹمز", btnRecipes: "📜 ریسپیز", btnSelectAll: "سب منتخب کریں",
-        importBackup: "JSON بیک اپ درآمد",
-        btnGenerateCode: "بیک اپ کوڈ بنائیں",
-        placeholderCode: "کوڈ یہاں آئے گا...",
-        btnCopyCode: "کوڈ کاپی کریں",
-        lblRestoreData: "ڈیٹا بحال کریں",
-        placeholderPaste: "کوڈ یہاں پیسٹ کریں...",
-        btnAddData: "🚀 ایپ میں ڈیٹا شامل کریں",
-        netCost: "خالص پیداواری لاگت",
-        noItems: "کوئی آئٹم نہیں ملا۔",
-        searchRecipes: "ریسپی تلاش کریں...",
-        btnCancel: "منسوخ", btnOk: "ٹھیک ہے",
-        confirmWrite: "یہاں لکھیں...",
-        toastEnterName: "براہ کرم نام درج کریں!",
-        toastEnterPrice: "درست قیمت درج کریں!",
-        toastEnterQty: "درست مقدار درج کریں!",
-        toastSelectCat: "زمرہ منتخب کریں!",
-    },
-    hi: {
-        btnData: "डेटा", btnManage: "प्रबंधन", btnCategory: "श्रेणी",
-        btnStock: "स्टॉक", btnAddRecipe: "रेसिपी जोड़ें",
-        stockPanelTitle: "स्टॉक सामग्री",
-        searchMaterials: "सामग्री खोजें...",
-        btnAddMaterial: "सामग्री जोड़ें",
-        catPanelTitle: "श्रेणियाँ",
-        catPlaceholder: "नई श्रेणी का नाम...",
-        btnAdd: "जोड़ें",
-        colDel: "हटाएं", colItem: "आइटम", colPrice: "मूल्य",
-        colTotalG: "कुल ग", colUsedG: "उपयोग ग", colCost: "लागत",
-        lblRecipeCost: "रेसिपी लागत:", lblPackaging: "पैकेजिंग:",
-        lblEffort: "%प्रयास:", lblSubTotal: "उप-कुल:",
-        lblMargin: "%मार्जिन:", lblGrandTotal: "कुल योग:",
-        btnFinish: "समाप्त",
-        modalItemDetails: "आइटम विवरण", modalRecipeDetails: "रेसिपी विवरण",
-        placeholderName: "नाम", placeholderPrice: "मूल्य",
-        placeholderBaseQty: "आधार मात्रा", lblCategory: "श्रेणी:",
-        btnDeletePerm: "स्थायी हटाएं", btnBack: "वापस", btnSave: "सहेजें",
-        shareTitle: "डेटा",
-        btnItems: "📦 आइटम", btnRecipes: "📜 रेसिपी", btnSelectAll: "सब चुनें",
-        importBackup: "JSON बैकअप आयात करें",
-        btnGenerateCode: "बैकअप कोड बनाएं",
-        placeholderCode: "कोड यहाँ आएगा...",
-        btnCopyCode: "कोड कॉपी करें",
-        lblRestoreData: "डेटा पुनर्स्थापित करें",
-        placeholderPaste: "यहाँ कोड पेस्ट करें...",
-        btnAddData: "🚀 ऐप में डेटा जोड़ें",
-        netCost: "शुद्ध उत्पादन लागत",
-        noItems: "कोई आइटम नहीं मिला।",
-        searchRecipes: "रेसिपी खोजें...",
-        btnCancel: "रद्द करें", btnOk: "ठीक है",
-        confirmWrite: "यहाँ लिखें...",
-        toastEnterName: "कृपया नाम दर्ज करें!",
-        toastEnterPrice: "वैध मूल्य दर्ज करें!",
-        toastEnterQty: "वैध मात्रा दर्ज करें!",
-        toastSelectCat: "श्रेणी चुनें!",
-    },
-    fr: {
-        btnData: "DONNÉES", btnManage: "GÉRER", btnCategory: "CATÉGORIE",
-        btnStock: "STOCK", btnAddRecipe: "Ajouter Recette",
-        stockPanelTitle: "MATÉRIAUX EN STOCK",
-        searchMaterials: "Rechercher matériaux...",
-        btnAddMaterial: "AJOUTER MATÉRIAU",
-        catPanelTitle: "CATÉGORIES",
-        catPlaceholder: "Nom nouvelle catégorie...",
-        btnAdd: "AJOUTER",
-        colDel: "SUPP", colItem: "ARTICLE", colPrice: "PRIX",
-        colTotalG: "TOTAL G", colUsedG: "UTILISÉ G", colCost: "COÛT",
-        lblRecipeCost: "Coût Recette:", lblPackaging: "Emballage:",
-        lblEffort: "%Effort:", lblSubTotal: "Sous-Total:",
-        lblMargin: "%Marge:", lblGrandTotal: "TOTAL GÉNÉRAL:",
-        btnFinish: "TERMINER",
-        modalItemDetails: "Détails Article", modalRecipeDetails: "Détails Recette",
-        placeholderName: "Nom", placeholderPrice: "Prix",
-        placeholderBaseQty: "Quantité de base", lblCategory: "CATÉGORIE:",
-        btnDeletePerm: "SUPPRIMER DÉFINITIVEMENT", btnBack: "RETOUR", btnSave: "SAUVEGARDER",
-        shareTitle: "DONNÉES",
-        btnItems: "📦 ARTICLES", btnRecipes: "📜 RECETTES", btnSelectAll: "TOUT SÉLECTIONNER",
-        importBackup: "Importer JSON de sauvegarde",
-        btnGenerateCode: "GÉNÉRER CODE SAUVEGARDE",
-        placeholderCode: "Le code apparaîtra ici...",
-        btnCopyCode: "COPIER LE CODE",
-        lblRestoreData: "Restaurer les données",
-        placeholderPaste: "Coller le code ici...",
-        btnAddData: "🚀 AJOUTER DONNÉES",
-        netCost: "COÛT NET DE PRODUCTION",
-        noItems: "Aucun article trouvé.",
-        searchRecipes: "Rechercher recettes...",
-        btnCancel: "ANNULER", btnOk: "OK",
-        confirmWrite: "Écrire ici...",
-        toastEnterName: "Veuillez entrer un nom!",
-        toastEnterPrice: "Entrez un prix valide!",
-        toastEnterQty: "Entrez une quantité valide!",
-        toastSelectCat: "Sélectionner catégorie!",
-    },
-    es: {
-        btnData: "DATOS", btnManage: "GESTIONAR", btnCategory: "CATEGORÍA",
-        btnStock: "STOCK", btnAddRecipe: "Agregar Receta",
-        stockPanelTitle: "MATERIALES EN STOCK",
-        searchMaterials: "Buscar materiales...",
-        btnAddMaterial: "AGREGAR MATERIAL",
-        catPanelTitle: "CATEGORÍAS",
-        catPlaceholder: "Nombre nueva categoría...",
-        btnAdd: "AGREGAR",
-        colDel: "ELIM", colItem: "ARTÍCULO", colPrice: "PRECIO",
-        colTotalG: "TOTAL G", colUsedG: "USADO G", colCost: "COSTO",
-        lblRecipeCost: "Costo Receta:", lblPackaging: "Empaque:",
-        lblEffort: "%Esfuerzo:", lblSubTotal: "Subtotal:",
-        lblMargin: "%Margen:", lblGrandTotal: "TOTAL GENERAL:",
-        btnFinish: "FINALIZAR",
-        modalItemDetails: "Detalles Artículo", modalRecipeDetails: "Detalles Receta",
-        placeholderName: "Nombre", placeholderPrice: "Precio",
-        placeholderBaseQty: "Cantidad base", lblCategory: "CATEGORÍA:",
-        btnDeletePerm: "ELIMINAR PERMANENTEMENTE", btnBack: "ATRÁS", btnSave: "GUARDAR",
-        shareTitle: "DATOS",
-        btnItems: "📦 ARTÍCULOS", btnRecipes: "📜 RECETAS", btnSelectAll: "SELECCIONAR TODO",
-        importBackup: "Importar JSON de respaldo",
-        btnGenerateCode: "GENERAR CÓDIGO RESPALDO",
-        placeholderCode: "El código aparecerá aquí...",
-        btnCopyCode: "COPIAR CÓDIGO",
-        lblRestoreData: "Restaurar datos",
-        placeholderPaste: "Pega el código aquí...",
-        btnAddData: "🚀 AGREGAR DATOS",
-        netCost: "COSTO NETO DE PRODUCCIÓN",
-        noItems: "No se encontraron artículos.",
-        searchRecipes: "Buscar recetas...",
-        btnCancel: "CANCELAR", btnOk: "OK",
-        confirmWrite: "Escribe aquí...",
-        toastEnterName: "¡Por favor ingresa un nombre!",
-        toastEnterPrice: "¡Ingresa un precio válido!",
-        toastEnterQty: "¡Ingresa una cantidad válida!",
-        toastSelectCat: "¡Selecciona categoría!",
-    }
-};
-
-let currentLang = localStorage.getItem('ASH_LANG') || 'en';
-function T(key) { return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS['en'][key] || key; }
-
-// Toggle lang dropdown open/close
-function toggleLangDropdown() {
-    const btn = document.getElementById('langBtn');
-    const drop = document.getElementById('langDropdown');
-    btn.classList.toggle('open');
-    drop.classList.toggle('show');
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('#langWrapper')) {
-        const btn = document.getElementById('langBtn');
-        const drop = document.getElementById('langDropdown');
-        if(btn) btn.classList.remove('open');
-        if(drop) drop.classList.remove('show');
-    }
-});
-
-function setLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('ASH_LANG', lang);
-    // Close dropdown
-    document.getElementById('langBtn').classList.remove('open');
-    document.getElementById('langDropdown').classList.remove('show');
-    // Update check marks
-    ['en','ar','ur','hi','fr','es'].forEach(l => {
-        const el = document.getElementById('check-' + l);
-        const row = document.getElementById('lang-' + l);
-        if(el) el.style.display = (l === lang) ? 'inline' : 'none';
-        if(row) row.classList.toggle('active-lang', l === lang);
-    });
-    // Update flag label on button
-    const flags = { en:'EN', ar:'AR', ur:'UR', hi:'HI', fr:'FR', es:'ES' };
-    document.getElementById('langBtnLabel').textContent = flags[lang] || 'EN';
-    // Apply all translations
-    applyLanguage();
-    // Re-render dynamic content
-    renderRecipes();
-    renderStock();
-    renderCatFilters();
-}
-
-function applyLanguage() {
-    // Set RTL/LTR
-    const rtlLangs = ['ar', 'ur'];
-    document.documentElement.dir = rtlLangs.includes(currentLang) ? 'rtl' : 'ltr';
-
-    // Header buttons
-    const btnDataEl = document.getElementById('hBtnData');
-    if(btnDataEl) btnDataEl.textContent = T('btnData');
-
-    const mBtn = document.getElementById('mBtn');
-    if(mBtn && !mBtn.classList.contains('active')) mBtn.textContent = T('btnManage');
-
-    const hBtnCat = document.getElementById('hBtnCategory');
-    if(hBtnCat) hBtnCat.textContent = T('btnCategory');
-
-    const hBtnStk = document.getElementById('hBtnStock');
-    if(hBtnStk) hBtnStk.textContent = T('btnStock');
-
-    const hBtnRec = document.getElementById('hBtnAddRecipe');
-    if(hBtnRec) hBtnRec.textContent = T('btnAddRecipe');
-
-    // Stock Panel
-    const stockNav = document.querySelector('.stockpanel-nav');
-    if(stockNav) stockNav.childNodes[0].textContent = T('stockPanelTitle') + ' ';
-
-    const stockSearch = document.getElementById('stockSearchInput');
-    if(stockSearch) stockSearch.placeholder = T('searchMaterials');
-
-    const addMatBtn = document.querySelector('#stockPanel .btn-pill[onclick*="openInputModal(\'stock\')"]');
-    if(addMatBtn) addMatBtn.innerHTML = `<i class="fas fa-plus"></i> ${T('btnAddMaterial')}`;
-
-    // Category Panel
-    const catNav = document.querySelector('.catpanel-nav');
-    if(catNav) catNav.childNodes[0].textContent = T('catPanelTitle') + ' ';
-
-    const newCatInp = document.getElementById('newCatInp');
-    if(newCatInp) newCatInp.placeholder = T('catPlaceholder');
-
-    const catAddBtn = document.querySelector('#catPanel .btn-pill[onclick="addCategory()"]');
-    if(catAddBtn) catAddBtn.textContent = T('btnAdd');
-
-    // Editor Panel row headers
-    const rowHeaders = document.querySelectorAll('.row-header div');
-    const hKeys = ['colDel','colItem','colPrice','colTotalG','colUsedG','colCost'];
-    rowHeaders.forEach((h,i) => { if(hKeys[i]) h.textContent = T(hKeys[i]); });
-
-    // Editor calc section
-    const rcSpan = document.querySelector('.calc-row span:first-child');
-    // Use data-key approach via querySelectorAll for calc rows
-    document.querySelectorAll('.calc-row').forEach(row => {
-        const label = row.querySelector('span:first-child');
-        if(!label) return;
-        const txt = label.textContent.trim();
-        if(txt.includes('Recipe Cost') || txt.includes('تكلفة الوصفة') || txt.includes('ریسپی لاگت') || txt.includes('रेसिपी') || txt.includes('Coût Recette') || txt.includes('Costo Receta')) label.textContent = T('lblRecipeCost');
-        else if(txt.includes('Packaging') || txt.includes('التعبئة') || txt.includes('پیکجنگ') || txt.includes('पैकेजिंग') || txt.includes('Emballage') || txt.includes('Empaque')) label.textContent = T('lblPackaging');
-        else if(txt.includes('Effort') || txt.includes('الجهد') || txt.includes('محنت') || txt.includes('प्रयास') || txt.includes('Esfuerzo')) label.textContent = T('lblEffort');
-        else if(txt.includes('Sub-Total') || txt.includes('المجموع الفرعي') || txt.includes('ذیلی') || txt.includes('उप-कुल') || txt.includes('Sous-Total') || txt.includes('Subtotal')) label.textContent = T('lblSubTotal');
-        else if(txt.includes('Margin') || txt.includes('الهامش') || txt.includes('منافع') || txt.includes('मार्जिन') || txt.includes('Marge') || txt.includes('Margen')) label.textContent = T('lblMargin');
-    });
-    const gtLabel = document.querySelector('.calc-row b:first-child');
-    if(gtLabel && (gtLabel.textContent.includes('GRAND') || gtLabel.textContent.includes('كلي') || gtLabel.textContent.includes('کل') || gtLabel.textContent.includes('कुल') || gtLabel.textContent.includes('GÉNÉRAL') || gtLabel.textContent.includes('GENERAL'))) {
-        gtLabel.textContent = T('lblGrandTotal');
-    }
-    const finishBtn = document.querySelector('.btn-pill[onclick="saveAndExit()"]');
-    if(finishBtn) finishBtn.textContent = T('btnFinish');
-
-    // Input Modal
-    const inp1 = document.getElementById('inp1');
-    if(inp1) inp1.placeholder = T('placeholderName');
-    const inp2 = document.getElementById('inp2');
-    if(inp2) inp2.placeholder = T('placeholderPrice');
-    const inpBase = document.getElementById('inpBase');
-    if(inpBase) inpBase.placeholder = T('placeholderBaseQty');
-
-    const catLabel = document.querySelector('#catSelectSection label');
-    if(catLabel) catLabel.textContent = T('lblCategory');
-
-    const delBtn = document.getElementById('delBtnInModal');
-    if(delBtn) delBtn.textContent = T('btnDeletePerm');
-
-    const backBtnModal = document.querySelector('#inputModalOverlay .btn-pill[onclick="smartClose()"]');
-    if(backBtnModal) backBtnModal.textContent = T('btnBack');
-    const saveBtnModal = document.querySelector('#inputModalOverlay .btn-pill[onclick="submitInputModal()"]');
-    if(saveBtnModal) saveBtnModal.textContent = T('btnSave');
-
-    // Share Panel
-    const shareNav = document.querySelector('.sharepanel-nav');
-    if(shareNav) shareNav.childNodes[0].textContent = T('shareTitle') + ' ';
-
-    const btnStockShare = document.getElementById('btn-stock');
-    if(btnStockShare) btnStockShare.textContent = T('btnItems');
-    const btnRecipeShare = document.getElementById('btn-recipe');
-    if(btnRecipeShare) btnRecipeShare.textContent = T('btnRecipes');
-
-    const importP = document.querySelector('#sharePanel .fas.fa-cloud-upload-alt + p');
-    if(importP) importP.textContent = T('importBackup');
-
-    const genBtn = document.querySelector('button[onclick="generateShareCode()"]');
-    if(genBtn) genBtn.innerHTML = `<i class="fas fa-code"></i> ${T('btnGenerateCode')}`;
-
-    const codeOutput = document.getElementById('shareCodeOutput');
-    if(codeOutput) codeOutput.placeholder = T('placeholderCode');
-
-    const copyBtn = document.querySelector('button[onclick="copyShareCode()"]');
-    if(copyBtn) copyBtn.innerHTML = `<i class="fas fa-copy"></i> ${T('btnCopyCode')}`;
-
-    const restoreLabel = document.querySelector('#sharePanel p[style*="font-weight:700"]');
-    if(restoreLabel) restoreLabel.textContent = T('lblRestoreData');
-
-    const restoreInput = document.getElementById('shareRestoreInput');
-    if(restoreInput) restoreInput.placeholder = T('placeholderPaste');
-
-    const addDataBtn = document.querySelector('button[onclick="processSmartAdd()"]');
-    if(addDataBtn) addDataBtn.innerHTML = T('btnAddData');
-
-    // Confirm popup
-    const cancelConfirmBtn = document.querySelector('.confirm-btns button[onclick="closeConfirm(false)"]');
-    if(cancelConfirmBtn) cancelConfirmBtn.textContent = T('btnCancel');
-    const okConfirmBtn = document.getElementById('confirmYesBtn');
-    if(okConfirmBtn) okConfirmBtn.textContent = T('btnOk');
-    const confirmInputEl = document.getElementById('confirmInput');
-    if(confirmInputEl) confirmInputEl.placeholder = T('confirmWrite');
-
-    // Recipe search input
-    const recipeSearch = document.getElementById('recipeSearchInput');
-    if(recipeSearch) recipeSearch.placeholder = T('searchRecipes');
-}
-
-// Override submitInputModal to use translated messages
-const _origSubmit = window.submitInputModal;
-// Override showToast to remain as-is but used keys come from T()
-
-
+function initApp() {
     // 1. FIREBASE REAL-TIME SYNC (Zamir & Madam Sync Fix)
     if (typeof db !== 'undefined') {
         
@@ -2094,9 +1552,7 @@ const _origSubmit = window.submitInputModal;
             if(document.querySelector('.ash-yellow-lines')) document.querySelector('.ash-yellow-lines').style.display = 'none';
         }
     }
-
-    // 4. Apply saved language on startup
-    setLanguage(currentLang);
+}
 
 
 
@@ -2442,11 +1898,11 @@ function submitInputModal() {
     let priceInput = document.getElementById('inp2').value.trim();
     let baseInput = document.getElementById('inpBase').value.trim();
 
-    if (!name) { showToast(T('toastEnterName'), true); return; }
+    if (!name) { showToast("Please enter a name!", true); return; }
 
     if (mode === 'stock') {
-        if (priceInput === "" || isNaN(priceInput)) { showToast(T('toastEnterPrice'), true); return; }
-        if (baseInput === "" || isNaN(baseInput) || parseFloat(baseInput) <= 0) { showToast(T('toastEnterQty'), true); return; }
+        if (priceInput === "" || isNaN(priceInput)) { showToast("Enter valid price!", true); return; }
+        if (baseInput === "" || isNaN(baseInput) || parseFloat(baseInput) <= 0) { showToast("Enter valid quantity!", true); return; }
 
         let nPrice = parseFloat(priceInput) || 0;
         let nBase = parseFloat(baseInput) || 1000;
@@ -2489,7 +1945,7 @@ function submitInputModal() {
 
     } else {
         let cat = document.getElementById('recipeCatSelect').value;
-        if (!cat || cat === "") { showToast(T('toastSelectCat'), true); return; }
+        if (!cat || cat === "") { showToast("Select Category!", true); return; }
         
         let recipeData = {
             name: name,
@@ -2599,7 +2055,7 @@ function renderRecipes() {
     gridDiv.className = isListView ? 'grid list-view-active' : 'grid';
 
     if (filtered.length === 0) {
-        gridDiv.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:60px; color:#94a3b8; font-weight:600;">${T('noItems')}</div>`;
+        gridDiv.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:60px; color:#94a3b8; font-weight:600;">No recipes found...</div>`;
         return;
     }
 
