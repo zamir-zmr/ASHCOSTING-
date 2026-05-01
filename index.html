@@ -44,21 +44,7 @@
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
         
-        body { margin: 0; background: var(--bg); color: #2D3436; overflow: hidden; user-select: none; 
-          
-          
-
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    user-select: none;
-}
-
-/* Taki user inputs mein type kar sake aur text select kar sake */
-input, textarea {
-    -webkit-user-select: text;
-    user-select: text;
-}
-
+        body { margin: 0; background: var(--bg); color: #2D3436; overflow: hidden; user-select: none; }
 
 
 .btn-reset { 
@@ -724,6 +710,7 @@ input, textarea {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px; /* Gap kam kiya */
     padding: 8px;
+    margin-bottom: 45px;
 }
 
 /* --- List View Mode (Active) --- */
@@ -1031,13 +1018,6 @@ input, textarea {
 }
 
 
-
-.recipe-item { /* Aapki list item ki class */
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Standard */
-    -webkit-touch-callout: none; /* iOS long press menu rokne ke liye */
-}
 
 
 
@@ -3418,7 +3398,7 @@ document.addEventListener('click', function(e) {
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
               
               <h2 
-            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F1</span>
+            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F2</span>
             </h2>
             </span>
             
