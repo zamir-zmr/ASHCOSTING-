@@ -2036,18 +2036,20 @@ function toggleSearch() {
 }
 
 function handleSearch(val) {
-    searchQuery = val.toLowerCase();
-    // Jab search ho raha ho, tab animation band rahega
+    // .trim() use karne se "Chewy Cookies " ka extra space hat jayega
+    searchQuery = val.toLowerCase().trim();
+    
+    // Jab search ho raha ho (query length > 0), tab animation band rahega
     isSearchActive = (searchQuery.length > 0); 
+    
     renderRecipes();
 }
 
-
-
 function renderRecipes() {
-    // 1. Unified Filter
+    // 1. Unified Filter with Trimmed Search
     let filtered = recipes.filter(r => {
         const matchesCategory = (currentFilter === 'ALL' || r.category === currentFilter);
+        // searchQuery ab trimmed hai, isliye matching perfect hogi
         const matchesSearch = r.name.toLowerCase().includes(searchQuery);
         return matchesCategory && matchesSearch;
     });
@@ -2095,7 +2097,6 @@ function renderRecipes() {
         </div>`;
     }).join('');
 }
-
 
 
 
