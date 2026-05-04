@@ -2060,7 +2060,7 @@ function renderRecipes() {
         let iconSize = isListView ? '24px' : '80px';
         
         // Control Animation: Only animate if search is NOT active
-        let cardAnim = isSearchActive ? '' : `animation: cardEntrance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: ${i < 12 ? i * 0.04 : 0}s;`;
+        let cardAnim = isSearchActive ? '' : `animation: cardEntrance 0.5s cubic-bezier(0.2, 1.8, 0.2, 1) both; animation-delay: ${i < 12 ? i * 0.04 : 0}s;`;
 
         let photoContent = r.img 
             ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
