@@ -1032,13 +1032,6 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-    
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
@@ -1105,7 +1098,7 @@ function Lock() {
     // 2. Agar Master Lock 'OFF' hai, tab Firebase check karo.
     
     if (APP_MASTER_LOCK === 'OFF') {
-      showLockScreen(deviceId, "NOT REQUIRED1");
+      showLockScreen(deviceId, "ON REQUIRED1");
     } else {
       if (isAllowedInFirebase) {
         removeLockScreen();
