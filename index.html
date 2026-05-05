@@ -924,16 +924,15 @@
 
 
 /* Cards: Professional Staggered Zoom-In */
+
 @keyframes cardEntrance {
-    0% { 
-        opacity: 0; 
-        transform: scale(0.85) translateY(30px);
-        filter: blur(8px);
+    0% {
+        opacity: 0;
+        transform: translateY(15px); /* Zyada door se mat layein, 15px kaafi hai */
     }
-    100% { 
-        opacity: 1; 
-        transform: scale(1) translateY(0);
-        filter: blur(0px);
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -2060,7 +2059,13 @@ function renderRecipes() {
         let iconSize = isListView ? '24px' : '80px';
         
         // Control Animation: Only animate if search is NOT active
-        let cardAnim = isSearchActive ? '' : `animation: cardEntrance 0s cubic-bezier(1, 1.8, 0.2, 1) both; animation-delay: ${i < 12 ? i * 0.04 : 0}s;`;
+        // Sirf pehle 8 items ko animation delay dein
+// 8 ke baad wale items bina delay ke load honge taaki white space na dikhe
+let delay = (i < 8 && !isSearchActive) ? (i * 0.05).toFixed(2) : 0;
+
+// Animation duration ko thoda fast (0.4s) karein taaki loading tez lage
+let cardAnim = `animation: cardEntrance 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; animation-delay: ${delay}s;`;
+
 
         let photoContent = r.img 
             ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` 
@@ -2070,8 +2075,9 @@ function renderRecipes() {
 
         return `
         <div class="card" 
-             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; ${cardAnim} ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect}"
-             onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
+     style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; will-change: transform, opacity; ${cardAnim} ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect}"
+     onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
+
             
             <div onclick="event.stopPropagation(); showRecipeItems(${realIdx})" 
                  style="position:absolute; ${isListView ? 'right:12px; top:50%; transform:translateY(-50%);' : 'top:8px; right:8px;'} width:34px; height:34px; background:rgba(255,255,255,0.95); backdrop-filter:blur(5px); border-radius:10px; display:flex; align-items:center; justify-content:center; z-index:10; color:#00D2D3; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
