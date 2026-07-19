@@ -1812,11 +1812,12 @@ function filterPriceList() {
 function renderPriceList() {
     const listEl = document.getElementById('priceListItems');
     if (!listEl) return;
-    const q = (document.getElementById('priceListSearchInput')?.value || '').toLowerCase();
+    const q = (document.getElementById('priceListSearchInput')?.value || '').toLowerCase().trim().replace(/\s+/g, ' ');
     listEl.innerHTML = '';
 
     priceList.forEach((item, idx) => {
-        if (q && !item.name.toLowerCase().includes(q)) return;
+        const itemName = item.name.toLowerCase().trim().replace(/\s+/g, ' ');
+        if (q && !itemName.includes(q)) return;
         const row = document.createElement('div');
         row.className = 'row-item draggable-item';
         row.dataset.idx = idx;
