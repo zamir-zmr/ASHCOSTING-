@@ -1371,7 +1371,9 @@ DATA</button>
         <button class="btn-pill" style="flex:1; background:var(--primary); color:white; padding: 10px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openAddPriceItem()">
             <i class="fas fa-plus"></i> ADD ITEM
         </button>
-
+        <button class="btn-pill" style="flex:1; background:#f59e0b; color:white; padding: 10px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openImportPriceModal()">
+            <i class="fas fa-file-import"></i> IMPORT
+        </button>
     </div>
 
     <div class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap: 5px; margin: 10px 15px 0 15px;">
@@ -1404,6 +1406,21 @@ DATA</button>
         <div style="display:flex; gap:10px;">
             <button class="btn-pill" style="flex:1; background:#f1f5f9;" onclick="closePriceModal()">BACK</button>
             <button class="btn-pill" style="flex:1; background:var(--primary); color:white;" onclick="savePriceItem()">SAVE</button>
+        </div>
+    </div>
+</div>
+
+<div id="priceImportOverlay" class="modal-overlay">
+    <div class="input-modal">
+        <h3 style="text-align:center; margin-top:0; color:var(--primary);">Import Price List</h3>
+        <p style="text-align:center; font-size:11px; color:#94a3b8; margin-top:-8px;">Paste data below — one item per line<br>(Name, Qty, Price)</p>
+
+        <textarea id="plImportText" placeholder="Red Velvet   8 inch   22
+Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; border:1px solid #e2e8f0; padding:10px; font-size:13px; font-family:inherit; margin-bottom:10px; resize:vertical;"></textarea>
+
+        <div style="display:flex; gap:10px;">
+            <button class="btn-pill" style="flex:1; background:#f1f5f9;" onclick="closeImportPriceModal()">BACK</button>
+            <button class="btn-pill" style="flex:1; background:var(--primary); color:white;" onclick="importPriceListText()">IMPORT</button>
         </div>
     </div>
 </div>
@@ -1681,6 +1698,66 @@ function closePriceModal() {
     document.getElementById('priceModalOverlay').style.display = 'none';
 }
 
+function openImportPriceModal() {
+    document.getElementById('plImportText').value = '';
+    document.getElementById('priceImportOverlay').style.display = 'flex';
+}
+
+function closeImportPriceModal() {
+    document.getElementById('priceImportOverlay').style.display = 'none';
+}
+
+function importPriceListText() {
+    const raw = document.getElementById('plImportText').value.trim();
+    if (!raw) { showToast('Paste some data first!', true); return; }
+
+    let imported = [];
+
+    // 1. Try JSON array first
+    try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+            parsed.forEach(p => {
+                const name = p.name || p.Name || p.item || p.Item || '';
+                const qty = p.qty || p.Qty || p.quantity || p.Quantity || '-';
+                const price = parseFloat(p.price || p.Price || 0);
+                if (name && !isNaN(price)) imported.push({ name: String(name).trim(), qty: String(qty).trim(), price: price });
+            });
+        }
+    } catch (e) {
+        // 2. Not JSON — parse line by line (tab or 2+ space separated: Name, Qty, Price)
+        raw.split('\n').forEach(line => {
+            line = line.trim();
+            if (!line) return;
+            let parts = line.split('\t').map(p => p.trim()).filter(p => p !== '');
+            if (parts.length < 2) parts = line.split(/\s{2,}/).map(p => p.trim()).filter(p => p !== '');
+            if (parts.length < 2) return;
+
+            const last = parts[parts.length - 1];
+            const priceMatch = last.match(/-?\d+(\.\d+)?/);
+            if (!priceMatch) return;
+            const price = parseFloat(priceMatch[0]);
+
+            let qty = '-', name = '';
+            if (parts.length >= 3) {
+                qty = parts[parts.length - 2];
+                name = parts.slice(0, parts.length - 2).join(' ');
+            } else {
+                name = parts[0];
+            }
+            if (name) imported.push({ name: name.trim(), qty: qty.trim(), price: price });
+        });
+    }
+
+    if (imported.length === 0) { showToast('Could not read any items!', true); return; }
+
+    priceList = priceList.concat(imported);
+    savePriceListData();
+    renderPriceList();
+    closeImportPriceModal();
+    showToast(`${imported.length} items imported!`);
+}
+
 function editPriceItem(idx) {
     const item = priceList[idx];
     if (!item) return;
@@ -1741,9 +1818,11 @@ function renderPriceList() {
     priceList.forEach((item, idx) => {
         if (q && !item.name.toLowerCase().includes(q)) return;
         const row = document.createElement('div');
-        row.className = 'row-item';
+        row.className = 'row-item draggable-item';
+        row.dataset.idx = idx;
         row.style.gridTemplateColumns = '1fr 55px 55px 25px';
         row.style.gap = '5px';
+        row.style.touchAction = 'pan-y';
         row.innerHTML = `
             <div style="text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" onclick="editPriceItem(${idx})">${item.name}</div>
             <div style="text-align:center;" onclick="editPriceItem(${idx})">${item.qty}</div>
@@ -1756,6 +1835,34 @@ function renderPriceList() {
     if (priceList.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">No items yet. Tap ADD ITEM to start.</p>';
     }
+
+    setTimeout(initPriceListSortable, 200);
+}
+
+function initPriceListSortable() {
+    let el = document.getElementById('priceListItems');
+    if (!el || typeof Sortable === 'undefined') return;
+
+    if (el.sortableInstance) el.sortableInstance.destroy();
+
+    el.sortableInstance = Sortable.create(el, {
+        animation: 150,
+        delay: 500,
+        delayOnTouchOnly: true,
+        touchStartThreshold: 5,
+        ghostClass: 'sortable-ghost',
+        onEnd: function() {
+            let newOrder = [];
+            el.querySelectorAll('.draggable-item').forEach(row => {
+                let oldIdx = parseInt(row.dataset.idx);
+                if (!isNaN(oldIdx) && priceList[oldIdx]) newOrder.push(priceList[oldIdx]);
+            });
+            priceList = newOrder;
+            savePriceListData();
+            renderPriceList();
+            showToast("Order Saved & Synced");
+        }
+    });
 }
 
 
