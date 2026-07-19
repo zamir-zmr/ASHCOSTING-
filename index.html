@@ -1219,12 +1219,13 @@ DATA</button>
 
 
         <!-- <button class="btn-pill" style="background:#000; color:#fff;" onclick="openBackupPanel()">BACKUP</button> -->
-        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:5px;" onclick="toggleManage()">MANAGE</button>
+        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:0px;" onclick="toggleManage()">MANAGE</button>
     </div>
 
-    <div class="h-btns" style="gap: 5px;">
+    <div class="h-btns" style="gap: 0px;">
         <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CATEGORY</button>
         <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
+        <button class="btn-pill" style="background:#fff; color:#d97706;" onclick="openPriceListPanel()">PRICE LIST</button>
         
         <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openInputModal('recipe')">Add Recipe</button>
     </div>
@@ -1346,6 +1347,64 @@ DATA</button>
     
     <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
         <div id="stockList"></div>
+    </div>
+</div>
+
+<div id="priceListPanel" class="panel">
+    <div style="padding:1px; background:#07c1c1;">
+        <div class="stockpanel-nav">PRICE LIST
+        <span onclick="closePanel('priceListPanel')" style="cursor:pointer;"</span>
+      <i class="fas fa-times" style="font-size:30px; color:black;"></i>
+        </div>
+    </div>
+
+    <div style="padding: 5px 15px 0 15px;">
+        <div style="position: relative; display: flex; align-items: center;">
+            <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
+            <input type="text" id="priceListSearchInput" placeholder="Search cakes..."
+                oninput="filterPriceList()"
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px; outline: none;">
+        </div>
+    </div>
+
+    <div style="display:flex; gap:8px; padding: 8px 15px 0 15px;">
+        <button class="btn-pill" style="flex:1; background:var(--primary); color:white; padding: 10px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openAddPriceItem()">
+            <i class="fas fa-plus"></i> ADD ITEM
+        </button>
+
+    </div>
+
+    <div class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap: 5px; margin: 10px 15px 0 15px;">
+        <div style="text-align:left;">ITEM</div><div>QTY</div><div>PRICE</div><div></div>
+    </div>
+
+    <div class="panel-content" style="padding: 5px 15px; overflow-y:auto; flex:1;">
+        <div id="priceListItems"></div>
+    </div>
+</div>
+
+<div id="priceModalOverlay" class="modal-overlay">
+    <div class="input-modal">
+        <h3 style="text-align:center; margin-top:0; color:var(--primary);">Cake Price Entry</h3>
+
+        <input type="hidden" id="plEditIdx" value="">
+
+        <div style="position:relative; margin-bottom:10px;">
+            <input type="text" id="plName" placeholder="Cake Name (English)" style="width:100%;">
+        </div>
+
+        <div style="position:relative; margin-bottom:10px;">
+            <input type="text" id="plQty" placeholder="Quantity (e.g. 6, 24, one size)" style="width:100%;">
+        </div>
+
+        <div style="position:relative; margin-bottom:10px;">
+            <input type="number" id="plPrice" placeholder="Price" step="0.01" style="width:100%;">
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <button class="btn-pill" style="flex:1; background:#f1f5f9;" onclick="closePriceModal()">BACK</button>
+            <button class="btn-pill" style="flex:1; background:var(--primary); color:white;" onclick="savePriceItem()">SAVE</button>
+        </div>
     </div>
 </div>
 
@@ -1476,6 +1535,7 @@ DATA</button>
 // Data load aur default values fix
 
 // 1. Data load aur default values fix
+let priceList = JSON.parse(localStorage.getItem('ASH_PL')) || [];
 let recipes = JSON.parse(localStorage.getItem('ASH_R')) || [];
 
 // Stock ko objects ke roop mein rakha hai taaki price logic crash na ho
@@ -1532,6 +1592,7 @@ function initApp() {
     renderCatFilters();
     renderRecipes();
     renderStock();
+    renderPriceList();
 
     // 3. Logo loading logic (Aapka original logic)
     const saved = localStorage.getItem('ASH_CUSTOM_LOGO');
@@ -1581,7 +1642,109 @@ function saveData() {
     localStorage.setItem('ASH_R', JSON.stringify(recipes)); 
     localStorage.setItem('ASH_S', JSON.stringify(stock)); 
     localStorage.setItem('ASH_C', JSON.stringify(cats)); 
+    localStorage.setItem('ASH_PL', JSON.stringify(priceList)); 
 }
+
+/* --- PRICE LIST LOGIC --- */
+function savePriceListData() {
+    localStorage.setItem('ASH_PL', JSON.stringify(priceList));
+}
+
+function openPriceListPanel() {
+    renderPriceList();
+    openPanel('priceListPanel');
+}
+
+function openAddPriceItem() {
+    document.getElementById('plName').value = '';
+    document.getElementById('plQty').value = '';
+    document.getElementById('plPrice').value = '';
+    document.getElementById('plEditIdx').value = '';
+    document.getElementById('priceModalOverlay').style.display = 'flex';
+}
+
+function closePriceModal() {
+    document.getElementById('priceModalOverlay').style.display = 'none';
+}
+
+function editPriceItem(idx) {
+    const item = priceList[idx];
+    if (!item) return;
+    document.getElementById('plName').value = item.name;
+    document.getElementById('plQty').value = item.qty;
+    document.getElementById('plPrice').value = item.price;
+    document.getElementById('plEditIdx').value = idx;
+    document.getElementById('priceModalOverlay').style.display = 'flex';
+}
+
+function savePriceItem() {
+    const name = document.getElementById('plName').value.trim();
+    const qty = document.getElementById('plQty').value.trim();
+    const price = document.getElementById('plPrice').value.trim();
+    const editIdx = document.getElementById('plEditIdx').value;
+
+    if (!name) { showToast('Enter cake name!', true); return; }
+    if (price === '' || isNaN(price) || parseFloat(price) < 0) { showToast('Enter valid price!', true); return; }
+
+    const item = { name: name, qty: qty || '-', price: parseFloat(price) };
+
+    if (editIdx !== '') {
+        priceList[parseInt(editIdx)] = item;
+    } else {
+        priceList.push(item);
+    }
+    savePriceListData();
+    renderPriceList();
+    closePriceModal();
+    showToast('Saved!');
+}
+
+function deletePriceItem(idx) {
+    const itemName = priceList[idx] ? priceList[idx].name : "Item";
+    showCustomModal({
+        title: "Delete Item?",
+        msg: `Are you sure you want to delete\n"${itemName}"?`,
+        showInput: false,
+        onYes: () => {
+            priceList.splice(idx, 1);
+            savePriceListData();
+            renderPriceList();
+            showToast(`${itemName} Deleted`);
+        }
+    });
+}
+
+function filterPriceList() {
+    renderPriceList();
+}
+
+function renderPriceList() {
+    const listEl = document.getElementById('priceListItems');
+    if (!listEl) return;
+    const q = (document.getElementById('priceListSearchInput')?.value || '').toLowerCase();
+    listEl.innerHTML = '';
+
+    priceList.forEach((item, idx) => {
+        if (q && !item.name.toLowerCase().includes(q)) return;
+        const row = document.createElement('div');
+        row.className = 'row-item';
+        row.style.gridTemplateColumns = '1fr 55px 55px 25px';
+        row.style.gap = '5px';
+        row.innerHTML = `
+            <div style="text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" onclick="editPriceItem(${idx})">${item.name}</div>
+            <div style="text-align:center;" onclick="editPriceItem(${idx})">${item.qty}</div>
+            <div style="text-align:center;" onclick="editPriceItem(${idx})">${item.price}</div>
+            <div onclick="deletePriceItem(${idx})" style="color:#ff7675; cursor:pointer; text-align:center;">✕</div>
+        `;
+        listEl.appendChild(row);
+    });
+
+    if (priceList.length === 0) {
+        listEl.innerHTML = '<p style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">No items yet. Tap ADD ITEM to start.</p>';
+    }
+}
+
+
 
 // --- NEW SYNC HELPER FOR CATEGORIES ---
 function syncCatsToCloud() {
