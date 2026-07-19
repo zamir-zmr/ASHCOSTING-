@@ -1219,10 +1219,10 @@ DATA</button>
 
 
         <!-- <button class="btn-pill" style="background:#000; color:#fff;" onclick="openBackupPanel()">BACKUP</button> -->
-        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:0px;" onclick="toggleManage()">MANAGE</button>
+        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:5px;" onclick="toggleManage()">MANAGE</button>
     </div>
 
-    <div class="h-btns" style="gap: 0px;">
+    <div class="h-btns" style="gap: 5px;">
         <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CATEGORY</button>
         <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
         <button class="btn-pill" style="background:#fff; color:#d97706;" onclick="openPriceListPanel()">PRICE LIST</button>
@@ -1586,6 +1586,17 @@ function initApp() {
                 renderCatFilters();
             }
         });
+
+        // PRICE LIST SYNC: Madam price list mein kuch add/change karengi toh aapko turant dikhega
+        db.ref('shared_price_list').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                priceList = data;
+                localStorage.setItem('ASH_PL', JSON.stringify(priceList));
+                renderPriceList();
+                console.log("Price List updated from Cloud!");
+            }
+        });
     }
 
     // 2. Initial Renders
@@ -1648,6 +1659,9 @@ function saveData() {
 /* --- PRICE LIST LOGIC --- */
 function savePriceListData() {
     localStorage.setItem('ASH_PL', JSON.stringify(priceList));
+    if (typeof db !== 'undefined') {
+        db.ref('shared_price_list').set(priceList);
+    }
 }
 
 function openPriceListPanel() {
