@@ -23,42 +23,71 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
 <style>
-/* Cropper window design */
 .crop-modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-    z-index: 99999; display: none; flex-direction: column;
-    align-items: center; justify-content: center;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 99999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
-.crop-container { width: 90%; max-height: 70vh; background: #000; overflow: hidden; }
-.crop-btns { margin-top: 20px; display: flex; gap: 10px; width: 90%; }
-</style>
-    <style>
-        :root { 
-            --primary: #00D2D3; 
-            --accent: #54A0FF; 
-            --danger: #FF6B6B; 
-            --bg: #c3ece8 ; 
-            --yellow-glow: #ffff00;
-            --white-shine: #ffffff;
-            --header-gradient: linear-gradient(135deg, #00D2D3 0%, #ffff00 100%);
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
-        
-        body { margin: 0; background: var(--bg); color: #2D3436; overflow: hidden; user-select: none; }
 
+.crop-container {
+    width: 90%;
+    max-height: 70vh;
+    background: #000;
+    overflow: hidden;
+}
 
-.btn-reset { 
-    background: #ff4757; 
-    color: white; 
-    border: none; 
-    padding: 15px; 
-    border-radius: 12px; 
-    width: 100%; 
-    font-weight: bold; 
-    margin-top: 10px; 
+.crop-btns {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    width: 90%;
+}
+
+:root {
+    --primary: #00D2D3;
+    --accent: #54A0FF;
+    --danger: #FF6B6B;
+    --bg: #c3ece8;
+    --yellow-glow: #ffff00;
+    --white-shine: #ffffff;
+    --header-gradient: linear-gradient(135deg, #00D2D3 0%, #ffff00 100%);
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: #2D3436;
+    overflow: hidden;
+    user-select: none;
+}
+
+.btn-reset {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
     transition: 0.3s;
 }
-.btn-reset:active { transform: scale(0.95); opacity: 0.8; }
+
+.btn-reset:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
 
 .share-section-title {
     background: #f1f5f9;
@@ -73,49 +102,40 @@
 }
 
 .toast {
-    pointer-events: none; /* Isse toast ke niche wale buttons kaam karenge */
-    /* ... baki purani css ... */
-}
-
-/* SMART TOAST DESIGN - MODIFIED */
-.toast {
-    position: fixed; 
-    top: -100px; /* Shuruat mein screen ke bahar */
-    left: 50%; 
+    pointer-events: none;
+    position: fixed;
+    top: -100px;
+    left: 50%;
     transform: translateX(-50%);
-    background: #2d3436; 
-    color: white; 
+    background: #2d3436;
+    color: white;
     padding: 12px 25px;
-    border-radius: 50px; 
-    font-weight: bold; 
+    border-radius: 50px;
+    font-weight: bold;
     font-size: 14px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5); /* Shadow thodi zyada ki hai */
-    z-index: 999999 !important; /* Isse popup ke upar dikhega */
-    transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex; 
-    align-items: center; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10000;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
     gap: 10px;
     width: max-content;
     max-width: 90%;
-    pointer-events: none; /* Taaki click karne mein rukawat na bane */
 }
 
-.toast.show { 
-    top: 40px; /* Screen ke upar se 40px neeche aayega */
+.toast.show {
+    top: 30px;
 }
 
-/* Green color for Success */
-.toast.success-toast { 
-    border: 2px solid #00D2D3; 
+.toast.success-toast {
+    border: 2px solid #00D2D3;
 }
 
-/* Red color for Error */
-.toast.error-toast { 
-    border: 2px solid #ff4757; 
-    color: #ff4757; 
+.toast.error-toast {
+    border: 2px solid #ff4757;
+    color: #ff4757;
 }
 
-/* Suggestions Dropdown Styling */
 #suggestions {
     position: absolute;
     width: calc(100% - 30px);
@@ -141,164 +161,229 @@
     background-color: #f9f9f9;
 }
 
-
-
-
-/* Table Header (Text Only) */
 .row-header {
     display: grid;
-
-
-    
-    grid-template-columns: 55px 2.4fr 1fr 1fr 1fr 1fr; 
-    
+    grid-template-columns: 55px 2.4fr 1fr 1fr 1fr 1fr;
     gap: 5px;
     background: #f8fafc;
     padding: 5px 5px;
     font-weight: 900;
     font-size: 10px;
     color: #64748b;
-    margin-left : 15px;
-    margin-right : 15px;
-    border-radius : 5px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 5px;
     border: 3px solid #00af9e;
     text-align: center;
 }
 
-
-
-
-/* Row Item alignment with Serial Number */.row-item { 
-    display: grid; 
-    grid-template-columns: 35px 2fr 1fr 1fr 1fr 1fr; /* Header ke barabar 6 columns */
-    gap: 5px; 
-    background: white; 
-    padding: 10px 5px; 
-    border-radius: 12px; 
-    margin-bottom: 8px; 
-    align-items: center; 
+.row-item {
+    display: grid;
+    grid-template-columns: 25px 2fr 1fr 1fr 1fr 1fr;
+    gap: 5px;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    align-items: center;
     font-size: 11px;
     cursor: grab;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-
-
-
-        
-        .app-header { 
-            background: var(--header-gradient); 
-            padding: 0 10px; display: flex; justify-content: space-between; align-items: center; 
-            height: 85px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-bottom: 2px solid white;
-        }
-        .header-left { display: flex; align-items: center; }
-        .h-btns { display: flex; gap: 5px; align-items: center; }
-        
-        /* Buttons ko chhota aur compact karne ke liye */
-.btn-pill { 
-    padding: 6px 8px; 
-    border-radius: 8px; 
-    font-weight: 700; 
-    font-size: 9px; /* Font size kam kiya */
-    transition: 0.2s; 
+.app-header {
+    background: var(--header-gradient);
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 85px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-bottom: 2px solid white;
 }
 
-.btn-pill:active { 
-    transform: scale(0.92); 
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.h-btns {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.btn-pill {
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 9px;
+    transition: 0.2s;
+}
+
+.btn-pill:active {
+    transform: scale(0.92);
     filter: brightness(1.1);
 }
 
-         /* .btn-pill { padding: 10px 15px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; transition: 0.2s; }
-         
-         .btn-pill:active { 
-             transform: scale(0.92); 
-             filter: brightness(1.1);
-         } */
- 
-
-
-
-
-
-
-
-/* Plus button ko bhi perfect round karne ke liye */
-.btn-add { 
-    background: white; 
-    color: var(--primary); 
-    width: 40px; 
-    height: 40px; 
-    border-radius: 50% !important; 
-    font-size: 24px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border: none; 
+.btn-add {
+    background: white;
+    color: var(--primary);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
     font-weight: 900;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
+.cat-filter-wrapper {
+    padding: 10px 15px;
+    background: #f8fafc;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    border-bottom: 1px solid #eee;
+}
 
+.cat-filter-wrapper::-webkit-scrollbar {
+    display: none;
+}
 
-        
+.cat-item {
+    padding: 6px 14px;
+    background: #ffffff;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 800;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    color: #64748b;
+    text-transform: uppercase;
+}
 
-        /* --- CATEGORY FILTER BAR --- */
-        .cat-filter-wrapper { padding: 10px 15px; background: #f8fafc; display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid #eee; }
-        .cat-filter-wrapper::-webkit-scrollbar { display: none; }
-        .cat-item { padding: 8px 18px; background: white; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1.5px solid #eee; cursor: pointer; transition: 0.2s; }
-        .cat-item.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(0,210,211,0.3); }
+.cat-item.active {
+    background: #019117 !important;
+    color: #ffffff !important;
+    border-color: #019117;
+    box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
+    animation: mega-jump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
 
-        
+.btn-manage {
+    background: white;
+    color: #2D3436;
+}
 
-        
-        .btn-manage { background: white; color: #2D3436; }
-        .btn-manage.active { background: var(--danger); color: white; }
-        .btn-stock { background: #2D3436; color: white; }
-        .btn-add { background: white; color: var(--primary); width: 42px; height: 42px; border-radius: 50%; font-size: 26px; display: flex; align-items: center; justify-content: center; border:none; font-weight: 900; }
+.btn-manage.active {
+    background: var(--danger);
+    color: white;
+}
 
-        .container { padding: 15px 15px; height: calc(100vh - 145px); overflow-y: auto; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.btn-stock {
+    background: #2D3436;
+    color: white;
+}
 
-        .card { 
-            height: 195px; background: white; border-radius: 20px; 
-            position: relative; overflow: hidden; display: flex; 
-            flex-direction: column; border: 2px solid #b4da11; 
-        }
-        .card-img-box { width: 100%; height: 140px; position: relative; background: #ffffff; overflow: hidden; }
-        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .card-info { padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; }
-        .card b { color: #2D3436; font-size: 11px; text-transform: uppercase; text-align: center; }
-        .card-cat-tag { font-size: 8px; color: var(--accent); font-weight: 900; text-transform: uppercase; margin-bottom: 2px; }
+.container {
+    padding: 15px 15px;
+    height: calc(100vh - 145px);
+    overflow-y: auto;
+}
 
-/* Premium iPhone Jiggle Animation */
-/* iPhone Jiggle Effect - Zamir Style */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 45px;
+}
+
+.card {
+    height: 195px;
+    background: white;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #b4da11;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-img-box {
+    width: 100%;
+    height: 140px;
+    position: relative;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.card-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-info {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.card b {
+    color: #2D3436;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.card-cat-tag {
+    font-size: 8px;
+    color: var(--accent);
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
 .manage-mode .card {
     border: 2px dashed #ff4757 !important;
     animation: jiggle 0.3s infinite ease-in-out !important;
-    pointer-events: auto; /* Clickable rakhne ke liye */
+    pointer-events: auto;
 }
 
 @keyframes jiggle {
-    0% { transform: rotate(-1deg); }
+0% { transform: rotate(-1deg); }
     50% { transform: rotate(1deg); }
     100% { transform: rotate(-1deg); }
 }
 
-/* Optional: Har dusre card ko thoda alag time par shake karne ke liye (Real feel) */
 .manage-mode .card:nth-child(even) {
     animation-duration: 0.22s;
     animation-direction: reverse;
 }
 
-
-
-/* Delete Icon (Optional: iPhone jaisa minus button) */
 .manage-mode .card::before {
     content: "✕";
     position: absolute;
     top: -10px;
     left: -10px;
-    background: #ff3b30; /* iOS Danger Red */
+    background: #ff3b30;
     color: white;
     width: 24px;
     height: 24px;
@@ -311,381 +396,466 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-
-/* Line 226 se replace karein */
-
-
-
-.panel { 
-    position: fixed; 
-    inset: 0; 
-    background: #bef1f5; 
-    z-index: 1000; 
-    display: none; 
-    flex-direction: column; 
-    height: 100vh; /* Puri screen cover karega */
+.panel {
+    position: fixed;
+    inset: 0;
+    background: #bef1f5;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    height: 100vh;
 }
 
-/* Stock aur Category dono ke scroll area ke liye */
-.panel-content { 
-    flex: 1; 
-    overflow-y: auto; 
-    padding: 15px; 
-    padding-bottom: 50px !important; /* Isse niche gap ban jayega aur aakhri item dikhne lagega */
+.panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    padding-bottom: 50px !important;
 }
 
-        
-
-/* Isse category ki list scroll hone lagegi */
 #catPanel .panel-content {
     flex: 1;
-    overflow-y: auto; /* Vertical scroll enable */
+    overflow-y: auto;
     padding: 15px;
     padding-bottom: 50px;
-    
 }
 
-        
-        .stockpanel-nav { background: #a6f2f8; padding: 5px;
-        padding-right: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        
-        display: flex; justify-content: space-between; align-items: center;
-        border-radius: 15px;
-        font-size: 20px;
-        border: 3px solid #d8ff20; font-weight: Normal;  }
-        
-        .catpanel-nav { background: #a6f2f8; padding: 5px;
-        padding-right: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        display: flex; justify-content: space-between; align-items: center;
-        border-radius: 15px;
-        font-size: 20px;
-        border: 3px solid #d8ff20; font-weight: Normal;  }
-        
-        .sharepanel-nav { background: #fff; padding: 5px;
-        padding-right: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        display: flex; justify-content: space-between; align-items: center;
-        border-radius: 15px;
-        font-size: 20px;
-        border: 2px solid #f1ff22; font-weight: Normal;  }
+.stockpanel-nav {
+    background: #a6f2f8;
+    padding: 5px;
+    padding-right: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    font-size: 20px;
+    border: 3px solid #d8ff20;
+    font-weight: Normal;
+}
 
-        .editorpanel-nav { background: #a6f2f8; padding: 5px;
-        padding-right: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        
-        display: flex; justify-content: space-between; align-items: center;
-        border-radius: 15px;
-        font-size: 17px;
-        border: 3px solid #d8ff20; font-weight: Normal;  }
+.catpanel-nav {
+    background: #a6f2f8;
+    padding: 5px;
+    padding-right: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    font-size: 20px;
+    border: 3px solid #d8ff20;
+    font-weight: Normal;
+}
 
+.sharepanel-nav {
+    background: #fff;
+    padding: 5px;
+    padding-right: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    font-size: 20px;
+    border: 2px solid #f1ff22;
+    font-weight: Normal;
+}
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .input-modal { background: white; border-radius: 35px; padding: 25px; width: 100%; max-width: 350px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        
-        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1.5px solid #eee; border-radius: 12px; outline: none; font-size: 14px; }
-        
-        .img-pick-wrapper { width: 110px; height: 110px; margin: 0 auto 15px; position: relative; }
-        .img-pick { width: 100%; height: 100%; border-radius: 25px; background: #f1f5f9; border: 2px dashed var(--primary); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .img-pick img { width: 100%; height: 100%; object-fit: cover; }
-        #modalImgDel { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; z-index: 10; }
+.editorpanel-nav {
+    background: #a6f2f8;
+    padding: 5px;
+    padding-right: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    font-size: 17px;
+    border: 3px solid #d8ff20;
+    font-weight: Normal;
+}
 
-        .row-item { display: grid; grid-template-columns: 25px 2fr 1fr 1fr 1fr 1fr; gap: 5px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 8px; align-items: center; font-size: 11px; }
-        .row-item input { margin: 0; padding: 6px 2px; background: #f1f5f9; border: none; text-align: center; font-weight: bold; }
-        .calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
-        .calc-input { width: 75px; padding: 5px; border: 1.5px solid #FFC107; border-radius: 8px; text-align: center; margin: 0; }
-        
-        .btn-edit-cat { background: var(--accent); color: white; padding: 5px 10px; margin-right: 5px; }
-        
-/* // popup for all///////popup for all*/
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.input-modal {
+    background: white;
+    border-radius: 35px;
+    padding: 25px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1.5px solid #eee;
+    border-radius: 12px;
+    outline: none;
+    font-size: 14px;
+}
+
+.img-pick-wrapper {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 15px;
+    position: relative;
+}
+
+.img-pick {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    background: #f1f5f9;
+    border: 2px dashed var(--primary);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-pick img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#modalImgDel {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--danger);
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid white;
+    z-index: 10;
+}
+
+.row-item input {
+    margin: 0;
+    padding: 6px 2px;
+    background: #f1f5f9;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+.calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.calc-input {
+    width: 75px;
+    padding: 5px;
+    border: 1.5px solid #FFC107;
+    border-radius: 8px;
+    text-align: center;
+    margin: 0;
+}
+
+.btn-edit-cat {
+    background: var(--accent);
+    color: white;
+    padding: 5px 10px;
+    margin-right: 5px;
+}
 
 .custom-confirm-overlay {
-    position: fixed; 
-    inset: 0; 
+    position: fixed;
+    inset: 0;
     background: rgba(0,0,0,0.8);
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 20000; /* Bas yahan 9999 ki jagah 20000 kar diya hai */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 20000;
 }
 
 .confirm-box {
-    background: white; width: 85%; max-width: 320px; border-radius: 25px;
-    padding: 25px; text-align: center; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: white;
+    width: 85%;
+    max-width: 320px;
+    border-radius: 25px;
+    padding: 25px;
+    text-align: center;
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-@keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.confirm-box h3 { margin: 0 0 10px; color: var(--primary); font-size: 18px; }
-#confirmInput { 
-    width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #eee; 
-    border-radius: 12px; font-size: 16px; outline: none; display: none; 
+
+@keyframes modalPop {
+from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; }
 }
-#confirmInput:focus { border-color: var(--primary); }
-.confirm-btns { display: flex; gap: 10px; margin-top: 10px; }
-.confirm-btns button { flex: 1; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
+.confirm-box h3 {
+    margin: 0 0 10px;
+    color: var(--primary);
+    font-size: 18px;
+}
 
-/* Naya Backup Panel Design */
-.backup-panel { position: fixed; inset: 0; background: #F8FAFC; z-index: 9999; display: none; flex-direction: column; }
-.backup-nav { background: white; padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; font-weight: bold; }
-.backup-area { width: 100%; height: 180px; margin: 10px 0; border-radius: 12px; border: 1.5px solid #ddd; padding: 10px; font-size: 10px; }
+#confirmInput {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    display: none;
+}
 
+#confirmInput:focus {
+    border-color: var(--primary);
+}
 
+.confirm-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-/* Updated Logo Style with Animation */
+.confirm-btns button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.backup-panel {
+    position: fixed;
+    inset: 0;
+    background: #F8FAFC;
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+}
+
+.backup-nav {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+}
+
+.backup-area {
+    width: 100%;
+    height: 180px;
+    margin: 10px 0;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
+    padding: 10px;
+    font-size: 10px;
+}
+
 .header-logo {
-    position: relative; 
-    width: 60px; 
+    position: relative;
+    width: 60px;
     height: 60px;
-    display: flex; justify-content: center; align-items: center;
-    border-radius: 50% !important; 
-    border: 1px solid #ffffff; 
-    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50% !important;
+    border: 1px solid #ffffff;
+    overflow: hidden;
     background: #000;
     box-shadow: 0 0 15px rgba(255,255,255,0.5);
-    /* Animation trigger */
     animation: logoEntrance 1.8s ease-out, logoGlow 3s infinite alternate;
-    margin-right: 8px; 
+    margin-right: 8px;
     flex-shrink: 0;
     transition: transform 0.3s ease;
 }
 
 .header-logo:active {
-    transform: scale(0.9); /* Shrink on click */
+    transform: scale(0.9);
 }
 
-/* Entrance Slide-in */
 @keyframes logoEntrance {
-    from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
+from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     to { transform: translateX(0) rotate(0deg); opacity: 1; }
 }
 
-/* Continuous Soft Glow & Pulse */
 @keyframes logoGlow {
-    0% { box-shadow: 0 0 10px 
+0% { box-shadow: 0 0 10px 
     0 0 5px  }
     100% { box-shadow: 0 0 20px 
      0 0 15px var(--yellow-glow); transform: scale(1.5); }
 }
 
-
-
-/* SMART TOAST DESIGN */
-.toast {
-    position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-    background: #2d3436; color: white; padding: 12px 25px;
-    border-radius: 50px; font-weight: bold; font-size: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex; align-items: center; gap: 10px;
-}
-.toast.show { top: 30px; }
-/* Green color for Success */
-.toast.success-toast { border: 2px solid #00D2D3; }
-/* Red color for Error */
-.toast.error-toast { border: 2px solid #ff4757; color: #ff4757; }
-
-
-/* Suggestions ko "Green Area" ke upar float karne ke liye */
-#suggestions {
-    position: absolute;
-    width: calc(100% - 30px); /* Side padding adjust karne ke liye */
+.share-panel {
+    position: fixed;
+    inset: 0;
     background: white;
-    z-index: 5000; /* Taaki items ke upar dikhe */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    border-radius: 0 0 15px 15px;
-    max-height: 200px;
+    z-index: 10001;
+    display: none;
+}
+
+.share-box {
+    background: white;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0px;
+    padding: 20px;
     overflow-y: auto;
-}
-
-/* Suggestion items ko thoda bada aur saaf dikhane ke liye */
-#suggestions div {
-    padding: 14px;
-    border-bottom: 1px solid #f1f1f1;
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-}
-
-
-        
-        
-    /* Smart Share Panel Design */
-.share-panel { 
-    position: fixed; 
-    inset: 0; 
-    background: white; /* Peeche ka black dhundhlapan hatane ke liye background white kiya */
-    z-index: 10001; 
-    display: none; 
-}
-
-.share-box { 
-    background: white; 
-    width: 100%;       /* Full screen width */
-    height: 100vh;     /* Full screen height */
-    max-height: 100vh; 
-    border-radius: 0px; /* Round/Oval shape hatane ke liye */
-    padding: 20px; 
-    overflow-y: auto; 
     position: relative;
     box-sizing: border-box;
 }
 
-.share-item-row { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    padding: 12px; 
-    border: 1px solid #eee; 
-    border-radius: 10px; /* Box ke andar ke items ko thoda round rakha hai modern look ke liye */
-    margin-bottom: 8px; 
+.share-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 8px;
 }
 
-/* Baaki buttons ka design wahi rakha hai */
-.share-item-row input[type="box"] { width: 20px; height: 20px; margin: 0; }
-.share-badge { background: #54A0FF; color: white; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
-.btn-purple { background: #7d5fff; color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin: 10px 0; 
-  
+.share-item-row input[type="box"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
 }
-.btn-blue { background: #54a0ff; color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; }
-.btn-green { background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; }
 
+.share-badge {
+    background: #54A0FF;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: bold;
+}
 
+.btn-purple {
+    background: #7d5fff;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.btn-blue {
+    background: linear-gradient(135deg, #54A0FF, #00D2D3);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    font-weight: bold;
+    border-color: #54A0FF;
+}
+
+.btn-green {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+}
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
+0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-10px); }
     50% { transform: translateX(10px); }
     75% { transform: translateX(-10px); }
 }
 
-<style>
-
-
-
-<style>
-/* Base Style */
-.prof-btn {
-    flex: 1; padding: 12px 5px; border-radius: 50px;
-    font-size: 11px; font-weight: 800; cursor: pointer;
-    transition: all 0.3s; display: flex; align-items: center;
-    justify-content: center; gap: 5px; border: 2px solid transparent;
-}
-
-/* 1. Item aur Recipe ke liye (Normal State) */
-.btn-blue { background: #f1f2f6; color: #54A0FF; border-color: #54A0FF; }
-
-/* 2. Item aur Recipe jab CLICK ho jaye (Active State) */
-.btn-blue.active { 
-    background: #54A0FF; color: white; 
-    box-shadow: 0 0 15px rgba(84, 160, 255, 0.6); 
-    transform: scale(0.95);
-}
-
-/* 3. Select All (Normal State) */
-.btn-gold { background: #f1f2f6; color: #FF9F43; border-color: #FF9F43; }
-
-/* 4. Select All jab CLICK ho jaye (Glow State) */
-.btn-gold.active { 
-    background: #FF9F43; color: white; 
-    box-shadow: 0 0 20px rgba(255, 159, 67, 0.8); 
-    animation: pulseGlow 1.5s infinite;
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 5px #FF9F43; }
-    50% { box-shadow: 0 0 20px #FF9F43; }
-    100% { box-shadow: 0 0 5px #FF9F43; }
-}
-</style>
-
-
-
-<style>
-/* Buttons ka basic look */
 .prof-btn {
     flex: 1;
-    border: none;
     padding: 12px 5px;
     border-radius: 50px;
     font-size: 11px;
     font-weight: 800;
-    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transition */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
+    border: none;
+    text-transform: uppercase;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     position: relative;
     overflow: hidden;
 }
 
-/* BEFORE CLICK: Blue Theme (Items & Recipes) */
-.btn-blue {
-    background: linear-gradient(135deg, #54A0FF, #00D2D3);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.3);
+.btn-blue.active {
+    background: #54A0FF !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(84, 160, 255, 0.7), inset 0 0 10px rgba(255,255,255,0.3) !important;
+    transform: scale(0.95);
+    border: 3px solid #0056b3 !important;
 }
 
-
-
-/* BEFORE CLICK: Gold Theme (Select All) */
 .btn-gold {
     background: linear-gradient(135deg, #FFEAA7, #FF9F43);
     color: #2d3436;
+    border-color: #FF9F43;
     border: 1px solid #FF9F43;
 }
 
-/* AFTER CLICK: Gold Glow & Push Effect */
-.btn-blue.active { 
-    background: #54A0FF !important; 
-    color: white !important; 
-    border: 3px solid #0056b3 !important; /* Gehra border */
-    box-shadow: 0 0 15px rgba(84, 160, 255, 0.7), inset 0 0 10px rgba(255,255,255,0.3) !important;
-    transform: scale(0.95);
-}
-
-
-/* 2. Select All jab Active ho (Gold Glow) */
-.btn-gold.active { 
-    background: #FF9F43 !important; 
-    color: white !important; 
-    border: 3px solid #b35d00 !important; /* Gehra border */
+.btn-gold.active {
+    background: #FF9F43 !important;
+    color: white !important;
     box-shadow: 0 0 20px rgba(255, 159, 67, 0.9), inset 0 0 10px rgba(255,255,255,0.4) !important;
     animation: pulseGlow 1.5s infinite;
+    border: 3px solid #b35d00 !important;
 }
 
-/* Chhota icon style */
-.prof-btn i { font-style: normal; font-size: 14px; }
-</style>
-
-
-<style>
-/* 1. Items aur Recipes jab Active hon (Blue Glow) */
-
-/* Glow ko "Saans" lene jaisa effect dene ke liye */
 @keyframes pulseGlow {
-    0% { box-shadow: 0 0 5px #FF9F43; border-color: #b35d00; }
+0% { box-shadow: 0 0 5px #FF9F43; border-color: #b35d00; }
     50% { box-shadow: 0 0 25px #FF9F43; border-color: #ffd700; }
     100% { box-shadow: 0 0 5px #FF9F43; border-color: #b35d00; }
 }
 
+.prof-btn i {
+    font-style: normal;
+    font-size: 14px;
+}
+
 .draggable-item {
-    touch-action: pan-y !important; /* Normal scroll chalu rakhega */
+    touch-action: pan-y !important;
     -webkit-user-select: none;
     user-select: none;
 }
@@ -695,42 +865,29 @@
     background: #00D2D3 !important;
 }
 
-/* Long press ke waqt selection highlight */
-
 .sortable-chosen {
     background: #f8f8f8 !important;
     border: 3px solid #ff0606 !important;
 }
 
-/* Normal Grid (2 Columns) */
-
-/* --- Base Grid View (2 Columns) --- */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px; /* Gap kam kiya */
-    padding: 8px;
-    margin-bottom: 45px;
-}
-
-/* --- List View Mode (Active) --- */
 .list-view-active {
     display: flex !important;
     flex-direction: column !important;
-    gap: 6px !important; /* Items ke beech ka gap kam kiya */
-    padding: 8px !important;
+    gap: 4px !important;
+    padding: 5px !important;
     animation: fadeIn 0.4s ease;
 }
 
 .list-view-active .card {
-    flex-direction: row !important; /* Image left, Text right */
-    height: 70px !important; /* List card ki height kam ki */
+    flex-direction: row !important;
+    height: 70px !important;
     align-items: center;
     padding: 0 8px;
+    margin: 1px 0 !important;
 }
 
 .list-view-active .card-img-box {
-    width: 60px !important; /* Image box size kam kiya */
+    width: 60px !important;
     height: 60px !important;
     min-width: 60px;
     border-radius: 8px;
@@ -744,11 +901,10 @@
     justify-content: center;
 }
 
-/* --- Premium Toggle Button --- */
 .toggle-btn-premium {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    width: 42px; /* Thoda compact size */
+    width: 42px;
     height: 42px;
     border-radius: 12px;
     cursor: pointer;
@@ -758,7 +914,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
-    margin: 5px 10px; /* Header spacing */
+    margin: 5px 10px;
 }
 
 .toggle-btn-premium:active {
@@ -766,9 +922,8 @@
     background: #f8fafc;
 }
 
-/* --- Animations & Icons --- */
 .icon-rotate {
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -779,26 +934,21 @@
 }
 
 #viewIcon {
-    font-size: 18px;
+    font-size: 16px;
     color: #475569;
     transition: color 0.3s ease;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
+from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
-
-/* Floating Search Bar Styles */
-/* Top Left Floating Search */
-
 
 .header-search-container {
     position: fixed;
     top: 5px;
     right: 15%;
-    transform: translateY(100%); /* Center alignment */
+    transform: translateY(100%);
     z-index: 200;
     width: auto;
 }
@@ -819,7 +969,7 @@
 }
 
 .search-bar-modern.active {
-    width: 280px; 
+    width: 280px;
     border: 1.5px solid #10b981;
 }
 
@@ -856,25 +1006,11 @@
     opacity: 1;
 }
 
-/* Rotation Effect */
-.icon-rotate { transition: transform 0.4s; }
-.rotate-active { transform: rotate(90deg); }
-
-
-
-
-
-
-
-/* Floating Button Style */
-
 .floating-toggle {
     position: fixed;
-    /* 90px se badha kar 110px kar diya taaki thoda niche aa jaye */
-    top: 57px;      
+    top: 57px;
     right: 15px;
     z-index: 1000;
-    
     background: #ffffff;
     border: 1px solid #e2e8f0;
     width: 40px;
@@ -890,42 +1026,8 @@
     padding: 0;
 }
 
-/* Icon Animation */
-.icon-rotate {
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-}
-
-.rotate-active {
-    transform: rotate(180deg);
-}
-
-#viewIcon {
-    font-size: 16px;
-    color: #475569;
-}
-
-/* List View Active (Zero Gap Logic) */
-.list-view-active {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 4px !important; /* Items ke beech ka gap */
-    padding: 5px !important;
-}
-
-.list-view-active .card {
-    flex-direction: row !important;
-    height: 70px !important;
-    margin: 1px 0 !important; /* Top/Bottom margin 1px */
-    align-items: center;
-}
-/* Cards: Ultra Professional Single Entry */
-
-
-
-/* Cards: Professional Staggered Zoom-In */
 @keyframes cardEntrance {
-    0% { 
+0% { 
         opacity: 0; 
         transform: scale(0.85) translateY(30px);
         filter: blur(8px);
@@ -937,9 +1039,8 @@
     }
 }
 
-/* Overlay: App-Style Slide & Scale (Khulne wala) */
 @keyframes overlayPremiumIn {
-    0% { 
+0% { 
         opacity: 0;
         transform: scale(1.05) translateY(40px);
         backdrop-filter: blur(0px);
@@ -951,19 +1052,15 @@
     }
 }
 
-/* Card Press Effect */
-.card {
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
 .card:active {
     transform: scale(0.94) !important;
 }
 
-/* Items List Entry */
 @keyframes itemSlide {
-    from { opacity: 0; transform: translateX(10px); }
+from { opacity: 0; transform: translateX(10px); }
     to { opacity: 1; transform: translateX(0); }
 }
+
 .recipe-item-row {
     animation: itemSlide 0.3s ease forwards;
 }
@@ -971,64 +1068,26 @@
 #catFilterBar {
     display: flex;
     overflow-x: auto;
-    gap: 6px; /* Gap kam kar diya gaya hai */
-    padding: 20px 10px; /* Jump ke liye space */
+    gap: 6px;
+    padding: 20px 10px;
     scrollbar-width: none;
     background: transparent;
     -webkit-overflow-scrolling: touch;
 }
 
-#catFilterBar::-webkit-scrollbar { display: none; }
-
-.cat-item {
-    padding: 6px 14px; /* Chota aur compact size */
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px; /* Clean Rounded Pill */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    cursor: pointer;
-    flex-shrink: 0;
-    font-size: 14px; /* Chote words jaisa aapne kaha */
-    font-weight: 800; /* Bold aur professional */
-    color: #64748b;
-    text-transform: uppercase; /* Tezi se padhne ke liye uppercase */
-    transition: all 0.2s ease;
-}
-
-/* High Intensity Jump Animation */
-.cat-item.active {
-    background: #019117 !important;
-    border-color: #019117;
-    color: #ffffff !important;
-    box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
-    
-    /* Stronger Jump Animation */
-    animation: mega-jump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+#catFilterBar::-webkit-scrollbar {
+    display: none;
 }
 
 @keyframes mega-jump {
-    0% { transform: scale(1) translateY(0); }
-    20% { transform: scale(1.3, 0.7) translateY(4px); } /* Neeche dabna */
-    50% { transform: scale(0.8, 1.4) translateY(-25px); } /* Ooncha Jump */
-    80% { transform: scale(1.1, 0.9) translateY(2px); } /* Bounce back */
-    100% { transform: scale(1) translateY(0); } /* Khada ho jana */
+0% { transform: scale(1) translateY(0); }
+    20% { transform: scale(1.3, 0.7) translateY(4px); } 
+    50% { transform: scale(0.8, 1.4) translateY(-25px); } 
+    80% { transform: scale(1.1, 0.9) translateY(2px); } 
+    100% { transform: scale(1) translateY(0); }
 }
 
-
-
-
-
 </style>
-
-
-
-
-
-
-    </style>
     
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
@@ -3320,7 +3379,6 @@ function updateButtonUI() {
 
 // --- 4. मुख्य फंक्शन (Neon Glow ID के साथ) ---
 function openSmartShare() {
-    history.pushState({ panel: 'sharePanel' }, "");
     document.getElementById('sharePanel').style.display = 'flex';
     
     // --- 🛡️ Professional Neon Glow AEC ID ---
