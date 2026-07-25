@@ -2515,6 +2515,19 @@ function showRecipeItems(idx) {
 
         <div style="flex:1; overflow-y:auto; padding-top:5px; background: #fff;">
             ${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}
+
+            <div style="padding:15px 18px 20px 18px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:12px; font-weight:800; color:#1e293b; text-transform:uppercase; letter-spacing:0.5px;">Steps / Method</span>
+                    <div style="display:flex; gap:6px;">
+                        <button id="descEditBtn" style="border:none; background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">EDIT</button>
+                        <button id="descSaveBtn" style="display:none; border:none; background:#2ecc71; color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">SAVE</button>
+                        <button id="descDelBtn" style="border:none; background:var(--danger); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">DELETE</button>
+                    </div>
+                </div>
+                <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px;">${r.description ? r.description.replace(/</g,'&lt;') : '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'}</div>
+                <textarea id="descEditBox" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:10px; padding:10px; font-size:13px; font-family:sans-serif; resize:vertical;" placeholder="Step 1: ...&#10;Step 2: ...&#10;Step 3: ...">${r.description || ''}</textarea>
+            </div>
         </div>
 
         <div style="padding:12px 20px; background:#fff; border-top:3px solid #17b128; border-radius:30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);">
@@ -2535,6 +2548,55 @@ function showRecipeItems(idx) {
     document.body.appendChild(overlay);
     document.getElementById('closeBtnIcon').onclick = () => history.back();
     document.getElementById('closeBtnBottom').onclick = () => history.back();
+
+    // --- Steps / Method: Edit / Save / Delete ---
+    const descViewBox  = document.getElementById('descViewBox');
+    const descEditBox  = document.getElementById('descEditBox');
+    const descEditBtn  = document.getElementById('descEditBtn');
+    const descSaveBtn  = document.getElementById('descSaveBtn');
+    const descDelBtn   = document.getElementById('descDelBtn');
+
+    const persistDescription = (val) => {
+        recipes[idx].description = val;
+        localStorage.setItem('ASH_R', JSON.stringify(recipes));
+        if (typeof db !== 'undefined') db.ref('shared_recipes_list').set(recipes);
+    };
+
+    const renderDescView = (val) => {
+        descViewBox.innerHTML = val
+            ? val.replace(/</g, '&lt;').replace(/\n/g, '<br>')
+            : '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>';
+    };
+
+    descEditBtn.onclick = () => {
+        descViewBox.style.display = 'none';
+        descEditBox.style.display = 'block';
+        descEditBtn.style.display = 'none';
+        descSaveBtn.style.display = 'inline-block';
+        descEditBox.focus();
+    };
+
+    descSaveBtn.onclick = () => {
+        const val = descEditBox.value.trim();
+        persistDescription(val);
+        renderDescView(val);
+        descViewBox.style.display = 'block';
+        descEditBox.style.display = 'none';
+        descSaveBtn.style.display = 'none';
+        descEditBtn.style.display = 'inline-block';
+        showToast('Steps Saved');
+    };
+
+    descDelBtn.onclick = () => {
+        persistDescription('');
+        descEditBox.value = '';
+        renderDescView('');
+        descViewBox.style.display = 'block';
+        descEditBox.style.display = 'none';
+        descSaveBtn.style.display = 'none';
+        descEditBtn.style.display = 'inline-block';
+        showToast('Steps Deleted');
+    };
 }
 
 // --- 3. SUPER FAST NOTIFICATION (Toast Logic) ---
