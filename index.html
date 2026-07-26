@@ -2466,55 +2466,59 @@ function showRecipeItems(idx) {
     const handleBackPress = () => closeOverlay();
     window.addEventListener('popstate', handleBackPress);
 
-    let calculatedTotal = 0;
-    let itemsHTML = (r.items || []).map((it, i) => {
-        let itemCost = ((it.price / it.total) * it.used) || 0;
-        calculatedTotal += itemCost;
-        return `
-        <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:5px 18px; border-bottom:2px solid #04fffb; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s;">
-            <div style="flex:1;">
-                <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
-                <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
-                    ${it.used}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span>
+    function renderRecipeItemsHTML(mult) {
+        let total = 0;
+        let html = (r.items || []).map((it, i) => {
+            let usedQty = (Number(it.used) || 0) * mult;
+            let itemCost = ((it.price / it.total) * (Number(it.used) || 0) * mult) || 0;
+            total += itemCost;
+            return `
+            <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:5px 18px; border-bottom:2px solid #04fffb; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s;">
+                <div style="flex:1;">
+                    <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
+                    <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
+                        ${Number(usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span>
+                    </div>
                 </div>
-            </div>
-            <div style="text-align:right;">
-            
-            
-    <div style="display: flex; align-items: baseline; gap: 4px; margin-top: 5px;">
-    <div style="font-weight: 900; color: #2ecc71; font-size: 14px; line-height: 1; letter-spacing: 0.5px;">
-        ${Number(itemCost).toFixed(3)}
+                <div style="text-align:right;">
+        <div style="display: flex; align-items: baseline; gap: 4px; margin-top: 5px;">
+        <div style="font-weight: 900; color: #2ecc71; font-size: 14px; line-height: 1; letter-spacing: 0.5px;">
+            ${Number(itemCost).toFixed(3)}
+        </div>
+        <div style="font-weight: 700; color: #94a3b8; font-size: 8px; text-transform: uppercase;">
+            OMR
+        </div>
     </div>
-    
-    <div style="font-weight: 700; color: #94a3b8; font-size: 8px; text-transform: uppercase;">
-        OMR
-    </div>
-</div>
+                </div>
+            </div>`;
+        }).join('');
+        return { html, total };
+    }
 
-                
-                
-            </div>
-        </div>`;
-    }).join('');
+    const initialRender = renderRecipeItemsHTML(1);
+    let itemsHTML = initialRender.html;
+    let calculatedTotal = initialRender.total;
 
     overlay.innerHTML = `
-        <div style="padding:5px 5px 5px 5px; background:#3bf1ff; color:#000000; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 25px 25px; 
-        border-bottom:3px solid #17b128;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
-            <div style="width:90px; height:90px; border-radius:12px; overflow:hidden; border:3px solid #17b128; flex-shrink:0; background: #2d3748;">
+        <div style="padding:14px 16px; background:linear-gradient(135deg, #0d9488 0%, #0891b2 100%); color:#ffffff; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 22px 22px; 
+        border-bottom:3px solid #075e56;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25); position:relative;">
+            <div style="width:80px; height:80px; border-radius:12px; overflow:hidden; border:3px solid #ffffff; flex-shrink:0; background: #2d3748; box-shadow:0 3px 10px rgba(0,0,0,0.2);">
                 ${r.img ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:70px;">🖼️</div>`}
             </div>
             <div style="flex:1; overflow:hidden;">
-                <h2 style="margin:0; font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.name}</h2>
-                <div style="font-size:12px; color:#000000; font-weight:700; text-transform:uppercase;">RECIPE</div>
+                <h2 style="margin:0; font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#ffffff;">${r.name}</h2>
+                <div style="font-size:11px; color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; letter-spacing:1px;">Recipe</div>
             </div>
-            <div id="closeBtnIcon" style="width:34px; height:34px; background:rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-                <i class="fas fa-times" style="font-size:30px;"></i>
+            <div id="closeBtnIcon" style="width:32px; height:32px; background:rgba(255,255,255,0.18); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;">
+                <i class="fas fa-times" style="font-size:22px; color:#fff;"></i>
             </div>
+            <input type="number" id="recipeMultiplyInput" value="1" step="0.1" min="0.1"
+                style="position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); width:52px; text-align:center; padding:5px 2px; border-radius:8px; border:2px solid #0d9488; font-weight:800; font-size:13px; color:#1e293b; background:#fff; z-index:20; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
         </div>
 
         <div style="flex:1; overflow-y:auto; padding-top:5px; background: #fff;">
-            ${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}
+            <div id="recipeItemsContainer">${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}</div>
 
             <div style="padding:15px 18px 20px 18px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -2534,12 +2538,12 @@ function showRecipeItems(idx) {
             <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:10px;">
                 <div style="text-align:right;">
                     <span style="font-size:10px; color:#94a3b8; font-weight:800; letter-spacing:0.5px; display:block; margin-bottom:2px;">NET PRODUCTION COST</span>
-                    <span style="font-size:26px; font-weight:900; color:#1e293b; line-height:1;">${Number(calculatedTotal).toFixed(3)}</span>
+                    <span id="recipeNetTotalDisplay" style="font-size:26px; font-weight:900; color:#1e293b; line-height:1;">${Number(calculatedTotal).toFixed(3)}</span>
                     <span style="font-size:12px; color:#00D2D3; font-weight:800; margin-left:2px;">OMR</span>
                 </div>
             </div>
             <button id="closeBtnBottom" style="width:100%;
-            padding:8px; border:none; background:#3bf1ff; color:#000000; border-radius:14px; font-weight:800; font-size:12px; letter-spacing:1px; cursor:pointer;">
+            padding:9px; border:2px solid #000; background:#00b8b8; color:#fff; border-radius:12px; font-weight:800; font-size:13px; letter-spacing:1px; cursor:pointer;">
                 CLOSE
             </button>
         </div>
@@ -2548,6 +2552,19 @@ function showRecipeItems(idx) {
     document.body.appendChild(overlay);
     document.getElementById('closeBtnIcon').onclick = () => history.back();
     document.getElementById('closeBtnBottom').onclick = () => history.back();
+
+    const recipeMultiplyInput = document.getElementById('recipeMultiplyInput');
+    if (recipeMultiplyInput) {
+        recipeMultiplyInput.addEventListener('input', function () {
+            let mult = parseFloat(this.value);
+            if (isNaN(mult) || mult <= 0) mult = 1;
+            const updated = renderRecipeItemsHTML(mult);
+            const itemsContainer = document.getElementById('recipeItemsContainer');
+            if (itemsContainer) itemsContainer.innerHTML = updated.html || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>';
+            const totalDisplay = document.getElementById('recipeNetTotalDisplay');
+            if (totalDisplay) totalDisplay.innerText = Number(updated.total).toFixed(3);
+        });
+    }
 
     // --- Steps / Method: Edit / Save / Delete ---
     const descViewBox  = document.getElementById('descViewBox');
