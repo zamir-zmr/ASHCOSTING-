@@ -2521,6 +2521,13 @@ function showRecipeItems(idx) {
             <div id="recipeItemsContainer">${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}</div>
 
             <div style="padding:15px 18px 20px 18px;">
+                <style>
+                    #descEditBox:empty:before{content:'Step 1: ...';color:#94a3b8;}
+                    .descTBtn{width:30px;height:30px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:13px;cursor:pointer;}
+                    .descSwatch{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px #cbd5e1;cursor:pointer;padding:0;}
+                    .descTLabel{font-size:9px;color:#94a3b8;font-weight:800;letter-spacing:0.5px;width:100%;margin-top:2px;}
+                    .descDivider{width:100%;height:1px;background:#e2e8f0;margin:3px 0;}
+                </style>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <span style="font-size:12px; font-weight:800; color:#1e293b; text-transform:uppercase; letter-spacing:0.5px;">Steps / Method</span>
                     <div style="display:flex; gap:6px;">
@@ -2529,21 +2536,42 @@ function showRecipeItems(idx) {
                         <button id="descDelBtn" style="border:none; background:var(--danger); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">DELETE</button>
                     </div>
                 </div>
-                <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:8px; padding:6px; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
+                <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:8px; padding:6px; display:flow-root; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
                 <div id="descEditBox" contenteditable="true" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:10px; padding:10px; font-size:13px; font-family:sans-serif; overflow-y:auto; white-space:pre-wrap; outline:none; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return ''; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
-                <div id="descFormatToolbar" style="display:none; position:fixed; z-index:10050; background:#ffffff; border:1.5px solid #bfdbfe; border-radius:12px; padding:6px; box-shadow:0 8px 24px rgba(0,0,0,0.28); gap:5px; align-items:center; flex-wrap:wrap; max-width:250px;">
-                    <button type="button" data-cmd="bold" title="Bold" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:900;font-size:14px;cursor:pointer;">B</button>
-                    <button type="button" data-cmd="italic" title="Italic" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-style:italic;font-weight:700;font-size:14px;cursor:pointer;">I</button>
-                    <button type="button" data-cmd="underline" title="Underline" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer;">U</button>
-                    <button type="button" data-cmd="strikeThrough" title="Strikethrough" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;text-decoration:line-through;cursor:pointer;">S</button>
-                    <button type="button" data-cmd="removeFormat" title="Normal" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:10px;cursor:pointer;">N</button>
-                    <button type="button" id="descForeColorBtn" title="Text Color" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#ff5252;font-weight:900;font-size:14px;cursor:pointer;">A</button>
-                    <button type="button" id="descHiliteColorBtn" title="Text Highlight" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;font-weight:800;font-size:11px;cursor:pointer;"><span style="background:#fff700;color:#000;padding:0 3px;border-radius:2px;">H</span></button>
-                    <button type="button" id="descBoxColorBtn" title="Text Box Color" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:800;font-size:14px;cursor:pointer;">&#9638;</button>
+                <div id="descFormatToolbar" style="display:none; position:fixed; z-index:10050; background:#ffffff; border:1.5px solid #bfdbfe; border-radius:12px; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,0.28); gap:6px; align-items:center; flex-wrap:wrap; max-width:270px;">
+                    <button type="button" class="descTBtn" data-cmd="bold" title="Bold" style="font-weight:900;">B</button>
+                    <button type="button" class="descTBtn" data-cmd="italic" title="Italic" style="font-style:italic;">I</button>
+                    <button type="button" class="descTBtn" data-cmd="underline" title="Underline" style="text-decoration:underline;">U</button>
+                    <button type="button" class="descTBtn" data-cmd="strikeThrough" title="Strikethrough" style="text-decoration:line-through;">S</button>
+                    <button type="button" class="descTBtn" data-cmd="removeFormat" title="Normal" style="font-size:10px;">N</button>
+                    <button type="button" class="descTBtn" id="descFontMinusBtn" title="Smaller Text">A-</button>
+                    <span id="descFontSizeBadge" style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 4px; border:1.5px solid #bfdbfe; border-radius:6px; background:#f1f5f9; color:#1e3a8a; font-weight:800; font-size:12px;">6</span>
+                    <button type="button" class="descTBtn" id="descFontPlusBtn" title="Bigger Text">A+</button>
+                    <div class="descDivider"></div>
+                    <span class="descTLabel">TEXT COLOR</span>
+                    <button type="button" class="descSwatch" data-target="fore" data-color="#ef4444" style="background:#ef4444;"></button>
+                    <button type="button" class="descSwatch" data-target="fore" data-color="#f97316" style="background:#f97316;"></button>
+                    <button type="button" class="descSwatch" data-target="fore" data-color="#22c55e" style="background:#22c55e;"></button>
+                    <button type="button" class="descSwatch" data-target="fore" data-color="#3b82f6" style="background:#3b82f6;"></button>
+                    <button type="button" class="descSwatch" data-target="fore" data-color="#a855f7" style="background:#a855f7;"></button>
+                    <button type="button" class="descSwatch" data-target="fore" data-color="#1e293b" style="background:#1e293b;"></button>
+                    <button type="button" id="descForeColorBtn" class="descTBtn" title="More Colors" style="width:24px;height:24px;border-radius:50%;font-size:12px;">&#127912;</button>
+                    <div class="descDivider"></div>
+                    <span class="descTLabel">HIGHLIGHT</span>
+                    <button type="button" class="descSwatch" data-target="hilite" data-color="#fff700" style="background:#fff700;"></button>
+                    <button type="button" class="descSwatch" data-target="hilite" data-color="#bbf7d0" style="background:#bbf7d0;"></button>
+                    <button type="button" class="descSwatch" data-target="hilite" data-color="#fbcfe8" style="background:#fbcfe8;"></button>
+                    <button type="button" class="descSwatch" data-target="hilite" data-color="#a5f3fc" style="background:#a5f3fc;"></button>
+                    <button type="button" class="descSwatch" data-target="hilite" data-color="#fed7aa" style="background:#fed7aa;"></button>
+                    <button type="button" id="descHiliteColorBtn" class="descTBtn" title="More Colors" style="width:24px;height:24px;border-radius:50%;font-size:12px;">&#127912;</button>
+                    <div class="descDivider"></div>
+                    <button type="button" class="descTBtn" id="descBoxColorBtn" title="Text Box Color" style="width:auto;padding:0 8px;">&#9638; Box</button>
+                    <button type="button" class="descTBtn" id="descPhotoBtnPopup" title="Add Photo Here" style="width:auto;padding:0 8px;">&#128247; Photo</button>
                 </div>
                 <input type="color" id="descForeColorInput" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;">
                 <input type="color" id="descHiliteColorInput" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;">
                 <input type="color" id="descBoxColorInput" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;">
+                <input type="file" id="descPhotoInput" accept="image/*" style="display:none;">
             </div>
         </div>
 
@@ -2585,6 +2613,8 @@ function showRecipeItems(idx) {
     const descEditBtn   = document.getElementById('descEditBtn');
     const descSaveBtn   = document.getElementById('descSaveBtn');
     const descDelBtn    = document.getElementById('descDelBtn');
+    const descPhotoBtnPopup = document.getElementById('descPhotoBtnPopup');
+    const descPhotoInput = document.getElementById('descPhotoInput');
     const descToolbar   = document.getElementById('descFormatToolbar');
     const descForeColorBtn   = document.getElementById('descForeColorBtn');
     const descHiliteColorBtn = document.getElementById('descHiliteColorBtn');
@@ -2592,8 +2622,11 @@ function showRecipeItems(idx) {
     const descForeColorInput   = document.getElementById('descForeColorInput');
     const descHiliteColorInput = document.getElementById('descHiliteColorInput');
     const descBoxColorInput    = document.getElementById('descBoxColorInput');
+    const descFontMinusBtn = document.getElementById('descFontMinusBtn');
+    const descFontPlusBtn  = document.getElementById('descFontPlusBtn');
+    const descFontSizeBadge = document.getElementById('descFontSizeBadge');
 
-    let descSavedRange = null;
+    let descSavedRange = null;   // selection ya caret position, formatting + photo insert dono ke liye
     let descBoxColorPending = r.descriptionBg || '';
 
     const persistDescription = (htmlVal, bgColor) => {
@@ -2613,7 +2646,7 @@ function showRecipeItems(idx) {
     function descHideToolbar() { descToolbar.style.display = 'none'; }
 
     function descShowToolbarAt(rect) {
-        const tw = 250, th = 90;
+        const tw = 270, th = 220;
         let left = rect.left + (rect.width / 2) - (tw / 2);
         left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
         // Android ka native Copy/Cut/Paste bubble usually selection ke UPAR aata hai,
@@ -2628,13 +2661,17 @@ function showRecipeItems(idx) {
         descToolbar.style.display = 'flex';
     }
 
+    // Har selection/caret change track karte hain (photo insert ke liye caret bhi chahiye)
     function descSaveSelection() {
         const sel = window.getSelection();
-        if (sel.rangeCount > 0 && descEditBox.contains(sel.anchorNode) && !sel.isCollapsed) {
+        if (sel.rangeCount > 0 && descEditBox.contains(sel.anchorNode)) {
             descSavedRange = sel.getRangeAt(0).cloneRange();
-            descShowToolbarAt(descSavedRange.getBoundingClientRect());
-        } else {
-            descHideToolbar();
+            descActiveSizeSpan = null; // naya selection - agla A+/A- naya span banayega
+            if (!sel.isCollapsed) {
+                descShowToolbarAt(descSavedRange.getBoundingClientRect());
+            } else {
+                descHideToolbar();
+            }
         }
     }
     function descRestoreSelection() {
@@ -2662,6 +2699,74 @@ function showRecipeItems(idx) {
         });
     });
 
+    // Quick colour swatches - ek hi tap mein color apply, native picker ki zaroorat nahi
+    descToolbar.querySelectorAll('.descSwatch').forEach(btn => {
+        btn.addEventListener('click', () => {
+            descRestoreSelection();
+            descEditBox.focus();
+            const color = btn.dataset.color;
+            if (btn.dataset.target === 'fore') {
+                document.execCommand('foreColor', false, color);
+            } else {
+                const applied = document.execCommand('hiliteColor', false, color);
+                if (!applied) document.execCommand('backColor', false, color);
+            }
+            descHideToolbar();
+        });
+    });
+
+    // Font size: 1-15 tak level, badge me current level dikhta hai, +/- se dhire dhire badhta/ghatta hai
+    let descFontLevel = 6;
+    let descActiveSizeSpan = null;
+
+    function descUpdateFontBadge() { descFontSizeBadge.textContent = descFontLevel; }
+
+    function descApplySizeSpan(px) {
+        const sel = window.getSelection();
+        if (descActiveSizeSpan && document.body.contains(descActiveSizeSpan)) {
+            descActiveSizeSpan.style.fontSize = px + 'px';
+            const r = document.createRange();
+            r.selectNodeContents(descActiveSizeSpan);
+            sel.removeAllRanges();
+            sel.addRange(r);
+            descSavedRange = r.cloneRange();
+            return;
+        }
+        descRestoreSelection();
+        if (!sel.rangeCount) return;
+        const range = sel.getRangeAt(0);
+        if (range.collapsed) return;
+        const span = document.createElement('span');
+        span.style.fontSize = px + 'px';
+        try {
+            range.surroundContents(span);
+        } catch (e) {
+            const frag = range.extractContents();
+            span.appendChild(frag);
+            range.insertNode(span);
+        }
+        descActiveSizeSpan = span;
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+        descSavedRange = newRange.cloneRange();
+    }
+
+    // Font size chhota/bada - popup khula rehta hai taaki baar baar tap karke dhire dhire size badhaya/ghataya ja sake
+    descFontMinusBtn.addEventListener('click', () => {
+        descEditBox.focus();
+        if (descFontLevel > 1) descFontLevel--;
+        descUpdateFontBadge();
+        descApplySizeSpan(10 + descFontLevel);
+    });
+    descFontPlusBtn.addEventListener('click', () => {
+        descEditBox.focus();
+        if (descFontLevel < 15) descFontLevel++;
+        descUpdateFontBadge();
+        descApplySizeSpan(10 + descFontLevel);
+    });
+
     descForeColorBtn.addEventListener('click', () => { descRestoreSelection(); descHideToolbar(); descForeColorInput.click(); });
     descHiliteColorBtn.addEventListener('click', () => { descRestoreSelection(); descHideToolbar(); descHiliteColorInput.click(); });
     descBoxColorBtn.addEventListener('click', () => { descHideToolbar(); descBoxColorInput.click(); });
@@ -2680,6 +2785,34 @@ function showRecipeItems(idx) {
     descBoxColorInput.addEventListener('input', () => {
         descBoxColorPending = descBoxColorInput.value;
         descEditBox.style.background = descBoxColorPending;
+    });
+
+    // Photo add: gallery ya camera dono se, jahan cursor hai wahin chhoti thumbnail (text ke saath inline) insert hogi
+    descPhotoBtnPopup.addEventListener('click', () => { descRestoreSelection(); descHideToolbar(); descPhotoInput.click(); });
+    descPhotoInput.addEventListener('change', () => {
+        const file = descPhotoInput.files && descPhotoInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const max = 300;
+                let w = img.width, h = img.height;
+                if (w > h) { if (w > max) { h *= max / w; w = max; } }
+                else { if (h > max) { w *= max / h; h = max; } }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                descEditBox.focus();
+                descRestoreSelection();
+                document.execCommand('insertHTML', false,
+                    `<img src="${dataUrl}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;float:right;margin:2px 0 6px 10px;">`);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        descPhotoInput.value = '';
     });
 
     // Toolbar ke bahar tap karne par bhi band ho jaye
