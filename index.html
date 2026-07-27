@@ -2521,7 +2521,6 @@ function showRecipeItems(idx) {
             <div id="recipeItemsContainer">${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}</div>
 
             <div style="padding:15px 18px 20px 18px;">
-                <style>#descEditBox:empty:before{content:'Step 1: ...';color:#94a3b8;}</style>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <span style="font-size:12px; font-weight:800; color:#1e293b; text-transform:uppercase; letter-spacing:0.5px;">Steps / Method</span>
                     <div style="display:flex; gap:6px;">
@@ -2530,20 +2529,21 @@ function showRecipeItems(idx) {
                         <button id="descDelBtn" style="border:none; background:var(--danger); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">DELETE</button>
                     </div>
                 </div>
-                <div id="descFormatToolbar" style="display:none; background:#f1f5f9; border:1.5px solid #dbeafe; border-radius:12px; padding:7px; margin-bottom:8px; gap:6px; align-items:center; overflow-x:auto; -webkit-overflow-scrolling:touch;">
-                    <button type="button" data-cmd="bold" title="Bold" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:900;font-size:14px;cursor:pointer;">B</button>
-                    <button type="button" data-cmd="italic" title="Italic" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-style:italic;font-weight:700;font-size:14px;cursor:pointer;">I</button>
-                    <button type="button" data-cmd="removeFormat" title="Normal" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:10px;cursor:pointer;">N</button>
-                    <button type="button" data-cmd="insertBr" title="Down Line" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;cursor:pointer;">&#8629;</button>
-                    <button type="button" id="descForeColorBtn" title="Text Color" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#ff5252;font-weight:900;font-size:14px;cursor:pointer;">A</button>
-                    <button type="button" id="descHiliteColorBtn" title="Text Highlight" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;font-weight:800;font-size:11px;cursor:pointer;"><span style="background:#fff700;color:#000;padding:0 3px;border-radius:2px;">H</span></button>
-                    <button type="button" id="descBoxColorBtn" title="Text Box Color" style="flex-shrink:0; width:34px;height:34px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:800;font-size:14px;cursor:pointer;">&#9638;</button>
-                </div>
                 <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:8px; padding:6px; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
                 <div id="descEditBox" contenteditable="true" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:10px; padding:10px; font-size:13px; font-family:sans-serif; overflow-y:auto; white-space:pre-wrap; outline:none; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return ''; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
-                <input type="color" id="descForeColorInput" style="position:fixed; opacity:0; width:0; height:0; pointer-events:none;">
-                <input type="color" id="descHiliteColorInput" style="position:fixed; opacity:0; width:0; height:0; pointer-events:none;">
-                <input type="color" id="descBoxColorInput" style="position:fixed; opacity:0; width:0; height:0; pointer-events:none;">
+                <div id="descFormatToolbar" style="display:none; position:fixed; z-index:10050; background:#ffffff; border:1.5px solid #bfdbfe; border-radius:12px; padding:6px; box-shadow:0 8px 24px rgba(0,0,0,0.28); gap:5px; align-items:center; flex-wrap:wrap; max-width:250px;">
+                    <button type="button" data-cmd="bold" title="Bold" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:900;font-size:14px;cursor:pointer;">B</button>
+                    <button type="button" data-cmd="italic" title="Italic" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-style:italic;font-weight:700;font-size:14px;cursor:pointer;">I</button>
+                    <button type="button" data-cmd="underline" title="Underline" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer;">U</button>
+                    <button type="button" data-cmd="strikeThrough" title="Strikethrough" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;text-decoration:line-through;cursor:pointer;">S</button>
+                    <button type="button" data-cmd="removeFormat" title="Normal" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:10px;cursor:pointer;">N</button>
+                    <button type="button" id="descForeColorBtn" title="Text Color" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#ff5252;font-weight:900;font-size:14px;cursor:pointer;">A</button>
+                    <button type="button" id="descHiliteColorBtn" title="Text Highlight" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;font-weight:800;font-size:11px;cursor:pointer;"><span style="background:#fff700;color:#000;padding:0 3px;border-radius:2px;">H</span></button>
+                    <button type="button" id="descBoxColorBtn" title="Text Box Color" style="width:32px;height:32px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:800;font-size:14px;cursor:pointer;">&#9638;</button>
+                </div>
+                <input type="color" id="descForeColorInput" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;">
+                <input type="color" id="descHiliteColorInput" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;">
+                <input type="color" id="descBoxColorInput" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0;">
             </div>
         </div>
 
@@ -2600,7 +2600,7 @@ function showRecipeItems(idx) {
         recipes[idx].description = htmlVal;
         recipes[idx].descriptionBg = bgColor || '';
         localStorage.setItem('ASH_R', JSON.stringify(recipes));
-        if (typeof db !== 'undefined') db.ref('shared_recipes_list').set(recipes);
+        if (typeof db !== 'undefined') db.ref('shared_recipes_list').set(recipes); // Madam ke phone tak turant pahunchega
     };
 
     const renderDescView = (htmlVal, bgColor) => {
@@ -2610,13 +2610,31 @@ function showRecipeItems(idx) {
         descViewBox.style.background = bgColor || 'transparent';
     };
 
-    // Toolbar is a fixed docked card above the text (never overlaps the
-    // phone's native Copy/Paste/Convert popup, which appears near the
-    // selected text itself). It just stays visible for the whole edit session.
+    function descHideToolbar() { descToolbar.style.display = 'none'; }
+
+    function descShowToolbarAt(rect) {
+        const tw = 250, th = 90;
+        let left = rect.left + (rect.width / 2) - (tw / 2);
+        left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+        // Android ka native Copy/Cut/Paste bubble usually selection ke UPAR aata hai,
+        // isliye humara popup pehle NEECHE dikhane ki koshish karega taaki overlap na ho.
+        let top = rect.bottom + 16;
+        if (top + th > window.innerHeight - 80) {
+            top = rect.top - th - 16;
+            if (top < 8) top = 8;
+        }
+        descToolbar.style.left = left + 'px';
+        descToolbar.style.top = top + 'px';
+        descToolbar.style.display = 'flex';
+    }
+
     function descSaveSelection() {
         const sel = window.getSelection();
         if (sel.rangeCount > 0 && descEditBox.contains(sel.anchorNode) && !sel.isCollapsed) {
             descSavedRange = sel.getRangeAt(0).cloneRange();
+            descShowToolbarAt(descSavedRange.getBoundingClientRect());
+        } else {
+            descHideToolbar();
         }
     }
     function descRestoreSelection() {
@@ -2629,12 +2647,9 @@ function showRecipeItems(idx) {
 
     descEditBox.addEventListener('mouseup', descSaveSelection);
     descEditBox.addEventListener('keyup', descSaveSelection);
-    descEditBox.addEventListener('touchend', descSaveSelection);
-    document.addEventListener('selectionchange', descSaveSelection);
+    descEditBox.addEventListener('touchend', () => setTimeout(descSaveSelection, 30));
 
-    // Prevent the toolbar from stealing focus/selection away from the
-    // editable box the instant a finger touches a button — this is what
-    // makes taps feel instant instead of needing a second tap.
+    // Toolbar ko tap karte hi selection/focus na ude - isse har button turant kaam karta hai
     descToolbar.addEventListener('pointerdown', (e) => e.preventDefault());
     descToolbar.addEventListener('mousedown', (e) => e.preventDefault());
 
@@ -2642,18 +2657,14 @@ function showRecipeItems(idx) {
         btn.addEventListener('click', () => {
             descRestoreSelection();
             descEditBox.focus();
-            const cmd = btn.dataset.cmd;
-            if (cmd === 'insertBr') {
-                document.execCommand('insertHTML', false, '<br>');
-            } else {
-                document.execCommand(cmd, false, null);
-            }
-        }, { passive: true });
+            document.execCommand(btn.dataset.cmd, false, null);
+            descHideToolbar(); // option choose hote hi popup band
+        });
     });
 
-    descForeColorBtn.addEventListener('click', () => { descRestoreSelection(); descForeColorInput.click(); });
-    descHiliteColorBtn.addEventListener('click', () => { descRestoreSelection(); descHiliteColorInput.click(); });
-    descBoxColorBtn.addEventListener('click', () => { descBoxColorInput.click(); });
+    descForeColorBtn.addEventListener('click', () => { descRestoreSelection(); descHideToolbar(); descForeColorInput.click(); });
+    descHiliteColorBtn.addEventListener('click', () => { descRestoreSelection(); descHideToolbar(); descHiliteColorInput.click(); });
+    descBoxColorBtn.addEventListener('click', () => { descHideToolbar(); descBoxColorInput.click(); });
 
     descForeColorInput.addEventListener('input', () => {
         descRestoreSelection();
@@ -2663,37 +2674,44 @@ function showRecipeItems(idx) {
     descHiliteColorInput.addEventListener('input', () => {
         descRestoreSelection();
         descEditBox.focus();
-        try { document.execCommand('hiliteColor', false, descHiliteColorInput.value); }
-        catch (e) { document.execCommand('backColor', false, descHiliteColorInput.value); }
+        const applied = document.execCommand('hiliteColor', false, descHiliteColorInput.value);
+        if (!applied) document.execCommand('backColor', false, descHiliteColorInput.value);
     });
     descBoxColorInput.addEventListener('input', () => {
         descBoxColorPending = descBoxColorInput.value;
         descEditBox.style.background = descBoxColorPending;
     });
 
+    // Toolbar ke bahar tap karne par bhi band ho jaye
+    document.addEventListener('mousedown', (e) => {
+        if (descToolbar.style.display === 'flex' && !descToolbar.contains(e.target) && !descEditBox.contains(e.target)) {
+            descHideToolbar();
+        }
+    });
+
     descEditBtn.onclick = () => {
         descViewBox.style.display = 'none';
         descEditBox.style.display = 'block';
-        descToolbar.style.display = 'flex';
         descEditBtn.style.display = 'none';
         descSaveBtn.style.display = 'inline-block';
         descEditBox.focus();
     };
 
     descSaveBtn.onclick = () => {
+        descHideToolbar();
         let htmlVal = descEditBox.innerHTML.trim();
         if (htmlVal === '<br>') htmlVal = '';
         persistDescription(htmlVal, descBoxColorPending);
         renderDescView(htmlVal, descBoxColorPending);
         descViewBox.style.display = 'block';
         descEditBox.style.display = 'none';
-        descToolbar.style.display = 'none';
         descSaveBtn.style.display = 'none';
         descEditBtn.style.display = 'inline-block';
         showToast('Steps Saved');
     };
 
     descDelBtn.onclick = () => {
+        descHideToolbar();
         descBoxColorPending = '';
         descEditBox.innerHTML = '';
         descEditBox.style.background = 'transparent';
@@ -2701,7 +2719,6 @@ function showRecipeItems(idx) {
         renderDescView('', '');
         descViewBox.style.display = 'block';
         descEditBox.style.display = 'none';
-        descToolbar.style.display = 'none';
         descSaveBtn.style.display = 'none';
         descEditBtn.style.display = 'inline-block';
         showToast('Steps Deleted');
