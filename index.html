@@ -2538,6 +2538,12 @@ function showRecipeItems(idx) {
                 </div>
                 <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:8px; padding:6px; display:flow-root; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
                 <div id="descEditBox" contenteditable="true" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:10px; padding:10px; font-size:13px; font-family:sans-serif; overflow-y:auto; white-space:pre-wrap; outline:none; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return ''; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
+                <div id="descPhotoLightbox" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:20000; align-items:flex-start; justify-content:center; padding-top:9vh; box-sizing:border-box;">
+                    <div style="position:relative; max-width:88vw; max-height:74vh;">
+                        <img id="descPhotoLightboxImg" src="" style="max-width:88vw; max-height:74vh; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.4); display:block;">
+                        <button id="descPhotoLightboxClose" type="button" style="position:absolute; top:-14px; right:-14px; width:32px;height:32px;border-radius:50%;border:none;background:#fff;color:#1e293b;font-weight:900;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.3);cursor:pointer;">&times;</button>
+                    </div>
+                </div>
                 <div id="descFormatToolbar" style="display:none; position:fixed; z-index:10050; background:#ffffff; border:1.5px solid #bfdbfe; border-radius:12px; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,0.28); gap:6px; align-items:center; flex-wrap:wrap; max-width:270px;">
                     <button type="button" class="descTBtn" data-cmd="bold" title="Bold" style="font-weight:900;">B</button>
                     <button type="button" class="descTBtn" data-cmd="italic" title="Italic" style="font-style:italic;">I</button>
@@ -2609,6 +2615,47 @@ function showRecipeItems(idx) {
 
     // --- Steps / Method: Rich Text Edit / Save / Delete ---
     const descViewBox   = document.getElementById('descViewBox');
+    const descPhotoLightbox    = document.getElementById('descPhotoLightbox');
+    const descPhotoLightboxImg = document.getElementById('descPhotoLightboxImg');
+    const descPhotoLightboxClose = document.getElementById('descPhotoLightboxClose');
+
+    function descOpenLightbox(src) {
+        descPhotoLightboxImg.src = src;
+        descPhotoLightbox.style.display = 'flex';
+    }
+    function descCloseLightbox() {
+        descPhotoLightbox.style.display = 'none';
+        descPhotoLightboxImg.src = '';
+    }
+    descPhotoLightbox.addEventListener('click', (e) => {
+        if (e.target === descPhotoLightbox) descCloseLightbox(); // sirf bahar (dimmed area) tap karne par band ho
+    });
+    descPhotoLightboxClose.addEventListener('click', descCloseLightbox);
+
+    let descLPTimer = null;
+    function descClearLP() { if (descLPTimer) { clearTimeout(descLPTimer); descLPTimer = null; } }
+
+    // Normal (view) mode ke steps me kisi bhi photo ko long-press karne par
+    // beech mein bada popup khulega taaki poori detail dikhe
+    descViewBox.addEventListener('touchstart', (e) => {
+        const img = e.target.closest('img');
+        if (!img) return;
+        descClearLP();
+        descLPTimer = setTimeout(() => { descOpenLightbox(img.src); descLPTimer = null; }, 420);
+    });
+    descViewBox.addEventListener('touchend', descClearLP);
+    descViewBox.addEventListener('touchmove', descClearLP);
+    descViewBox.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('img')) e.preventDefault();
+    });
+    descViewBox.addEventListener('mousedown', (e) => {
+        const img = e.target.closest('img');
+        if (!img) return;
+        descClearLP();
+        descLPTimer = setTimeout(() => { descOpenLightbox(img.src); descLPTimer = null; }, 420);
+    });
+    descViewBox.addEventListener('mouseup', descClearLP);
+    descViewBox.addEventListener('mouseleave', descClearLP);
     const descEditBox   = document.getElementById('descEditBox');
     const descEditBtn   = document.getElementById('descEditBtn');
     const descSaveBtn   = document.getElementById('descSaveBtn');
@@ -2633,7 +2680,13 @@ function showRecipeItems(idx) {
         recipes[idx].description = htmlVal;
         recipes[idx].descriptionBg = bgColor || '';
         localStorage.setItem('ASH_R', JSON.stringify(recipes));
-        if (typeof db !== 'undefined') db.ref('shared_recipes_list').set(recipes); // Madam ke phone tak turant pahunchega
+        if (typeof db !== 'undefined') {
+            db.ref('shared_recipes_list').set(recipes) // Madam ke phone tak turant pahunchega (photos sahit)
+                .catch((err) => {
+                    console.error('Firebase sync failed:', err);
+                    showToast('Cloud sync failed - photo too large?');
+                });
+        }
     };
 
     const renderDescView = (htmlVal, bgColor) => {
