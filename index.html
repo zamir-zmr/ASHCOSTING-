@@ -2897,17 +2897,24 @@ function showRecipeItems(idx) {
     };
 
     descDelBtn.onclick = () => {
-        descHideToolbar();
-        descBoxColorPending = '';
-        descEditBox.innerHTML = '';
-        descEditBox.style.background = 'transparent';
-        persistDescription('', '');
-        renderDescView('', '');
-        descViewBox.style.display = 'block';
-        descEditBox.style.display = 'none';
-        descSaveBtn.style.display = 'none';
-        descEditBtn.style.display = 'inline-block';
-        showToast('Steps Deleted');
+        showCustomModal({
+            title: "Delete Steps/Method?",
+            msg: `Are you want to delete the Steps/Method\nfor "${r.name}"?.`,
+            showInput: false,
+            onYes: () => {
+                descHideToolbar();
+                descBoxColorPending = '';
+                descEditBox.innerHTML = '';
+                descEditBox.style.background = 'transparent';
+                persistDescription('', '');
+                renderDescView('', '');
+                descViewBox.style.display = 'block';
+                descEditBox.style.display = 'none';
+                descSaveBtn.style.display = 'none';
+                descEditBtn.style.display = 'inline-block';
+                showToast('Steps Deleted');
+            }
+        });
     };
 }
 
