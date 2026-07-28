@@ -2899,7 +2899,7 @@ function showRecipeItems(idx) {
     descDelBtn.onclick = () => {
         showCustomModal({
             title: "Delete Steps/Method?",
-            msg: `Are you want to delete\n "${r.name}"?.`,
+            msg: `Are you sure you want to delete the Steps/Method\nfor "${r.name}"? This cannot be undone.`,
             showInput: false,
             onYes: () => {
                 descHideToolbar();
@@ -3637,7 +3637,8 @@ function downloadJSONFile() {
             } else if(type === 'recipe') {
                 let rec = recipes[idx];
                 if(rec) {
-                    selected.r.push({...rec, img: ""});
+                    let cleanDesc = (rec.description || '').replace(/<img[^>]*>/gi, '');
+                    selected.r.push({...rec, img: "", description: cleanDesc});
                     if(rec.category) catsNeeded.add(rec.category);
                 }
             }
@@ -3873,7 +3874,8 @@ function generateShareCode() {
                 selected.s.push({ name: stock[idx].name, price: stock[idx].price || 0, img: "" });
             } else if(type === 'recipe') {
                 let rec = recipes[idx];
-                selected.r.push({...rec, img: ""});
+                let cleanDesc = (rec.description || '').replace(/<img[^>]*>/gi, '');
+                selected.r.push({...rec, img: "", description: cleanDesc});
                 if(rec.category) catsNeeded.add(rec.category);
             }
         }
