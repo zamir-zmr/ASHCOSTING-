@@ -1609,6 +1609,28 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
     <script>
 // Data load aur default values fix
 
+// --- UNIVERSAL BACK-BUTTON SAFETY NET ---
+// Jab bhi koi panel/overlay (DATA, recipe steps, stock modal, etc.) band hoke
+// "home" (null history state) tak pahunchta hai, seedha app exit nahi hona chahiye.
+// Pehli baar ek harmless guard-state push karo (thodi delay ke saath, taaki WebView
+// ka native back-stack settle ho jaye), taaki agla hi back press turant exit na kare.
+// Doosri baar (guard already fired ho chuka) tab hi asli exit hone do.
+let __homeGuardArmed = false;
+window.addEventListener('popstate', function(e) {
+    if (!e.state) {
+        if (!__homeGuardArmed) {
+            __homeGuardArmed = true;
+            setTimeout(function() {
+                try { history.pushState({ __homeGuard: true }, ''); } catch (err) {}
+            }, 50);
+        } else {
+            __homeGuardArmed = false; // is baar sach me exit hone do
+        }
+    } else {
+        __homeGuardArmed = false; // kisi panel/overlay ke andar hain, guard reset
+    }
+});
+
 // 1. Data load aur default values fix
 let priceList = JSON.parse(localStorage.getItem('ASH_PL')) || [];
 let recipes = JSON.parse(localStorage.getItem('ASH_R')) || [];
