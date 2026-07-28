@@ -2462,7 +2462,14 @@ function showRecipeItems(idx) {
         }
     };
 
-    const handleBackPress = () => closeOverlay();
+    const handleBackPress = () => {
+        const videoOverlayEl = document.getElementById('descVideoPlayerOverlay');
+        if (videoOverlayEl && videoOverlayEl.style.display === 'flex') {
+            if (typeof descCloseVideoPlayer === 'function') descCloseVideoPlayer(true);
+            return; // sirf video band hoga, poora Steps/Method page khula rahega
+        }
+        closeOverlay();
+    };
     window.addEventListener('popstate', handleBackPress);
 
     function renderRecipeItemsHTML(mult) {
@@ -2754,11 +2761,6 @@ function showRecipeItems(idx) {
             if (!fromPopstate) history.back(); // pushed state ko saaf karo taaki back-stack clean rahe
         }
     }
-    window.addEventListener('popstate', () => {
-        if (descVideoPlayerOverlay.style.display === 'flex') {
-            descCloseVideoPlayer(true);
-        }
-    });
     descVideoPlayerClose.addEventListener('click', () => descCloseVideoPlayer());
     descVideoPlayerOverlay.addEventListener('click', (e) => { if (e.target === descVideoPlayerOverlay) descCloseVideoPlayer(); });
     descVideoLinkText.addEventListener('click', () => descOpenVideo(descVideoUrl));
