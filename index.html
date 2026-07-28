@@ -2465,7 +2465,8 @@ function showRecipeItems(idx) {
     const handleBackPress = () => {
         const videoOverlayEl = document.getElementById('descVideoPlayerOverlay');
         if (videoOverlayEl && videoOverlayEl.style.display === 'flex') {
-            if (typeof descCloseVideoPlayer === 'function') descCloseVideoPlayer(true);
+            if (typeof descCloseVideoPlayer === 'function') descCloseVideoPlayer();
+            history.pushState({ action: "closeOverlay" }, ""); // depth same rakho jaisi video khulne se pehle thi
             return; // sirf video band hoga, poora Steps/Method page khula rahega
         }
         closeOverlay();
@@ -2740,26 +2741,19 @@ function showRecipeItems(idx) {
         descSetThumb(descVideoThumbView, info && info.thumb);
     }
 
-    let descVideoHistoryPushed = false;
     function descOpenVideo(url) {
         if (!url) return;
         const info = descParseVideo(url);
         if (info && info.embed) {
             descVideoPlayerFrame.src = info.embed;
             descVideoPlayerOverlay.style.display = 'flex';
-            history.pushState({ descVideoModal: true }, '');
-            descVideoHistoryPushed = true;
         } else {
             window.open(url, '_blank');
         }
     }
-    function descCloseVideoPlayer(fromPopstate) {
+    function descCloseVideoPlayer() {
         descVideoPlayerOverlay.style.display = 'none';
         descVideoPlayerFrame.src = '';
-        if (descVideoHistoryPushed) {
-            descVideoHistoryPushed = false;
-            if (!fromPopstate) history.back(); // pushed state ko saaf karo taaki back-stack clean rahe
-        }
     }
     descVideoPlayerClose.addEventListener('click', () => descCloseVideoPlayer());
     descVideoPlayerOverlay.addEventListener('click', (e) => { if (e.target === descVideoPlayerOverlay) descCloseVideoPlayer(); });
