@@ -2535,6 +2535,18 @@ function showRecipeItems(idx) {
                         <button id="descDelBtn" style="border:none; background:var(--danger); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">DELETE</button>
                     </div>
                 </div>
+                <div id="descVideoView" style="display:none; align-items:center; gap:10px; margin-bottom:10px;">
+                    <div id="descVideoLinkText" style="flex:1; min-width:0; font-size:12px; color:#2563eb; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;">🔗 Watch Video</div>
+                    <div id="descVideoThumbView" style="width:64px;height:64px;flex-shrink:0;border-radius:10px;background-color:#0f172a;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;">&#9654;</div>
+                </div>
+                <div id="descVideoEdit" style="display:none; align-items:center; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="descVideoLinkInput" placeholder="Paste YouTube / Instagram / Facebook video link" style="flex:1; min-width:0; box-sizing:border-box; border:1.5px solid #cbd5e1; border-radius:8px; padding:8px 10px; font-size:12px; color:#1e293b;" value="${r.videoUrl ? String(r.videoUrl).replace(/"/g,'&quot;') : ''}">
+                    <div id="descVideoThumbEdit" style="width:64px;height:64px;flex-shrink:0;border-radius:10px;background-color:#0f172a;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;">&#9654;</div>
+                </div>
+                <div id="descVideoPlayerOverlay" style="display:none; position:fixed; inset:0; background:#000; z-index:20001; align-items:center; justify-content:center;">
+                    <iframe id="descVideoPlayerFrame" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
+                    <button id="descVideoPlayerClose" type="button" style="position:absolute; top:14px; right:14px; width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,0.92);color:#1e293b;font-weight:900;font-size:18px;cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.4);">&times;</button>
+                </div>
                 <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:8px; padding:6px; display:flow-root; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
                 <div id="descEditBox" contenteditable="true" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:10px; padding:10px; font-size:13px; font-family:sans-serif; overflow-y:auto; white-space:pre-wrap; outline:none; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return ''; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
                 <div id="descPhotoLightbox" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:20000; align-items:flex-start; justify-content:center; padding-top:9vh; box-sizing:border-box;">
@@ -2672,12 +2684,101 @@ function showRecipeItems(idx) {
     const descFontPlusBtn  = document.getElementById('descFontPlusBtn');
     const descFontSizeBadge = document.getElementById('descFontSizeBadge');
 
+    // --- Video Link (YouTube / Instagram / Facebook) ---
+    const descVideoView = document.getElementById('descVideoView');
+    const descVideoEdit = document.getElementById('descVideoEdit');
+    const descVideoLinkText = document.getElementById('descVideoLinkText');
+    const descVideoThumbView = document.getElementById('descVideoThumbView');
+    const descVideoLinkInput = document.getElementById('descVideoLinkInput');
+    const descVideoThumbEdit = document.getElementById('descVideoThumbEdit');
+    const descVideoPlayerOverlay = document.getElementById('descVideoPlayerOverlay');
+    const descVideoPlayerFrame = document.getElementById('descVideoPlayerFrame');
+    const descVideoPlayerClose = document.getElementById('descVideoPlayerClose');
+
+    let descVideoUrl = r.videoUrl || '';
+
+    function descParseVideo(url) {
+        if (!url) return null;
+        url = url.trim();
+        let m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([a-zA-Z0-9_-]{6,})/);
+        if (m) {
+            const id = m[1];
+            return { embed: `https://www.youtube.com/embed/${id}?autoplay=1`, thumb: `https://img.youtube.com/vi/${id}/hqdefault.jpg` };
+        }
+        if (/instagram\.com\/(reel|p|tv)\//.test(url)) {
+            const clean = url.split('?')[0].replace(/\/$/, '');
+            return { embed: clean + '/embed/', thumb: null };
+        }
+        if (/facebook\.com|fb\.watch/.test(url)) {
+            return { embed: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`, thumb: null };
+        }
+        return { embed: null, thumb: null };
+    }
+
+    function descSetThumb(el, thumbUrl) {
+        if (thumbUrl) {
+            el.style.backgroundImage = `url('${thumbUrl}')`;
+            el.textContent = '';
+        } else {
+            el.style.backgroundImage = 'none';
+            el.textContent = '\u25B6';
+        }
+    }
+
+    function descApplyVideoDisplay(url) {
+        if (!url) { descVideoView.style.display = 'none'; return; }
+        const info = descParseVideo(url);
+        descVideoView.style.display = 'flex';
+        descVideoLinkText.textContent = '\uD83D\uDD17 ' + url;
+        descSetThumb(descVideoThumbView, info && info.thumb);
+    }
+
+    let descVideoHistoryPushed = false;
+    function descOpenVideo(url) {
+        if (!url) return;
+        const info = descParseVideo(url);
+        if (info && info.embed) {
+            descVideoPlayerFrame.src = info.embed;
+            descVideoPlayerOverlay.style.display = 'flex';
+            history.pushState({ descVideoModal: true }, '');
+            descVideoHistoryPushed = true;
+        } else {
+            window.open(url, '_blank');
+        }
+    }
+    function descCloseVideoPlayer(fromPopstate) {
+        descVideoPlayerOverlay.style.display = 'none';
+        descVideoPlayerFrame.src = '';
+        if (descVideoHistoryPushed) {
+            descVideoHistoryPushed = false;
+            if (!fromPopstate) history.back(); // pushed state ko saaf karo taaki back-stack clean rahe
+        }
+    }
+    window.addEventListener('popstate', () => {
+        if (descVideoPlayerOverlay.style.display === 'flex') {
+            descCloseVideoPlayer(true);
+        }
+    });
+    descVideoPlayerClose.addEventListener('click', () => descCloseVideoPlayer());
+    descVideoPlayerOverlay.addEventListener('click', (e) => { if (e.target === descVideoPlayerOverlay) descCloseVideoPlayer(); });
+    descVideoLinkText.addEventListener('click', () => descOpenVideo(descVideoUrl));
+    descVideoThumbView.addEventListener('click', () => descOpenVideo(descVideoUrl));
+    descVideoThumbEdit.addEventListener('click', () => descOpenVideo(descVideoLinkInput.value.trim()));
+    descVideoLinkInput.addEventListener('input', () => {
+        descVideoUrl = descVideoLinkInput.value.trim();
+        const info = descParseVideo(descVideoUrl);
+        descSetThumb(descVideoThumbEdit, info && info.thumb);
+    });
+    descApplyVideoDisplay(descVideoUrl);
+    descSetThumb(descVideoThumbEdit, (descParseVideo(descVideoUrl) || {}).thumb);
+
     let descSavedRange = null;   // selection ya caret position, formatting + photo insert dono ke liye
     let descBoxColorPending = r.descriptionBg || '';
 
-    const persistDescription = (htmlVal, bgColor) => {
+    const persistDescription = (htmlVal, bgColor, videoUrl) => {
         recipes[idx].description = htmlVal;
         recipes[idx].descriptionBg = bgColor || '';
+        recipes[idx].videoUrl = videoUrl || '';
         localStorage.setItem('ASH_R', JSON.stringify(recipes));
         if (typeof db !== 'undefined') {
             db.ref('shared_recipes_list').set(recipes) // Madam ke phone tak turant pahunchega (photos sahit)
@@ -2877,6 +2978,10 @@ function showRecipeItems(idx) {
     descEditBtn.onclick = () => {
         descViewBox.style.display = 'none';
         descEditBox.style.display = 'block';
+        descVideoView.style.display = 'none';
+        descVideoEdit.style.display = 'flex';
+        descVideoLinkInput.value = descVideoUrl;
+        descSetThumb(descVideoThumbEdit, (descParseVideo(descVideoUrl) || {}).thumb);
         descEditBtn.style.display = 'none';
         descSaveBtn.style.display = 'inline-block';
         descEditBox.focus();
@@ -2886,8 +2991,11 @@ function showRecipeItems(idx) {
         descHideToolbar();
         let htmlVal = descEditBox.innerHTML.trim();
         if (htmlVal === '<br>') htmlVal = '';
-        persistDescription(htmlVal, descBoxColorPending);
+        descVideoUrl = descVideoLinkInput.value.trim();
+        persistDescription(htmlVal, descBoxColorPending, descVideoUrl);
         renderDescView(htmlVal, descBoxColorPending);
+        descApplyVideoDisplay(descVideoUrl);
+        descVideoEdit.style.display = 'none';
         descViewBox.style.display = 'block';
         descEditBox.style.display = 'none';
         descSaveBtn.style.display = 'none';
@@ -2898,14 +3006,15 @@ function showRecipeItems(idx) {
     descDelBtn.onclick = () => {
         showCustomModal({
             title: "Delete Steps/Method?",
-            msg: `Are you want to delete\n "${r.name}"?`,
+            msg: `Are you sure you want to delete the Steps/Method\nfor "${r.name}"? This cannot be undone.`,
             showInput: false,
             onYes: () => {
                 descHideToolbar();
                 descBoxColorPending = '';
                 descEditBox.innerHTML = '';
                 descEditBox.style.background = 'transparent';
-                persistDescription('', '');
+                descVideoEdit.style.display = 'none';
+                persistDescription('', '', descVideoUrl);
                 renderDescView('', '');
                 descViewBox.style.display = 'block';
                 descEditBox.style.display = 'none';
