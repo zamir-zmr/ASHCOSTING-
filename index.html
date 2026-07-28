@@ -114,8 +114,7 @@ body {
     font-weight: bold;
     font-size: 14px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    z-index: 10000;
-    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000000;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -2932,7 +2931,7 @@ function showFastToast(msg) {
     toast.style = `
         position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
         background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 50px;
-        font-size: 13px; font-weight: 700; z-index: 20000; display: flex; align-items: center;
+        font-size: 13px; font-weight: 700; z-index: 1000000; display: flex; align-items: center;
         box-shadow: 0 10px 25px rgba(0,0,0,0.2); pointer-events: none;
         animation: toastPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     `;
