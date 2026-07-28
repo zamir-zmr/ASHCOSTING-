@@ -2466,7 +2466,9 @@ function showRecipeItems(idx) {
         const videoOverlayEl = document.getElementById('descVideoPlayerOverlay');
         if (videoOverlayEl && videoOverlayEl.style.display === 'flex') {
             if (typeof descCloseVideoPlayer === 'function') descCloseVideoPlayer();
-            history.pushState({ action: "closeOverlay" }, ""); // depth same rakho jaisi video khulne se pehle thi
+            // Native WebView back-forward list turant (isi tick mein) update nahi hoti,
+            // isliye pushState ko thoda delay karke karo taaki canGoBack() sahi report ho
+            setTimeout(() => { history.pushState({ action: "closeOverlay" }, ""); }, 50);
             return; // sirf video band hoga, poora Steps/Method page khula rahega
         }
         closeOverlay();
