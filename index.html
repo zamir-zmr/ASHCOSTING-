@@ -493,6 +493,27 @@ body {
     font-weight: Normal;
 }
 
+/* PC layout for editorPanel */
+@media (min-width: 768px) {
+    #editorPanel-body {
+        flex-direction: row !important;
+    }
+    #editorPanel-items-col {
+        flex: 1;
+        overflow-y: auto;
+    }
+    #editorPanel-summary-col {
+        width: 300px;
+        min-width: 260px;
+        border-left: 3px solid #07c1c1;
+        border-top: none !important;
+        border-radius: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 20px;
+        overflow-y: auto;
+    }
+}
+
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1569,54 +1590,48 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
         ">
     </div>
 
-    <div class="row-header">
-        <div>DEL</div>
-        <div>ITEM</div>
-        <div>PRICE</div>
-        <div>TOTAL G</div>
-        <div>USED G</div>
-        <div>COST</div>
-    </div>
-    
-    
-      <div style="flex:1; overflow-y:auto; padding:0px 15px 15px 15px;">
-        <div id="suggestions"></div>
-        <div id="ingredientList" style="margin-top:0px;"></div>
-        
-        
-    </div>
+    <div id="editorPanel-body" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
 
-        
-        
-        
-        <div style="background:white; padding:15px; border-top:3px solid var(--primary); 
-        border-radius:25px 25px 0 0;
-        margin-bottom: 40px">
-          
-            <div class="calc-row"
-            style="padding-top:0px; margin-top:0px; 
-            
-            "
-            ><span>Recipe Cost:</span> <b id="recipeTotalDisplay">0.000</b></div>
-            <div class="calc-row"
-            style="padding-top:0px; margin-top:0px;"
-            ><span>Packaging:</span> <input type="number" id="packInp" class="calc-input" oninput="calcTotal()"></div>
-            <div class="calc-row"
-            style="padding-top:0px; margin-top:0px;"
-            ><span>Effort %:</span> <input type="number" id="effInp" class="calc-input" oninput="calcTotal()"></div>
-            <div class="calc-row" style="color:var(--primary); font-weight:bold;
-            padding-top:0px; margin-top:0px;
-            "><span>Sub-Total:</span> <span id="allTotalDisplay">0.000</span></div>
-            <div class="calc-row"
-            style="padding-top:0px; margin-top:0px;"
-            ><span>Margin %:</span> <input type="number" id="sellInp" class="calc-input" oninput="calcTotal()"></div>
+        <!-- Items List -->
+        <div id="editorPanel-items-col" style="flex:1; overflow-y:auto; display:flex; flex-direction:column;">
+            <div class="row-header">
+                <div>DEL</div>
+                <div>ITEM</div>
+                <div>PRICE</div>
+                <div>TOTAL G</div>
+                <div>USED G</div>
+                <div>COST</div>
+            </div>
+            <div style="flex:1; overflow-y:auto; padding:0px 15px 15px 15px;">
+                <div id="suggestions"></div>
+                <div id="ingredientList" style="margin-top:0px;"></div>
+            </div>
+        </div>
+
+        <!-- Cost Summary -->
+        <div id="editorPanel-summary-col" style="background:white; padding:15px; border-top:3px solid var(--primary); border-radius:25px 25px 0 0; margin-bottom:40px;">
+            <div class="calc-row" style="padding-top:0px; margin-top:0px;">
+                <span>Recipe Cost:</span> <b id="recipeTotalDisplay">0.000</b>
+            </div>
+            <div class="calc-row" style="padding-top:0px; margin-top:0px;">
+                <span>Packaging:</span> <input type="number" id="packInp" class="calc-input" oninput="calcTotal()">
+            </div>
+            <div class="calc-row" style="padding-top:0px; margin-top:0px;">
+                <span>Effort %:</span> <input type="number" id="effInp" class="calc-input" oninput="calcTotal()">
+            </div>
+            <div class="calc-row" style="color:var(--primary); font-weight:bold; padding-top:0px; margin-top:0px;">
+                <span>Sub-Total:</span> <span id="allTotalDisplay">0.000</span>
+            </div>
+            <div class="calc-row" style="padding-top:0px; margin-top:0px;">
+                <span>Margin %:</span> <input type="number" id="sellInp" class="calc-input" oninput="calcTotal()">
+            </div>
             <div class="calc-row" style="font-size:18px; color:#2ecc71; border-top:1px solid #eee; padding-top:0px; margin-top:0px;">
                 <b>GRAND TOTAL:</b> <b id="grandTotal">0.000 OMR</b>
             </div>
-            <button class="btn-pill" style="width:100%; background:var(--primary); color:white; margin-top:0px; 
-
-            padding:5px;" onclick="saveAndExit()">FINISH</button>
+            <button class="btn-pill" style="width:100%; background:var(--primary); color:white; margin-top:0px; padding:5px;" onclick="saveAndExit()">FINISH</button>
         </div>
+
+    </div>
     </div>
 
 
