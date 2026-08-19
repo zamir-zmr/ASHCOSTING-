@@ -1330,7 +1330,7 @@ function openSmartShare() {
   
   
 
-    <div class="app-header" style="height: 80px; padding: 0 10px;">
+    <div class="app-header" id="appHeader" style="height: 80px; padding: 0 10px;">
     <div class="header-left">
         <div class="header-logo" onclick="document.getElementById('logoInput').click()" style="cursor:pointer;">
             <div class="ash-logo-circle"></div> 
@@ -1342,20 +1342,107 @@ function openSmartShare() {
             <img id="appLogoImg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; z-index:4; border-radius:50%;">
             <input type="file" id="logoInput" hidden accept="image/*" onchange="uploadAppLogo(this)">
         </div>
-<button class="btn-pill" style="background:#7d5fff; color:#fff;" onclick="openSmartShare()">
-DATA</button>
-
-
-        <!-- <button class="btn-pill" style="background:#000; color:#fff;" onclick="openBackupPanel()">BACKUP</button> -->
-        <button class="btn-pill btn-manage" id="mBtn" style="margin-left:0px;" onclick="toggleManage()">MANAGE</button>
     </div>
 
     <div class="h-btns" style="gap: 0px;">
-        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openPanel('catPanel')">CATEGORY</button>
-        <button class="btn-pill btn-stock" onclick="openPanel('stockPanel')">STOCK</button>
-        <button class="btn-pill" style="background:#fff; color:#d97706;" onclick="openPriceListPanel()">PRICE LIST</button>
-        
-        <button class="btn-pill" style="background:#fff; color:var(--accent);" onclick="openInputModal('recipe')">Add Recipe</button>
+        <!-- Hamburger Menu Button -->
+        <button id="hamburgerBtn" onclick="toggleHamburgerMenu(event)" style="
+            width: 50px; height: 50px; border-radius: 50%;
+
+          margin-bottom: 20px;
+            background: radial-gradient(circle at 35% 30%, #02a7a7, #02a7a7);
+            border: 2px solid #e5ff73; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 0 8px rgba(212,175,55,0.3);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            position: relative; z-index: 10000;
+        ">
+            <div id="hamburgerLines" style="display:flex; flex-direction:column; gap:5px;">
+                <span style="display:block; width:20px; height:2.5px; background:#e5ff73; border-radius:2px; transition:all 0.3s;"></span>
+                <span style="display:block; width:20px; height:2.5px; background:#e5ff73; border-radius:2px; transition:all 0.3s;"></span>
+                <span style="display:block; width:20px; height:2.5px; background:#e5ff73; border-radius:2px; transition:all 0.3s;"></span>
+            </div>
+        </button>
+    </div>
+</div>
+
+<!-- Hamburger Menu Overlay (backdrop) -->
+<div id="hamburgerOverlay" onclick="closeHamburgerMenu()" style="
+    position: fixed; inset: 0; z-index: 9998;
+    display: none;
+    background: transparent;
+"></div>
+
+<!-- Hamburger Dropdown Menu -->
+<div id="hamburgerMenu" style="
+    position: fixed;
+    top: 8px; right: 6px;
+    width: 220px;
+    padding-top: 58px;
+    background: linear-gradient(165deg, rgba(255,255,255,0.72), rgba(255,255,255,0.45));
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border-radius: 45px 45px 100px 100px;
+    border: 1px solid rgba(255,255,255,0.6);
+    z-index: 9999;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    transform: scale(0.25) translate(35px, -35px);
+    transform-origin: top right;
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+    pointer-events: none;
+">
+    <div style="padding: 4px 0 34px 0;">
+        <button onclick="closeHamburgerMenu(); openSmartShare();" style="
+            width:100%; padding:13px 26px; background:transparent; border:none;
+            color:#8a6d1f; font-size:15px; font-weight:700; text-align:left;
+            cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+            letter-spacing:0.3px; transition: background 0.2s;
+        " onmousedown="this.style.background='rgba(184,134,11,0.1)'" onmouseup="this.style.background='transparent'">
+            DATA <i class="fas fa-chart-line" style="font-size:15px; color:#b8860b;"></i>
+        </button>
+        <button id="mBtn" onclick="closeHamburgerMenu(); toggleManage();" style="
+            width:100%; padding:13px 26px; background:transparent; border:none;
+            color:#8a6d1f; font-size:15px; font-weight:700; text-align:left;
+            cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+            letter-spacing:0.3px; transition: background 0.2s;
+        " onmousedown="this.style.background='rgba(184,134,11,0.1)'" onmouseup="this.style.background='transparent'">
+            MANAGE <i class="fas fa-cog" style="font-size:15px; color:#b8860b;"></i>
+        </button>
+        <button onclick="closeHamburgerMenu(); openPanel('catPanel');" style="
+            width:100%; padding:13px 26px; background:transparent; border:none;
+            color:#8a6d1f; font-size:15px; font-weight:700; text-align:left;
+            cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+            letter-spacing:0.3px; transition: background 0.2s;
+        " onmousedown="this.style.background='rgba(184,134,11,0.1)'" onmouseup="this.style.background='transparent'">
+            CATEGORY <i class="fas fa-list" style="font-size:15px; color:#b8860b;"></i>
+        </button>
+        <button onclick="closeHamburgerMenu(); openPanel('stockPanel');" style="
+            width:100%; padding:13px 26px; background:transparent; border:none;
+            color:#8a6d1f; font-size:15px; font-weight:700; text-align:left;
+            cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+            letter-spacing:0.3px; transition: background 0.2s;
+        " onmousedown="this.style.background='rgba(184,134,11,0.1)'" onmouseup="this.style.background='transparent'">
+            STOCK <i class="fas fa-boxes" style="font-size:15px; color:#b8860b;"></i>
+        </button>
+        <button onclick="closeHamburgerMenu(); openPriceListPanel();" style="
+            width:100%; padding:13px 26px; background:transparent; border:none;
+            color:#8a6d1f; font-size:15px; font-weight:700; text-align:left;
+            cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+            letter-spacing:0.3px; transition: background 0.2s;
+        " onmousedown="this.style.background='rgba(184,134,11,0.1)'" onmouseup="this.style.background='transparent'">
+            PRICE LIST <i class="fas fa-tag" style="font-size:15px; color:#b8860b;"></i>
+        </button>
+        <button onclick="closeHamburgerMenu(); openInputModal('recipe');" style="
+            width:100%; padding:13px 26px; background:transparent; border:none;
+            color:#8a6d1f; font-size:15px; font-weight:700; text-align:left;
+            cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+            letter-spacing:0.3px; transition: background 0.2s;
+        " onmousedown="this.style.background='rgba(184,134,11,0.1)'" onmouseup="this.style.background='transparent'">
+            ADD RECIPE <i class="fas fa-plus" style="font-size:15px; color:#b8860b;"></i>
+        </button>
     </div>
 </div>
 
@@ -2227,11 +2314,15 @@ window.onpopstate = function(event) {
         if(panel) {
             panel.style.display = 'flex';
             if(homeCont) homeCont.style.display = 'none';
+            const appHeader = document.getElementById('appHeader');
+            if(appHeader) appHeader.style.display = 'none';
         }
     } 
     else {
         // 4. FIX: Agar event.state null hai, iska matlab hum HOME par hain
         if(homeCont) homeCont.style.display = 'block';
+        const appHeader = document.getElementById('appHeader');
+        if(appHeader) appHeader.style.display = 'flex';
         
         // Sabse important line: History ko poori tarah saaf kar dein
         // Taaki ab user back dabaye toh App Exit ho jaye
@@ -2248,6 +2339,9 @@ function openPanel(id) {
 
     const homeCont = document.getElementById('homeCont');
     if(homeCont) homeCont.style.display = 'none';
+
+    const appHeader = document.getElementById('appHeader');
+    if(appHeader) appHeader.style.display = 'none';
 }
 
 function closePanel(id) { 
@@ -4235,12 +4329,16 @@ function openPanel(id) {
     document.querySelectorAll('.panel, .modal-overlay, #sharePanel').forEach(el => el.style.display = 'none');
     document.getElementById(id).style.display = 'flex'; 
     document.getElementById('homeCont').style.display = 'none';
+    const appHeader = document.getElementById('appHeader');
+    if(appHeader) appHeader.style.display = 'none';
 }
 
 function openSharePanel() { 
     history.pushState({ panel: 'sharePanel' }, "");
     document.getElementById('sharePanel').style.display = 'flex';
     openSmartShare();
+    const appHeader = document.getElementById('appHeader');
+    if(appHeader) appHeader.style.display = 'none';
 }
 function closePanel(id) { history.back(); }
 function smartClose() { history.back(); }
@@ -4252,9 +4350,12 @@ window.onpopstate = function(event) {
     if(b) { b.innerText = "MANAGE"; b.classList.remove('active'); }
     const h = document.getElementById('homeCont');
     if(h) { h.classList.remove('manage-mode'); h.style.display = 'block'; }
+    const appHeader = document.getElementById('appHeader');
     if(event.state && event.state.panel) {
         const p = document.getElementById(event.state.panel);
-        if(p) { p.style.display = 'flex'; if(h) h.style.display = 'none'; }
+        if(p) { p.style.display = 'flex'; if(h) h.style.display = 'none'; if(appHeader) appHeader.style.display = 'none'; }
+    } else {
+        if(appHeader) appHeader.style.display = 'flex';
     }
 };
 
@@ -4299,6 +4400,45 @@ document.addEventListener('click', function(e) {
     if(hc) hc.classList.remove('manage-mode');
     renderRecipes();
 });
+
+// ===== HAMBURGER MENU FUNCTIONS =====
+let hamburgerOpen = false;
+
+function toggleHamburgerMenu(e) {
+    e.stopPropagation();
+    if (hamburgerOpen) {
+        closeHamburgerMenu();
+    } else {
+        openHamburgerMenu();
+    }
+}
+
+function openHamburgerMenu() {
+    const menu = document.getElementById('hamburgerMenu');
+    const overlay = document.getElementById('hamburgerOverlay');
+    const btn = document.getElementById('hamburgerBtn');
+    if (!menu) return;
+    hamburgerOpen = true;
+    overlay.style.display = 'block';
+    menu.style.pointerEvents = 'auto';
+    menu.style.transform = 'scale(1) translate(0px,0px)';
+    menu.style.opacity = '1';
+    btn.style.transform = 'scale(0.9)';
+    btn.style.background = '#02a7a7';
+}
+
+function closeHamburgerMenu() {
+    const menu = document.getElementById('hamburgerMenu');
+    const overlay = document.getElementById('hamburgerOverlay');
+    const btn = document.getElementById('hamburgerBtn');
+    if (!menu) return;
+    hamburgerOpen = false;
+    overlay.style.display = 'none';
+    menu.style.pointerEvents = 'none';
+    menu.style.transform = 'scale(0.25) translate(35px, -35px)';
+    menu.style.opacity = '0';
+    if (btn) { btn.style.transform = 'scale(1)'; btn.style.background = '#02a7a7'; }
+}
 
 
     </script>
