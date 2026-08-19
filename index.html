@@ -513,7 +513,7 @@ body {
         overflow-y: auto;
     }
     #recipeItemsContainer {
-        grid-template-columns: repeat(2, 1fr) !important;  /* 2-col */
+        grid-template-columns: 1fr 1fr !important;
     }
 }
 
@@ -2539,12 +2539,14 @@ function showRecipeItems(idx) {
 
     function renderRecipeItemsHTML(mult) {
         let total = 0;
+        const totalItems = (r.items || []).length;
         let html = (r.items || []).map((it, i) => {
             let usedQty = (Number(it.used) || 0) * mult;
             let itemCost = ((it.price / it.total) * (Number(it.used) || 0) * mult) || 0;
             total += itemCost;
+            const isLastOdd = (totalItems % 2 !== 0) && (i === totalItems - 1);
             return `
-            <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:5px 18px; border-bottom:2px solid #04fffb; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s;">
+            <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:5px 18px; border-bottom:2px solid #04fffb; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s; ${isLastOdd ? 'grid-column: 1 / -1;' : ''}">
                 <div style="flex:1;">
                     <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
                     <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
