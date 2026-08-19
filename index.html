@@ -512,6 +512,9 @@ body {
         padding: 20px;
         overflow-y: auto;
     }
+    #recipeItemsContainer {
+        grid-template-columns: 1fr 1fr !important;
+    }
 }
 
 .modal-overlay {
@@ -2586,7 +2589,7 @@ function showRecipeItems(idx) {
         </div>
 
         <div style="flex:1; overflow-y:auto; padding-top:5px; background: #fff;">
-            <div id="recipeItemsContainer">${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}</div>
+            <div id="recipeItemsContainer" style="display:grid; grid-template-columns:1fr; gap:0;">${itemsHTML || '<p style="text-align:center; color:#94a3b8; margin-top:50px; font-size:18px;">No items found.</p>'}</div>
 
             <div style="padding:15px 18px 20px 18px;">
                 <style>
