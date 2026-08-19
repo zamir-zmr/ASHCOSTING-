@@ -513,7 +513,8 @@ body {
         overflow-y: auto;
     }
     #recipeItemsContainer {
-        grid-template-columns: 1fr 1fr !important;
+        display: block !important;
+        grid-template-columns: unset !important;
     }
 }
 
@@ -1104,6 +1105,15 @@ from { opacity: 0; transform: translateX(10px); }
 
 .recipe-item-row {
     animation: itemSlide 0.3s ease forwards;
+}
+
+@media (min-width: 768px) {
+    #recipeItemsContainer {
+        column-gap: 0 !important;
+    }
+    #recipeItemsContainer .recipe-item-row {
+        border-bottom: 2px solid #04fffb;
+    }
 }
 
 #catFilterBar {
@@ -2539,32 +2549,73 @@ function showRecipeItems(idx) {
 
     function renderRecipeItemsHTML(mult) {
         let total = 0;
-        const totalItems = (r.items || []).length;
-        let html = (r.items || []).map((it, i) => {
+        const items = r.items || [];
+        const totalItems = items.length;
+        const isPC = window.innerWidth >= 768;
+
+        // Calculate all costs first
+        const rows = items.map((it, i) => {
             let usedQty = (Number(it.used) || 0) * mult;
             let itemCost = ((it.price / it.total) * (Number(it.used) || 0) * mult) || 0;
             total += itemCost;
-            const isLastOdd = (totalItems % 2 !== 0) && (i === totalItems - 1);
-            return `
-            <div class="recipe-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:5px 18px; border-bottom:2px solid #04fffb; animation: itemSlide 0.2s ease forwards; animation-delay: ${i * 0.02}s; ${isLastOdd ? 'grid-column: 1 / -1;' : ''}">
+            return { it, usedQty, itemCost, i };
+        });
+
+        const itemHTML = (it, usedQty, itemCost, i, extraStyle = '') => `
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 14px; flex:1; ${extraStyle}">
                 <div style="flex:1;">
-                    <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform: uppercase; line-height:1;">${it.name}</div>
+                    <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform:uppercase; line-height:1;">${it.name}</div>
                     <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
                         ${Number(usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span>
                     </div>
                 </div>
-                <div style="text-align:right;">
-        <div style="display: flex; align-items: baseline; gap: 4px; margin-top: 5px;">
-        <div style="font-weight: 900; color: #2ecc71; font-size: 14px; line-height: 1; letter-spacing: 0.5px;">
-            ${Number(itemCost).toFixed(3)}
-        </div>
-        <div style="font-weight: 700; color: #94a3b8; font-size: 8px; text-transform: uppercase;">
-            OMR
-        </div>
-    </div>
+                <div style="display:flex; align-items:baseline; gap:4px; margin-top:5px;">
+                    <div style="font-weight:900; color:#2ecc71; font-size:14px; line-height:1;">${Number(itemCost).toFixed(3)}</div>
+                    <div style="font-weight:700; color:#94a3b8; font-size:8px; text-transform:uppercase;">OMR</div>
                 </div>
             </div>`;
-        }).join('');
+
+        let html = '';
+
+        if (!isPC) {
+            // Mobile: single column
+            rows.forEach(({it, usedQty, itemCost, i}) => {
+                html += `<div class="recipe-item-row" style="display:flex; border-bottom:2px solid #04fffb; animation:itemSlide 0.2s ease forwards; animation-delay:${i * 0.02}s;">
+                    ${itemHTML(it, usedQty, itemCost, i)}
+                </div>`;
+            });
+        } else {
+            // PC: 2-column pairs
+            for (let i = 0; i < totalItems; i += 2) {
+                const isLast = i + 1 >= totalItems;
+                if (isLast) {
+                    // Last odd item — only left half, right half empty
+                    html += `<div class="recipe-item-row" style="display:flex; border-bottom:2px solid #04fffb; animation:itemSlide 0.2s ease forwards; animation-delay:${i * 0.02}s;">
+                        <div style="flex:1; display:flex; justify-content:center; align-items:center; padding:5px 14px; gap:20px;">
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform:uppercase; line-height:1;">${rows[i].it.name}</div>
+                                <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">${Number(rows[i].usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${rows[i].it.unit || ' g'}</span></div>
+                            </div>
+                            <div style="display:flex; align-items:baseline; gap:4px;">
+                                <div style="font-weight:900; color:#2ecc71; font-size:14px;">${Number(rows[i].itemCost).toFixed(3)}</div>
+                                <div style="font-weight:700; color:#94a3b8; font-size:8px; text-transform:uppercase;">OMR</div>
+                            </div>
+                        </div>
+                        <div style="flex:1; border-left:2px solid #04fffb;"></div>
+                    </div>`;
+                } else {
+                    html += `<div class="recipe-item-row" style="display:flex; border-bottom:2px solid #04fffb; animation:itemSlide 0.2s ease forwards; animation-delay:${i * 0.02}s;">
+                        <div style="flex:1; display:flex;">
+                            ${itemHTML(rows[i].it, rows[i].usedQty, rows[i].itemCost, i)}
+                        </div>
+                        <div style="width:2px; background:#04fffb; flex-shrink:0;"></div>
+                        <div style="flex:1; display:flex;">
+                            ${itemHTML(rows[i+1].it, rows[i+1].usedQty, rows[i+1].itemCost, i+1)}
+                        </div>
+                    </div>`;
+                }
+            }
+        }
         return { html, total };
     }
 
