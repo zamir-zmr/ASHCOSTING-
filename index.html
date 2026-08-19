@@ -1330,7 +1330,8 @@ function openSmartShare() {
   
   
 
-    <div class="app-header" id="appHeader" style="height: 80px; padding: 0 10px;">
+   
+   <div class="app-header" id="appHeader" style="height: 80px; padding: 0 10px;">
     <div class="header-left">
         <div class="header-logo" onclick="document.getElementById('logoInput').click()" style="cursor:pointer;">
             <div class="ash-logo-circle"></div> 
@@ -1445,7 +1446,6 @@ function openSmartShare() {
         </button>
     </div>
 </div>
-
 
 
         
@@ -2361,6 +2361,8 @@ function openInputModal(type, idx = null) {
     
     document.getElementById('inputModalOverlay').style.display = 'flex';
     document.getElementById('delBtnInModal').style.display = (idx !== null) ? 'block' : 'none';
+    const appHeader = document.getElementById('appHeader');
+    if(appHeader) appHeader.style.display = 'none';
     
     if (type === 'stock') {
         document.getElementById('inputModalTitle').innerText = "Item Details";
@@ -3343,6 +3345,8 @@ let r = recipes[i];
     document.getElementById('effInp').value = r.effortPct || 0;
     document.getElementById('sellInp').value = r.marginPct || 0;
     document.getElementById('editorPanel').style.display = 'flex';
+    const appHeader = document.getElementById('appHeader');
+    if(appHeader) appHeader.style.display = 'none';
     renderTable();
 }
         
@@ -4425,7 +4429,8 @@ function openHamburgerMenu() {
     menu.style.opacity = '1';
     btn.style.transform = 'scale(0.9)';
     btn.style.background = '#02a7a7';
-}
+
+   }
 
 function closeHamburgerMenu() {
     const menu = document.getElementById('hamburgerMenu');
