@@ -3771,27 +3771,22 @@ function downloadJSONFile() {
 
     try {
         const dataStr = JSON.stringify(selected, null, 2);
+        const fileName = "AshCostinApp_Backup_" + new Date().toISOString().slice(0,10) + ".json";
+        
+        // APK/Mobile Compatibility Fix:
+        // Direct Blob ki jagah Base64 approach best hai mobile browsers ke liye
+        const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
+        const dataUri = 'data:application/json;charset=utf-8;base64,' + base64Data;
 
-        // Kodular WebView Bridge:
-        // Kodular ke "Web View String Change" block ko trigger karta hai.
-        // Block me "DOWNLOAD:" prefix detect hota hai, File1.SaveFile se device me save hota hai.
-        if (typeof AppInventor !== 'undefined' && AppInventor.setWebViewString) {
-            // Kodular APK mode — WebViewString se Kodular block trigger karo
-            AppInventor.setWebViewString("DOWNLOAD:" + dataStr);
-            showToast("📥 JSON File Downloaded!");
-        } else {
-            // Chrome / Browser fallback — direct download
-            const fileName = "AshCostinApp_Backup_" + new Date().toISOString().slice(0,10) + ".json";
-            const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
-            const dataUri = 'data:application/json;charset=utf-8;base64,' + base64Data;
-            const link = document.createElement('a');
-            link.href = dataUri;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("📥 JSON File Downloaded!");
-        }
+        const link = document.createElement('a');
+        link.href = dataUri;
+        link.download = fileName;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast("📥 JSON File Downloaded!");
     } catch (err) {
         console.error("Download Error:", err);
         showToast("Download fail hua. 'GENERATE CODE' use karein.", true);
