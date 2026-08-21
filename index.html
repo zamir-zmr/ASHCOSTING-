@@ -1583,31 +1583,58 @@ function openSmartShare() {
         </div>
     </div>
 
-    <div style="padding: 5px 15px 0 15px;">
-        <div style="position: relative; display: flex; align-items: center;">
+    <div id="plTopBar" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <div style="position: relative; display: flex; align-items: center; flex:1; min-width:150px;">
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="priceListSearchInput" placeholder="Search cakes..."
                 oninput="filterPriceList()"
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px; outline: none;">
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
         </div>
-    </div>
-
-    <div style="display:flex; gap:8px; padding: 8px 15px 0 15px;">
-        <button class="btn-pill" style="flex:1; background:var(--primary); color:white; padding: 10px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openAddPriceItem()">
+        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="openAddPriceItem()">
             <i class="fas fa-plus"></i> ADD ITEM
         </button>
-        <button class="btn-pill" style="flex:1; background:#f59e0b; color:white; padding: 10px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer;" onclick="openImportPriceModal()">
+        <button class="btn-pill" style="background:#f59e0b; color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="openImportPriceModal()">
             <i class="fas fa-file-import"></i> IMPORT
         </button>
     </div>
 
-    <div class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap: 5px; margin: 10px 15px 0 15px;">
+    <div id="plMobileHeader" class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap: 5px; margin: 10px 15px 0 15px;">
         <div style="text-align:left;">ITEM</div><div>QTY</div><div>PRICE</div><div></div>
     </div>
-
-    <div class="panel-content" style="padding: 5px 15px; overflow-y:auto; flex:1;">
+    <div class="panel-content" id="plMobileContent" style="padding: 5px 15px; overflow-y:auto; flex:1;">
         <div id="priceListItems"></div>
     </div>
+
+    <div id="plDesktopContent" class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1; display:none;">
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; align-items:start;">
+            <div>
+                <div class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap:5px; margin:0 0 6px 0;">
+                    <div style="text-align:left;">ITEM</div><div>QTY</div><div>PRICE</div><div></div>
+                </div>
+                <div id="plCol1"></div>
+            </div>
+            <div>
+                <div class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap:5px; margin:0 0 6px 0;">
+                    <div style="text-align:left;">ITEM</div><div>QTY</div><div>PRICE</div><div></div>
+                </div>
+                <div id="plCol2"></div>
+            </div>
+            <div>
+                <div class="row-header" style="grid-template-columns: 1fr 55px 55px 25px; gap:5px; margin:0 0 6px 0;">
+                    <div style="text-align:left;">ITEM</div><div>QTY</div><div>PRICE</div><div></div>
+                </div>
+                <div id="plCol3"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    @media (min-width: 768px) {
+        #plMobileHeader { display: none !important; }
+        #plMobileContent { display: none !important; }
+        #plDesktopContent { display: flex !important; flex-direction: column; }
+    }
+    </style>
 </div>
 
 <div id="priceModalOverlay" class="modal-overlay">
@@ -2060,9 +2087,7 @@ function renderPriceList() {
     const q = (document.getElementById('priceListSearchInput')?.value || '').toLowerCase().trim().replace(/\s+/g, ' ');
     listEl.innerHTML = '';
 
-    priceList.forEach((item, idx) => {
-        const itemName = item.name.toLowerCase().trim().replace(/\s+/g, ' ');
-        if (q && !itemName.includes(q)) return;
+    const makeRow = (item, idx) => {
         const row = document.createElement('div');
         row.className = 'row-item draggable-item';
         row.dataset.idx = idx;
@@ -2075,11 +2100,34 @@ function renderPriceList() {
             <div style="text-align:center;" onclick="editPriceItem(${idx})">${item.price}</div>
             <div onclick="deletePriceItem(${idx})" style="color:#ff7675; cursor:pointer; text-align:center;">✕</div>
         `;
-        listEl.appendChild(row);
+        return row;
+    };
+
+    const filtered = priceList.map((item, idx) => ({item, idx})).filter(({item}) => {
+        const itemName = item.name.toLowerCase().trim().replace(/\s+/g, ' ');
+        return !q || itemName.includes(q);
     });
+
+    // Mobile list
+    filtered.forEach(({item, idx}) => listEl.appendChild(makeRow(item, idx)));
 
     if (priceList.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">No items yet. Tap ADD ITEM to start.</p>';
+    }
+
+    // Desktop 3-column
+    const col1 = document.getElementById('plCol1');
+    const col2 = document.getElementById('plCol2');
+    const col3 = document.getElementById('plCol3');
+    if (col1 && col2 && col3) {
+        col1.innerHTML = ''; col2.innerHTML = ''; col3.innerHTML = '';
+        filtered.forEach(({item, idx}, i) => {
+            const cols = [col1, col2, col3];
+            cols[i % 3].appendChild(makeRow(item, idx));
+        });
+        if (filtered.length === 0) {
+            col1.innerHTML = '<p style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">No items yet.</p>';
+        }
     }
 
     setTimeout(initPriceListSortable, 200);
