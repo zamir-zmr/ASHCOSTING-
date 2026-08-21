@@ -1547,18 +1547,16 @@ function openSmartShare() {
 
     </div>
     
-    <div id="stockPanelInputRow" style="padding:15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; justify-content:flex-end;">
-        <div style="display:flex; gap:10px; align-items:center; width:33.333%;">
-            <div style="position: relative; display: flex; align-items: center; flex:1;">
-                <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
-                <input type="text" id="stockSearchInput" placeholder="Search materials..."
-                    oninput="filterStockItems()"
-                    style="width:100%; height: 38px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
-            </div>
-            <button class="btn-pill" style="background:var(--primary); color:white; white-space:nowrap; flex-shrink:0; padding: 8px 14px; font-size:12px; border:none; border-radius:10px; cursor:pointer;" onclick="openInputModal('stock')">
-                <i class="fas fa-plus"></i> ADD MATERIAL
-            </button>
+    <div id="stockPanelInputRow" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <div style="position: relative; display: flex; align-items: center; flex:1; min-width:150px;">
+            <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
+            <input type="text" id="stockSearchInput" placeholder="Search materials..."
+                oninput="filterStockItems()"
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
         </div>
+        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="openInputModal('stock')">
+            <i class="fas fa-plus"></i> ADD MATERIAL
+        </button>
     </div>
 
     <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
@@ -1569,8 +1567,6 @@ function openSmartShare() {
     #stockList .draggable-item { margin-bottom: 0 !important; }
     @media (max-width: 480px) {
         #stockList { grid-template-columns: 1fr !important; }
-        #stockPanelInputRow { display: block !important; }
-        #stockPanelInputRow > div { width: 100% !important; }
     }
     </style>
 </div>
@@ -1688,11 +1684,12 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
     </div>
     </div>
     
-    <div id="catPanelInputRow" style="padding:15px; background:#bef1f5; border-bottom:1px solid #eee;">
-        <div style="display:flex; gap:10px; align-items:center;">
-            <input type="text" id="newCatInp" placeholder="New Category Name..." style="margin:0; flex:1;">
-            <button class="btn-pill" style="background:var(--primary); color:white; white-space:nowrap; flex-shrink:0;" onclick="addCategory()">ADD</button>
-        </div>
+    <div id="catPanelInputRow" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <input type="text" id="newCatInp" placeholder="New Category Name..."
+            style="flex:1; min-width:150px; height: 35px; padding: 0 10px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="addCategory()">
+            <i class="fas fa-plus"></i> ADD
+        </button>
     </div>
 
     <div class="panel-content">
@@ -1706,13 +1703,6 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
         }
         #catManagerList .draggable-item {
             margin-bottom: 0 !important;
-        }
-        #catPanelInputRow {
-            display: flex;
-            justify-content: flex-end;
-        }
-        #catPanelInputRow > div {
-            width: 33.333%;
         }
     }
     </style>
