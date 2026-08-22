@@ -766,6 +766,152 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     box-sizing: border-box;
 }
 
+/* ===== DESKTOP LAYOUT FOR sharePanel ===== */
+@media (min-width: 600px) and (orientation: landscape), (min-width: 900px) {
+    #sharePanel .share-box {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: #e8f8f8 !important;
+    }
+
+    /* Top header bar */
+    #sharePanel .share-box > div:first-child {
+        flex-shrink: 0;
+    }
+
+    /* Desktop top bar */
+    #sp-desktop-topbar {
+        display: flex !important;
+        align-items: center;
+        gap: 14px;
+        padding: 10px 20px;
+        background: #e8f8f8;
+        border-bottom: 1px solid #b2e8e8;
+        flex-shrink: 0;
+    }
+
+    /* Main desktop body: sidebar + content */
+    #sp-desktop-body {
+        display: flex !important;
+        flex: 1;
+        overflow: hidden;
+        min-height: 0;
+    }
+
+    /* Left sidebar */
+    #sp-sidebar {
+        display: flex !important;
+        flex-direction: column;
+        width: 220px;
+        min-width: 180px;
+        background: #f0fafa;
+        border-right: 2px solid #b2e8e8;
+        padding: 16px 14px;
+        gap: 10px;
+        flex-shrink: 0;
+        justify-content: flex-start;
+    }
+
+    /* Center + right area */
+    #sp-main-area {
+        display: flex !important;
+        flex: 1;
+        overflow: hidden;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    /* Lists row */
+    #sp-lists-row {
+        display: flex !important;
+        flex: 1;
+        overflow: hidden;
+        gap: 0;
+        min-height: 0;
+    }
+
+    /* Stock list column */
+    #sp-stock-col {
+        flex: 1;
+        border-right: 2px solid #b2e8e8;
+        overflow-y: auto;
+        padding: 10px 12px;
+        border-top: 3px solid #3b82f6;
+    }
+
+    /* Recipe list column */
+    #sp-recipe-col {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px 12px;
+        border-top: 3px solid #e11d48;
+    }
+
+    /* Bottom bar for generate/copy/restore */
+    #sp-bottom-bar {
+        display: flex !important;
+        flex-shrink: 0;
+        padding: 12px 16px;
+        background: #f0fafa;
+        border-top: 2px solid #b2e8e8;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    #sp-bottom-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    #sp-bottom-right {
+        width: 260px;
+        min-width: 220px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Hide mobile-only scrollable wrapper on desktop */
+    #sp-mobile-scroll {
+        display: none !important;
+    }
+
+    /* Desktop sidebar button style */
+    .sp-sidebar-btn {
+        width: 100%;
+        padding: 13px 10px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        text-align: center;
+        transition: 0.2s;
+    }
+    .sp-sidebar-btn:active { transform: scale(0.96); }
+
+    /* Checkbox item rows in desktop lists */
+    .sp-item-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 6px;
+        border-bottom: 1px solid #f1f1f1;
+        cursor: pointer;
+    }
+    .sp-item-row:hover { background: #f8fffe; border-radius: 8px; }
+    .sp-item-row input[type="checkbox"] {
+        width: 18px; height: 18px; margin: 0; flex-shrink: 0;
+        accent-color: #3b82f6;
+    }
+    .sp-item-name { font-size: 14px; font-weight: 500; color: #2D3436; }
+    .sp-item-id { font-size: 11px; color: #636e72; }
+}
+
 .share-item-row {
     display: flex;
     align-items: center;
@@ -4210,6 +4356,56 @@ function openSmartShare() {
 
     document.getElementById('shareItemsList').innerHTML = html;
 
+    // ===== DESKTOP: populate split columns =====
+    const isDesktop = window.innerWidth >= 900 || (window.innerWidth >= 600 && window.innerHeight < window.innerWidth);
+    const mobileScroll = document.getElementById('sp-mobile-scroll');
+    const desktopTopbar = document.getElementById('sp-desktop-topbar');
+    const desktopBody = document.getElementById('sp-desktop-body');
+
+    if (isDesktop) {
+        if (mobileScroll) mobileScroll.style.display = 'none';
+        if (desktopTopbar) desktopTopbar.style.display = 'flex';
+        if (desktopBody) desktopBody.style.display = 'flex';
+
+        // Sync Device ID to desktop topbar
+        const devIdDesktop = document.getElementById('displayDeviceIdDesktop');
+        if (devIdDesktop) {
+            devIdDesktop.innerHTML = `<span style="width:8px;height:8px;background:#00ffcc;border-radius:50%;display:inline-block;box-shadow:0 0 6px #00ffcc;"></span> Device ID: ${deviceId}`;
+        }
+
+        // Stock column
+        let stockHtml = '';
+        stock.forEach((s, i) => {
+            stockHtml += `<label class="sp-item-row" style="display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid #f1f1f1;cursor:pointer;">
+                <input type="checkbox" class="share-chk" data-type="stock" data-idx="${i}" onchange="updateButtonUI()" style="width:18px;height:18px;margin:0;flex-shrink:0;accent-color:#3b82f6;">
+                <div>
+                    <div style="font-size:14px;font-weight:500;color:#2D3436;">${s.name}</div>
+                    <div style="font-size:11px;color:#94a3b8;">Item-${i+1}</div>
+                </div>
+            </label>`;
+        });
+        const spStock = document.getElementById('sp-stock-list');
+        if (spStock) spStock.innerHTML = stockHtml;
+
+        // Recipe column
+        let recipeHtml = '';
+        recipes.forEach((r, i) => {
+            recipeHtml += `<label class="sp-item-row" style="display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid #f1f1f1;cursor:pointer;">
+                <input type="checkbox" class="share-chk" data-type="recipe" data-idx="${i}" onchange="updateButtonUI()" style="width:18px;height:18px;margin:0;flex-shrink:0;accent-color:#e11d48;">
+                <div>
+                    <div style="font-size:14px;font-weight:500;color:#2D3436;">${r.name}</div>
+                    <div style="font-size:11px;color:#fb7185;">Recipe-${i+1}</div>
+                </div>
+            </label>`;
+        });
+        const spRecipe = document.getElementById('sp-recipe-list');
+        if (spRecipe) spRecipe.innerHTML = recipeHtml;
+    } else {
+        if (mobileScroll) mobileScroll.style.display = 'block';
+        if (desktopTopbar) desktopTopbar.style.display = 'none';
+        if (desktopBody) desktopBody.style.display = 'none';
+    }
+
     // --- All Animations (Button + Neon ID) ---
     if (!document.getElementById('share-styles-main')) {
         const style = document.createElement('style');
@@ -4278,24 +4474,35 @@ function generateShareCode() {
     }
 
     // Direct JSON output as you requested
-    document.getElementById('shareCodeOutput').value = JSON.stringify(selected);
+    const jsonOut = JSON.stringify(selected);
+    document.getElementById('shareCodeOutput').value = jsonOut;
+    const desktopOut = document.getElementById('shareCodeOutputDesktop');
+    if (desktopOut) desktopOut.value = jsonOut;
     showToast("JSON Text Generated! Copy now.");
 }
 
 function copyShareCode() {
     const output = document.getElementById('shareCodeOutput');
-    const val = output.value.trim();
+    const outputDesktop = document.getElementById('shareCodeOutputDesktop');
+    const val = (output ? output.value.trim() : '') || (outputDesktop ? outputDesktop.value.trim() : '');
     if(!val) return showToast("First click on 'GENERATE CODE'!", true);
-    output.select();
-    output.setSelectionRange(0, 99999); 
-    document.execCommand('copy');
-    showToast("JSON Text copied to clipboard!");
+    if(navigator.clipboard) {
+        navigator.clipboard.writeText(val).then(() => showToast("JSON Text copied to clipboard!")).catch(() => {
+            if(output) { output.select(); output.setSelectionRange(0, 99999); document.execCommand('copy'); }
+            showToast("JSON Text copied to clipboard!");
+        });
+    } else {
+        const active = (output && output.value) ? output : outputDesktop;
+        if(active) { active.select(); active.setSelectionRange(0, 99999); document.execCommand('copy'); }
+        showToast("JSON Text copied to clipboard!");
+    }
 }
 
 function processSmartAdd() {
     try {
         const inputArea = document.getElementById('shareRestoreInput');
-        let rawCode = inputArea.value.trim();
+        const inputAreaDesktop = document.getElementById('shareRestoreInputDesktop');
+        let rawCode = (inputArea ? inputArea.value.trim() : '') || (inputAreaDesktop ? inputAreaDesktop.value.trim() : '');
         if(!rawCode) return showToast("Paste JSON text or select file!", true);
         
         let decoded = JSON.parse(rawCode);
@@ -4516,6 +4723,19 @@ function closeHamburgerMenu() {
 }
 
 
+// ===== ORIENTATION CHANGE: Re-render sharePanel layout =====
+function handleOrientationChange() {
+    const panel = document.getElementById('sharePanel');
+    if (!panel || panel.style.display === 'none' || panel.style.display === '') return;
+    // small delay to let browser finish rotating
+    setTimeout(() => {
+        openSmartShare();
+    }, 200);
+}
+
+window.addEventListener('resize', handleOrientationChange);
+window.addEventListener('orientationchange', handleOrientationChange);
+
     </script>
     
     
@@ -4537,93 +4757,51 @@ function closeHamburgerMenu() {
     
     <div class="share-box" style="background: #bef1f5; border-radius: 0px; padding: 0px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; max-height: 100vh;">
 
-   <!-- STICKY DATA HEADER -->
-   
-   <div style="padding:1px; background:#07c1c1;">
+   <!-- STICKY DATA HEADER (mobile + desktop) -->
+   <div style="padding:1px; background:#07c1c1; flex-shrink:0;">
     <div class="sharepanel-nav">DATA 
-    <span onclick="document.getElementById('sharePanel').style.display='none'"
-    </span>
-  <i class="fas fa-times" style="font-size:30px;"></i>
+    <span onclick="document.getElementById('sharePanel').style.display='none'"></span>
+    <i class="fas fa-times" style="font-size:30px; cursor:pointer;" onclick="document.getElementById('sharePanel').style.display='none'"></i>
     </div>
-    </div>
+   </div>
 
-   <!-- SCROLLABLE CONTENT -->
-   <div style="overflow-y: auto; flex: 1; padding: 15px 20px; padding-bottom: 20px;">
+   <!-- ===== MOBILE SCROLLABLE CONTENT ===== -->
+   <div id="sp-mobile-scroll" style="overflow-y: auto; flex: 1; padding: 15px 20px; padding-bottom: 20px;">
         
-                <div style="background: #f8fafc; padding: 5px 5px; border-radius: 14px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
-          
+        <div style="background: #f8fafc; padding: 5px 5px; border-radius: 14px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
-              
-              <h2 
-            style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Version:F2</span>
-            </h2>
+              <h2 style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin:0;">Version:F2</h2>
             </span>
-            
             <span id="displayDeviceId" style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Loading...</span>
         </div>
-
 
         <div style="display: flex; gap: 8px; margin: 5px 0;">
             <button id="btn-stock" onclick="bulkSelect('stock')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📦 ITEMS</button>
             <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
-            <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">SELECT ALL</button>
+            <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">✓ SELECT ALL</button>
         </div>
         
-          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-   
-   <button class="btn-blue" style="flex:1; background:#2ecc71;" onclick="downloadJSONFile()">📥 DOWNLOAD JSON</button>
-</div>
-
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <button class="btn-blue" style="flex:1; background:#2ecc71;" onclick="downloadJSONFile()">📥 DOWNLOAD JSON</button>
+        </div>
 
         <div style="margin-top:0px; border: 2px dashed #0bd2ff; padding: 15px; border-radius: 18px; text-align: center; background: #f1f5f9; transition: 0.3s;">
             <i class="fas fa-cloud-upload-alt" style="color: #06b6d4; font-size: 20px; margin-bottom: 0px;"></i>
-                <p style="font-size: 10px; font-weight: 800; color: #475569; margin-bottom: 0px; text-transform: uppercase;">Import Backup JSON</p>
+            <p style="font-size: 10px; font-weight: 800; color: #475569; margin-bottom: 0px; text-transform: uppercase;">Import Backup JSON</p>
             <input type="file" id="importFile" accept=".json" style="font-size: 12px; width: 100%; color: #64748b;" onchange="importJSONFile(this)">
         </div>
 
-<div id="shareItemsList" style="max-height: 450px; overflow-y: auto; margin: 0px 0; padding: 5px;">
-    
-    <div style="background: white; border-radius: 12px; margin-bottom: 0px; padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span style="font-family: monospace; font-weight: bold; color: #b2bec3; font-size: 13px; width: 25px;">1</span>
-            <div style="display: flex; flex-direction: column;">
-                <span style="font-size: 15px; font-weight: 500; color: #2D3436;">Flour</span>
-                <span style="font-size: 11px; color: #636e72;">STOCK ITEM</span>
-            </div>
-        </div>
-        <input type="checkbox" style="width: 22px; height: 22px; cursor: pointer; accent-color: #3b82f6;">
-    </div>
-    
-    <div style="background: white; border-radius: 12px; margin-bottom: 0px; padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span style="font-family: monospace; font-weight: bold; color: #b2bec3; font-size: 13px; width: 25px;">2</span>
-            <div style="display: flex; flex-direction: column;">
-                <span style="font-size: 15px; font-weight: 500; color: #2D3436;">Chocolate Chips Coo...</span>
-                <span style="font-size: 11px; color: #e11d48;">RECIPE</span>
-            </div>
-        </div>
-        <input type="checkbox" style="width: 22px; height: 22px; cursor: pointer; accent-color: #3b82f6;">
-    </div>
-
-</div>
+        <div id="shareItemsList" style="max-height: 450px; overflow-y: auto; margin: 0px 0; padding: 5px;"></div>
             
-        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 14px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 35px;
-        cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
+        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 14px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 35px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
             <i class="fas fa-code"></i> GENERATE BACKUP CODE
         </button>
 
         <div style="position: relative; margin-bottom: 7px; width: 100%;">
-            <textarea id="shareCodeOutput" 
-                      style="width:100%; height:70px; border-radius:14px; padding:12px; font-size:12px; border:1px solid #e2e8f0; background:#f8fafc; color: #334155;
-                  border:2px solid #3b82f6;
-                  display: block; resize: none;" 
-                      placeholder="The code will come here..." readonly></textarea>
+            <textarea id="shareCodeOutput" style="width:100%; height:70px; border-radius:14px; padding:12px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color: #334155; display: block; resize: none;" placeholder="The code will come here..." readonly></textarea>
         </div>
 
-        <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 12px; 
-        
-        color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;
-        border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
+        <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
             <i class="fas fa-copy"></i> COPY GENERATED CODE
         </button>
 
@@ -4631,24 +4809,81 @@ function closeHamburgerMenu() {
 
         <div>
             <p style="font-size:13px; font-weight:700; color: #1e293b; margin-bottom:1px;">Restore Data</p>
-            
             <div style="position: relative; margin-bottom: 1px; width: 100%;">
-                <textarea id="shareRestoreInput" 
-                          style="width:100%; height:100px; border-radius:18px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" 
-                          placeholder="Paste the code here..."
-                          onclick="this.focus();"
-                          onfocus="this.select();"></textarea>
+                <textarea id="shareRestoreInput" style="width:100%; height:100px; border-radius:18px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
             </div>
-          
-            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 16px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; 
-            margin-bottom: 35px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
+            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 16px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; margin-bottom: 35px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
                 🚀 <i class="fas fa-file-import"></i> ADD DATA TO APP
             </button>
         </div>
-        </div><!-- end scrollable content -->
-    </div>
-</div>
+   </div><!-- end mobile scroll -->
+
+   <!-- ===== DESKTOP LAYOUT ===== -->
+   <!-- Top info bar -->
+   <div id="sp-desktop-topbar" style="display:none;">
+       <div style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 6px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); white-space:nowrap;">VERSION: F2</div>
+       <div id="displayDeviceIdDesktop" style="font-size: 12px; font-family: 'Courier New', monospace; color: #fff; background: #1e3a3a; padding: 6px 16px; border-radius: 50px; font-weight: 700; display:flex; align-items:center; gap:8px;"><span style="width:8px;height:8px;background:#2ecc71;border-radius:50%;display:inline-block;"></span> Device ID: Loading...</div>
+       <div id="sp-title-desktop" style="flex:1; background:#fff; border-radius:8px; padding: 8px 20px; font-size:18px; font-weight:700; color:#1e293b; letter-spacing:2px; border: 1px solid #e2e8f0;">DATA</div>
+   </div>
+
+   <!-- Desktop body -->
+   <div id="sp-desktop-body" style="display:none;">
+
+       <!-- Left Sidebar -->
+       <div id="sp-sidebar">
+           <button class="sp-sidebar-btn" style="background:#3b82f6; color:white;" onclick="bulkSelect('stock')">📦 ITEMS</button>
+           <button class="sp-sidebar-btn" style="background:#3b82f6; color:white;" onclick="bulkSelect('recipe')">📜 RECIPES</button>
+           <button class="sp-sidebar-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:white;" onclick="toggleAllShare()">✓ SELECT ALL</button>
+           <button class="sp-sidebar-btn" style="background:#2ecc71; color:white;" onclick="downloadJSONFile()">📥 DOWNLOAD JSON</button>
+           <div style="border: 2px dashed #0bd2ff; padding: 12px; border-radius: 14px; text-align: center; background: #f1f5f9; margin-top:4px;">
+               <p style="font-size: 10px; font-weight: 800; color: #475569; margin: 0 0 6px; text-transform: uppercase;">IMPORT BACKUP JSON</p>
+               <input type="file" id="importFileDesktop" accept=".json" style="font-size: 11px; width: 100%; color: #64748b;" onchange="importJSONFile(this)">
+           </div>
+           <!-- Logo bottom -->
+           <div style="margin-top:auto; padding-top:20px; display:flex; justify-content:center;">
+               <img src="https://i.ibb.co/vzS8m8S/logo.png" style="width:50px; height:50px; border-radius:50%; opacity:0.7;" onerror="this.style.display='none'">
+           </div>
+       </div>
+
+       <!-- Main area -->
+       <div id="sp-main-area">
+           <!-- Lists row -->
+           <div id="sp-lists-row">
+               <!-- Stock column -->
+               <div id="sp-stock-col">
+                   <div id="sp-stock-list"></div>
+               </div>
+               <!-- Recipe column -->
+               <div id="sp-recipe-col">
+                   <div id="sp-recipe-list"></div>
+               </div>
+           </div>
+
+           <!-- Bottom bar -->
+           <div id="sp-bottom-bar">
+               <div id="sp-bottom-left">
+                   <button style="width:100%; padding: 11px; border-radius: 12px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 13px; cursor: pointer;" onclick="generateShareCode()">
+                       &lt;/&gt; GENERATE BACKUP CODE
+                   </button>
+                   <textarea id="shareCodeOutputDesktop" style="width:100%; height:55px; border-radius:12px; padding:10px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color:#334155; resize:none;" placeholder="The code will come here..." readonly></textarea>
+                   <button style="width:100%; padding: 11px; border-radius: 12px; background:linear-gradient(135deg,#54A0FF,#00D2D3); color:white; border:none; font-weight:600; cursor:pointer;" onclick="copyShareCode()">
+                       <i class="fas fa-copy"></i> COPY GENERATED CODE
+                   </button>
+               </div>
+               <div id="sp-bottom-right">
+                   <p style="font-size:13px; font-weight:700; color:#1e293b; margin:0 0 4px;">Restore Data</p>
+                   <textarea id="shareRestoreInputDesktop" style="width:100%; height:70px; border-radius:14px; padding:10px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; outline:none; resize:none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
+                   <button style="width:100%; padding: 10px; border-radius: 14px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 14px; cursor: pointer;" onclick="processSmartAdd()">
+                       🚀 <i class="fas fa-file-import"></i> ADD DATA TO APP
+                   </button>
+               </div>
+           </div>
+       </div><!-- end sp-main-area -->
+
+   </div><!-- end sp-desktop-body -->
+
+    </div><!-- end share-box -->
+</div><!-- end sharePanel -->
 
 </div>
 </body>
