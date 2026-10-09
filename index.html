@@ -4957,21 +4957,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
    page, so the embedded bot's "+" / camera button can open the camera
    instead of only the gallery. Failure or denial never blocks the overlay.
    ========================================================================= */
-async function ashAiEnsureCameraPermission() {
-    try {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-        if (navigator.permissions && navigator.permissions.query) {
-            try {
-                const st = await navigator.permissions.query({ name: 'camera' });
-                if (st.state === 'granted' || st.state === 'denied') return;
-            } catch (e) { /* permissions.query not supported for camera; continue */ }
-        }
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-        stream.getTracks().forEach(t => t.stop()); // permission is kept; release the camera immediately
-    } catch (e) {
-        console.warn('ASH AI: camera permission not granted:', e && e.name);
-    }
-}
+async function ashAiEnsureCameraPermission() { /* native camera via Kodular bridge - no pre-warm needed */ }
 
 function ashAiOpenOverlay() {
     document.getElementById('ashAiFrameOverlay').style.display = 'flex';
@@ -5469,22 +5455,68 @@ ashAiInitFirebaseListeners();
 
 
 <script>
-/* ZCam bridge relay (Ash parent page): bot iframe <-> Kodular native Camera */
+/* ZCam bridge relay (Ash Costing parent) — Zamir AI camera protocol
+   Bot iframe "Camera" -> here -> Kodular: AppInventor.setWebViewString('OPEN_CAMERA:<ts>')
+   Kodular returns photo as "IMG:<base64>" via receiveFromApp() / receiveNativeImage() / receiveNativeChunk()
+   -> relayed back into the bot iframe. */
 (function () {
-    var target = null;
-    function hasBridge() { return !!(window.AppInventor && window.AppInventor.setWebViewString); }
-    var prev = window.ZCamReceive;
-    window.ZCamReceive = function (dataUrl) {          // Kodular yahan photo bhejega
-        if (target) { try { target.postMessage({ zcam: 'result', dataUrl: dataUrl }, '*'); } catch (e) {} target = null; }
-        else if (prev) prev(dataUrl);
+    var pending = false, lastSig = '', pollUntil = 0, chunks = [], prevZ = window.ZCamReceive;
+    function hasBridge() { return !!(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function'); }
+    function botFrame() { return document.getElementById('ashAiIframe'); }
+    function sendToBot(dataUrl) {
+        var fr = botFrame();
+        if (fr && fr.contentWindow) { try { fr.contentWindow.postMessage({ zcam: 'result', dataUrl: dataUrl }, '*'); } catch (e) {} }
+    }
+    function deliver(raw) {
+        raw = String(raw || '').trim();
+        if (!raw) return;
+        if (pending) { pending = false; sendToBot(raw); return; }
+        // not requested by bot -> hand to the page's own ZCam consumer if any
+        var ov = document.getElementById('ashAiFrameOverlay');
+        if (ov && ov.style.display !== 'none') sendToBot(raw);
+        else if (prevZ) prevZ(raw);
+    }
+    window.ZCamReceive = function (raw) { deliver(raw); };
+    window.receiveNativeImage = function (a, b) { deliver(a); };
+    window.receiveNativeChunk = function (index, total, piece) {
+        try {
+            index = Number(index); total = Number(total);
+            if (index === 0) chunks = [];
+            chunks[index] = String(piece || '');
+            var have = 0; for (var i = 0; i < total; i++) if (chunks[i] !== undefined) have++;
+            if (have === total) { var all = chunks.join(''); chunks = []; deliver(all); }
+        } catch (e) {}
     };
+    function readAppString(arg) {
+        try {
+            if (typeof arg === 'string' && arg) return arg;
+            if (window.AppInventor && typeof window.AppInventor.getWebViewString === 'function')
+                return String(window.AppInventor.getWebViewString() || '');
+        } catch (e) {}
+        return '';
+    }
+    function handleAppString(str) {
+        if (!str || str.indexOf('IMG:') !== 0) return false;
+        var sig = str.length + ':' + str.slice(0, 40) + ':' + str.slice(-40);
+        if (sig === lastSig) return false;
+        lastSig = sig; pollUntil = 0;
+        deliver(str.slice(4));
+        return true;
+    }
+    window.receiveFromApp = function (arg) { try { handleAppString(readAppString(arg)); } catch (e) {} };
+    setInterval(function () {
+        if (Date.now() > pollUntil) return;
+        try { handleAppString(readAppString()); } catch (e) {}
+    }, 1000);
+
     window.addEventListener('message', function (e) {
-        var d = e.data, fr = document.getElementById('ashAiIframe');
+        var d = e.data, fr = botFrame();
         if (!d || !d.zcam || !fr || e.source !== fr.contentWindow) return;
         if (d.zcam === 'ping' && hasBridge()) e.source.postMessage({ zcam: 'pong' }, '*');
         if (d.zcam === 'open' && hasBridge()) {
-            target = e.source;
-            window.AppInventor.setWebViewString('ZCAM_OPEN:' + (d.facing || 'environment'));
+            pending = true;
+            window.AppInventor.setWebViewString('OPEN_CAMERA:' + Date.now());
+            pollUntil = Date.now() + 90000;
         }
     });
 })();
