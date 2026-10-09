@@ -5467,13 +5467,37 @@ ashAiInitFirebaseListeners();
         var fr = botFrame();
         if (fr && fr.contentWindow) { try { fr.contentWindow.postMessage({ zcam: 'result', dataUrl: dataUrl }, '*'); } catch (e) {} }
     }
-    function deliver(raw) {
+    var lastSig2 = '', lastT = 0;
+    // Har format (IMG:base64 / raw base64 / data:URL) ko ek saaf data URL banao; tuta/adhura ho to '' (ignore)
+    function normalizeImg(raw) {
         raw = String(raw || '').trim();
-        if (!raw) return;
-        if (pending) { pending = false; sendToBot(raw); return; }
+        if (raw.indexOf('IMG:') === 0) raw = raw.slice(4).trim();
+        if (!raw) return '';
+        raw = raw.replace(/[\r\n\s]/g, '');
+        if (raw.indexOf('data:') === 0) {
+            var c = raw.indexOf(',');
+            return (c > 0 && raw.length - c > 200) ? raw : '';
+        }
+        raw = raw.replace(/-/g, '+').replace(/_/g, '/');
+        if (raw.length < 200 || /[^A-Za-z0-9+\/=]/.test(raw)) return '';
+        var mime = 'image/jpeg';
+        if (raw.indexOf('iVBOR') === 0) mime = 'image/png';
+        else if (raw.indexOf('UklGR') === 0) mime = 'image/webp';
+        else if (raw.indexOf('R0lGOD') === 0) mime = 'image/gif';
+        while (raw.length % 4) raw += '=';
+        return 'data:' + mime + ';base64,' + raw;
+    }
+    function deliver(raw) {
+        var url = normalizeImg(raw);
+        if (!url) return;
+        var sig = url.length + ':' + url.slice(0, 60) + ':' + url.slice(-60), now = Date.now();
+        if (sig === lastSig2 && now - lastT < 60000) return;   // wahi photo dobara (alag Kodular path se)
+        if (!pending && now - lastT < 8000) return;            // photo ke turant baad extra copies
+        lastSig2 = sig; lastT = now;
+        if (pending) { pending = false; sendToBot(url); return; }
         // not requested by bot -> hand to the page's own ZCam consumer if any
         var ov = document.getElementById('ashAiFrameOverlay');
-        if (ov && ov.style.display !== 'none') sendToBot(raw);
+        if (ov && ov.style.display !== 'none') sendToBot(url);
         else if (prevZ) prevZ(raw);
     }
     window.ZCamReceive = function (raw) { deliver(raw); };
