@@ -5515,7 +5515,7 @@ ashAiInitFirebaseListeners();
         if (d.zcam === 'ping' && hasBridge()) e.source.postMessage({ zcam: 'pong' }, '*');
         if (d.zcam === 'open' && hasBridge()) {
             pending = true;
-            window.AppInventor.setWebViewString('OPEN_CAMERA:' + Date.now());
+            window.AppInventor.setWebViewString('OPEN_CAMERA OPEN CAMERA:' + Date.now());
             pollUntil = Date.now() + 90000;
         }
     });
