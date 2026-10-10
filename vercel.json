@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "regions": ["dxb1"],
   "builds": [
     { "src": "gemini.js", "use": "@vercel/node" },
     { "src": "*.html", "use": "@vercel/static" }

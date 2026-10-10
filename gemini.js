@@ -51,7 +51,8 @@ const SYSTEM_INSTRUCTION = {
       '2. RECIPE ITEMS INCLUSION RULE: For the recipe\'s \'items\' array, include ONLY the specific ingredients and quantities used in the recipe.\n' +
       '3. CATEGORY ISOLATION RULE: When generating or updating a recipe, if the \'c\' array is requested, contain ONLY the category of the current recipe.\n' +
       '4. ALWAYS OUTPUT VALID RAW JSON ONLY when asked to generate or update stock, recipes, or categories.\n' +
-      '5. NEVER wrap JSON in markdown backticks (do NOT use ```json ... ```). Output raw JSON text directly.\n' +
+      '5. NEVER add any greeting, explanation, or text before or after the JSON; start the output directly with the opening brace.\n' +
+      '   NEVER wrap JSON in markdown backticks (do NOT use ```json ... ```). Output raw JSON text directly.\n' +
       '6. COMPACT FORMATTING: Do not place closing braces/brackets (`}`, `]`) on individual separate lines at the end of an object/array. Collapse and inline all closing brackets immediately to the right of the final field (e.g., `"used": 150}}]}`).\n\n' +
 
       'CASUAL / AMBIGUOUS INPUT HANDLING:\n' +
@@ -174,6 +175,9 @@ export default async function handler(req, res) {
     }
   }
 
+  const abortCtl = new AbortController();
+  res.on('close', () => { if (!res.writableEnded) abortCtl.abort(); });
+
   const upstreamUrl = `https://generativelanguage.googleapis.com/v1/models/${MODEL}:streamGenerateContent?alt=sse&key=${apiKey}`;
 
   let upstreamResponse;
@@ -181,7 +185,8 @@ export default async function handler(req, res) {
     upstreamResponse = await fetch(upstreamUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents, systemInstruction: SYSTEM_INSTRUCTION })
+      body: JSON.stringify({ contents, systemInstruction: SYSTEM_INSTRUCTION, generationConfig: { temperature: 0.2 } }),
+      signal: abortCtl.signal
     });
   } catch (err) {
     res.status(502).json({ error: { message: 'Failed to reach Gemini API', detail: err.message } });
@@ -200,6 +205,8 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  if (res.flushHeaders) res.flushHeaders();
 
   const reader = upstreamResponse.body.getReader();
   try {

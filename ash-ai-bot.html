@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:#0E1116;color-scheme:dark">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0E1116">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>Restaurant AI Assistant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"></noscript>
 
 <style>
   :root{
@@ -869,7 +872,7 @@
         const img = new Image();
         img.onload = () => {
           try {
-            const MAX = 1280;
+            const MAX = 1024;
             let w = img.naturalWidth, h = img.naturalHeight;
             const k = Math.min(1, MAX / Math.max(w, h));
             w = Math.max(1, Math.round(w * k)); h = Math.max(1, Math.round(h * k));
@@ -877,7 +880,7 @@
             const ctx = c.getContext('2d');
             ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
             ctx.drawImage(img, 0, 0, w, h);
-            const out = c.toDataURL('image/jpeg', 0.8);
+            const out = c.toDataURL('image/jpeg', 0.75);
             c.width = c.height = 0;
             resolve({ mimeType: 'image/jpeg', base64: out.split(',')[1], previewUrl: out });
           } catch (err) {
@@ -2009,7 +2012,7 @@
     setInterval(function () {
         if (Date.now() > pollUntil) return;
         try { handleAppString(readAppString()); } catch (e) {}
-    }, 1000);
+    }, 300);
 
     function openNative() {
         window.AppInventor.setWebViewString('OPEN_CAMERA OPEN CAMERA:' + Date.now());
