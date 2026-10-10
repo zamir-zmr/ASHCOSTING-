@@ -1,5 +1,5 @@
 // recipe.js
-export const RECIPES_BY_CATEGORY = {
+var RECIPES_BY_CATEGORY = {
   "Cookies": [
     "Chocolate Chip Cookies", "Fudge cookies", "Kinder Cookies", "Oatmeal cookies", 
     "Pistachio Cookies", "Nutella cookies", "Toffee Cookies", "Chewy Chocolate Cookies", 

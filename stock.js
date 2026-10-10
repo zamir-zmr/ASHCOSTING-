@@ -1,4 +1,4 @@
-export const STOCK_DATA = [
+var STOCK_DATA = [
   { "id": 1, "name": "Sliced irani pistachio", "price": 0.0 },
   { "id": 2, "name": "Belgium gourmet", "price": 7.1 },
   { "id": 3, "name": "Lurpak Butter", "price": 2.055 },

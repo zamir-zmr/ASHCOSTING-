@@ -1,5 +1,5 @@
 // category.js
-export const CATEGORIES = [
+var CATEGORIES = [
   "Cookies",
   "Muffins",
   "Cinnamon Roll",
