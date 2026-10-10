@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "gemini.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/gemini", "dest": "/gemini.js" },
+    { "handle": "filesystem" }
+  ]
+}

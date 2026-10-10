@@ -1,17 +1,12 @@
-// gemini.js — CLIENT-SIDE version (no backend / no /api folder needed)
-// Bot ke fetch('/api/gemini') calls ko intercept karke seedha Gemini API ko call karta hai.
-// Load order (ash-ai-bot.html): category.js, recipe.js, stock.js, gemini.js
-(function () {
-  // ====== API KEY ======
-  // Yahan apni key paste karein, ya khali chhodein — tab bot khud ek input box dikhayega
-  // aur key phone ke localStorage me save kar lega.
-  var GEMINI_API_KEY = '';
+// api/gemini.js
+import { CATEGORIES } from './category.js';
+import { RECIPES_BY_CATEGORY } from './recipe.js';
+import { STOCK_DATA } from './stock.js';
 
-  var MODEL = 'gemini-3.1-flash-lite';
-  var TTS_MODEL = 'gemini-2.5-flash-preview-tts';
-  var BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
+const MODEL = 'gemini-3.1-flash-lite';
+const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
 
-  var SYSTEM_INSTRUCTION = {
+const SYSTEM_INSTRUCTION = {
   parts: [{
     text:
       'You are the exclusive AI assistant for the ASH COSTING application — a commercial bakery inventory, recipe formulation, and costing tool.\n\n' +
@@ -64,7 +59,7 @@
   }]
 };
 
-var QUICK_REPLIES = {
+const QUICK_REPLIES = {
   greetings: {
     patterns: /^(hi|hello|hey|salam|namaste)\b/i,
     reply: () => 'Hello! I am your ASH COSTING assistant. What item, recipe, or category would you like to manage today?'
@@ -75,92 +70,151 @@ var QUICK_REPLIES = {
   }
 };
 
-
-  function jsonResp(status, obj) {
-    return new Response(JSON.stringify(obj), { status: status, headers: { 'Content-Type': 'application/json' } });
+async function handleTTS(req, res, apiKey) {
+  const { text, voice } = req.body || {};
+  if (!text) {
+    res.status(400).json({ error: { message: 'Missing "text" for TTS' } });
+    return;
   }
 
-  function getKey() {
-    if (GEMINI_API_KEY) return Promise.resolve(GEMINI_API_KEY);
-    var k = '';
-    try { k = localStorage.getItem('ash_gemini_key') || ''; } catch (e) {}
-    if (k) return Promise.resolve(k);
-    return new Promise(function (resolve) {
-      var ov = document.createElement('div');
-      ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:20px;';
-      ov.innerHTML = '<div style="background:#1e293b;color:#fff;border-radius:14px;padding:18px;width:100%;max-width:420px;font:600 14px sans-serif;">' +
-        '<div style="margin-bottom:10px;">Gemini API Key daalein</div>' +
-        '<input id="ashKeyIn" type="password" placeholder="AIza..." style="width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:none;font-size:15px;">' +
-        '<button id="ashKeyOk" style="margin-top:12px;width:100%;padding:12px;border:none;border-radius:10px;background:#fb923c;color:#fff;font:700 15px sans-serif;">Save</button></div>';
-      document.body.appendChild(ov);
-      ov.querySelector('#ashKeyOk').onclick = function () {
-        var v = ov.querySelector('#ashKeyIn').value.trim();
-        if (!v) return;
-        try { localStorage.setItem('ash_gemini_key', v); } catch (e) {}
-        ov.remove(); resolve(v);
-      };
-    });
-  }
+  const voiceName = voice || 'Ursa';
+  const ttsUrl = `https://generativelanguage.googleapis.com/v1/models/${TTS_MODEL}:generateContent?key=${apiKey}`;
 
-  async function handleTTS(body, key) {
-    if (!body.text) return jsonResp(400, { error: { message: 'Missing "text" for TTS' } });
-    var r;
-    try {
-      r = await _fetch(BASE + TTS_MODEL + ':generateContent?key=' + key, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: body.text }] }],
-          generationConfig: { responseModalities: ['AUDIO'],
-            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: body.voice || 'Ursa' } } } }
-        })
-      });
-    } catch (err) { return jsonResp(502, { error: { message: 'Failed to reach Gemini TTS API: ' + err.message } }); }
-    var data = null;
-    try { data = await r.json(); } catch (e) {}
-    if (!r.ok) return jsonResp(r.status, { error: { message: (data && data.error && data.error.message) || ('Gemini TTS error: ' + r.status) } });
-    var parts = (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
-    var ap = parts.find(function (p) { return p.inlineData; });
-    if (!ap || !ap.inlineData.data) return jsonResp(502, { error: { message: 'No audio returned from Gemini TTS' } });
-    return jsonResp(200, { audioBase64: ap.inlineData.data, mimeType: ap.inlineData.mimeType || 'audio/L16;rate=24000' });
-  }
-
-  async function handleChat(body, key) {
-    var contents = body.contents;
-    if (!contents) return jsonResp(400, { error: { message: 'Missing "contents" in request body' } });
-    var last = contents[contents.length - 1];
-    var parts = (last && last.parts) || [];
-    var lastText = parts.map(function (p) { return p.text || ''; }).join(' ').trim();
-    var hasImg = parts.some(function (p) { return p.inline_data || p.inlineData; });
-    if (!hasImg) {
-      for (var k in QUICK_REPLIES) {
-        if (QUICK_REPLIES[k].patterns.test(lastText)) {
-          var chunk = JSON.stringify({ candidates: [{ content: { parts: [{ text: QUICK_REPLIES[k].reply() }] } }] });
-          return new Response('data: ' + chunk + '\n\n', { status: 200, headers: { 'Content-Type': 'text/event-stream' } });
+  let ttsResponse;
+  try {
+    ttsResponse = await fetch(ttsUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text }] }],
+        generationConfig: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName }
+            }
+          }
         }
+      })
+    });
+  } catch (err) {
+    res.status(502).json({ error: { message: 'Failed to reach Gemini TTS API', detail: err.message } });
+    return;
+  }
+
+  if (!ttsResponse.ok) {
+    let detail = null;
+    try { detail = await ttsResponse.json(); } catch (_) {}
+    res.status(ttsResponse.status).json({
+      error: { message: detail?.error?.message || `Gemini TTS error: ${ttsResponse.status}` }
+    });
+    return;
+  }
+
+  let data;
+  try {
+    data = await ttsResponse.json();
+  } catch (err) {
+    res.status(502).json({ error: { message: 'Invalid TTS response from Gemini' } });
+    return;
+  }
+
+  const audioPart = data?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+  const audioBase64 = audioPart?.inlineData?.data;
+  const mimeType = audioPart?.inlineData?.mimeType || 'audio/L16;rate=24000';
+
+  if (!audioBase64) {
+    res.status(502).json({ error: { message: 'No audio returned from Gemini TTS' } });
+    return;
+  }
+
+  res.status(200).json({ audioBase64, mimeType });
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: { message: 'Method not allowed' } });
+    return;
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    res.status(500).json({ error: { message: 'Server misconfigured: GEMINI_API_KEY missing' } });
+    return;
+  }
+
+  if (req.body && req.body.action === 'tts') {
+    await handleTTS(req, res, apiKey);
+    return;
+  }
+
+  const { contents } = req.body || {};
+  if (!contents) {
+    res.status(400).json({ error: { message: 'Missing "contents" in request body' } });
+    return;
+  }
+
+  const lastMsg = contents?.slice(-1)?.[0];
+  const lastText = lastMsg?.parts?.map(p => p.text || '').join(' ').trim() || '';
+  const lastHasImage = !!(lastMsg?.parts || []).find(p => p.inline_data || p.inlineData);
+
+  if (!lastHasImage) {
+    for (const key of Object.keys(QUICK_REPLIES)) {
+      const rule = QUICK_REPLIES[key];
+      if (rule.patterns.test(lastText)) {
+        const replyText = rule.reply();
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache, no-transform');
+        res.setHeader('Connection', 'keep-alive');
+        const chunk = JSON.stringify({ candidates: [{ content: { parts: [{ text: replyText }] } }] });
+        res.write(`data: ${chunk}\n\n`);
+        res.end();
+        return;
       }
-    }
-    try {
-      var r = await _fetch(BASE + MODEL + ':streamGenerateContent?alt=sse&key=' + key, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: contents, systemInstruction: SYSTEM_INSTRUCTION })
-      });
-      if (!r.ok) {
-        var d = null; try { d = await r.json(); } catch (e) {}
-        return jsonResp(r.status, { error: { message: (d && d.error && d.error.message) || ('Gemini API error: ' + r.status) } });
-      }
-      return r; // SSE stream seedha bot ko
-    } catch (err) {
-      return jsonResp(502, { error: { message: 'Failed to reach Gemini API: ' + err.message } });
     }
   }
 
-  var _fetch = window.fetch.bind(window);
-  window.fetch = async function (input, init) {
-    var url = typeof input === 'string' ? input : (input && input.url) || '';
-    if (url.indexOf('/api/gemini') === -1) return _fetch(input, init);
-    var body = {};
-    try { body = JSON.parse((init && init.body) || '{}'); } catch (e) {}
-    var key = await getKey();
-    return body.action === 'tts' ? handleTTS(body, key) : handleChat(body, key);
-  };
-})();
+  const upstreamUrl = `https://generativelanguage.googleapis.com/v1/models/${MODEL}:streamGenerateContent?alt=sse&key=${apiKey}`;
+
+  let upstreamResponse;
+  try {
+    upstreamResponse = await fetch(upstreamUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents, systemInstruction: SYSTEM_INSTRUCTION })
+    });
+  } catch (err) {
+    res.status(502).json({ error: { message: 'Failed to reach Gemini API', detail: err.message } });
+    return;
+  }
+
+  if (!upstreamResponse.ok || !upstreamResponse.body) {
+    let detail = null;
+    try { detail = await upstreamResponse.json(); } catch (_) {}
+    res.status(upstreamResponse.status).json({
+      error: { message: detail?.error?.message || `Gemini API error: ${upstreamResponse.status}` }
+    });
+    return;
+  }
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+
+  const reader = upstreamResponse.body.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      res.write(value);
+    }
+  } catch (err) {}
+  finally {
+    res.end();
+  }
+}
+
+export const config = {
+  api: { bodyParser: { sizeLimit: '8mb' } }
+};
+                                   
