@@ -4305,7 +4305,6 @@ function downloadJSONFile() {
             window.__dlFlip = !window.__dlFlip;   // same data dobara bheja to bhi event aaye
             window.AppInventor.setWebViewString('DOWNLOAD:' + dataStr + (window.__dlFlip ? '\n' : ''));
             showToast("📥 Backup save ho raha hai...");
-            setTimeout(function () { ashShowBackupSheet(dataStr); }, 600);
             return;
         }
         const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
