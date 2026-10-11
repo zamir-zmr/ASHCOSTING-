@@ -912,6 +912,48 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     .sp-item-id { font-size: 11px; color: #636e72; }
 }
 
+/* ===== LANDSCAPE / PC: compress DATA panel to fit, scroll as fallback ===== */
+@media (min-width: 600px) and (max-height: 640px) {
+    #sharePanel .share-box { overflow-y: auto !important; overflow-x: hidden !important; }
+    #sharePanel .sharepanel-nav { padding: 2px 14px !important; margin: 2px 4px !important; font-size: 14px !important; border-radius: 10px !important; }
+    #sharePanel .sharepanel-nav i { font-size: 20px !important; }
+    #sp-desktop-topbar { padding: 3px 10px !important; gap: 8px !important; }
+    #sp-desktop-topbar > div { padding: 3px 10px !important; font-size: 11px !important; }
+    #sp-title-desktop { font-size: 13px !important; letter-spacing: 1px !important; }
+    #sp-desktop-body { flex: 1 1 0 !important; min-height: 270px !important; }
+    #sp-sidebar { width: 165px !important; min-width: 150px !important; padding: 6px 8px 56px !important; gap: 5px !important; overflow-y: auto !important; }
+    .sp-sidebar-btn { padding: 7px 6px !important; font-size: 11px !important; border-radius: 9px !important; }
+    #sp-sidebar > div[style*="dashed"] { padding: 5px !important; margin-top: 0 !important; border-radius: 10px !important; }
+    #sp-sidebar > div[style*="dashed"] p { font-size: 9px !important; margin: 0 0 3px !important; }
+    #sp-sidebar input[type="file"] { font-size: 10px !important; }
+    #sp-sidebar > div:last-child { display: none !important; }
+    #sp-stock-col, #sp-recipe-col { padding: 3px 8px !important; }
+    .sp-item-row { padding: 4px 4px !important; gap: 8px !important; }
+    .sp-item-row input[type="checkbox"] { width: 16px !important; height: 16px !important; }
+    .sp-item-name { font-size: 12px !important; }
+    .sp-item-id { font-size: 10px !important; }
+    #sp-bottom-bar { padding: 5px 10px !important; gap: 8px !important; }
+    #sp-bottom-left, #sp-bottom-right { gap: 4px !important; }
+    #sp-bottom-right { width: 230px !important; min-width: 200px !important; }
+    #sp-bottom-bar button { padding: 6px !important; font-size: 11px !important; border-radius: 9px !important; }
+    #sp-bottom-bar p { font-size: 11px !important; margin: 0 !important; }
+    #shareCodeOutputDesktop { height: 32px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 9px !important; }
+    #shareRestoreInputDesktop { height: 40px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 9px !important; }
+    #sharePanel #ashAiFabBtn { width: 42px !important; height: 42px !important; font-size: 19px !important; left: 10px !important; right: auto !important; bottom: 10px !important; }
+}
+@media (min-width: 600px) and (max-height: 420px) {
+    #sharePanel .sharepanel-nav { padding: 0 12px !important; font-size: 12px !important; }
+    #sharePanel .sharepanel-nav i { font-size: 17px !important; }
+    #sp-desktop-topbar { padding: 2px 8px !important; }
+    #sp-desktop-topbar > div { padding: 2px 8px !important; font-size: 10px !important; }
+    .sp-sidebar-btn { padding: 5px 4px !important; font-size: 10px !important; }
+    #sp-bottom-bar { padding: 4px 8px !important; }
+    #sp-bottom-bar button { padding: 4px !important; font-size: 10px !important; }
+    #shareCodeOutputDesktop { height: 26px !important; }
+    #shareRestoreInputDesktop { height: 34px !important; }
+    .sp-item-row { padding: 3px 4px !important; }
+}
+
 .share-item-row {
     display: flex;
     align-items: center;
@@ -4938,7 +4980,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
     <div style="position:relative; width:100%; height:100%; max-width:100%; max-height:100%; background:#0E1116; display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; justify-content:space-between; background:#1e293b; padding:10px 16px; color:#fff;">
             <span style="font-weight:700; font-size:15px;"><i class="fas fa-robot"></i> ASH AI Bot</span>
-            <button onclick="document.getElementById('ashAiFrameOverlay').style.display='none'" style="background:#ef4444; color:#fff; border:none; border-radius:8px; padding:8px 14px; font-weight:700; cursor:pointer;">✕ Close</button>
+            <button onclick="ashAiCloseOverlay()" style="background:#ef4444; color:#fff; border:none; border-radius:8px; padding:8px 14px; font-weight:700; cursor:pointer;">✕ Close</button>
         </div>
         <iframe id="ashAiIframe" src="ash-ai-bot.html" loading="eager" allow="camera *; microphone *; display-capture *; clipboard-read *; clipboard-write *; fullscreen *; autoplay *" allowfullscreen style="flex:1; width:100%; height:100%; min-height:0; border:none; background:#0E1116; color-scheme:dark;"></iframe>
     </div>
@@ -4959,9 +5001,43 @@ window.addEventListener('orientationchange', handleOrientationChange);
    ========================================================================= */
 async function ashAiEnsureCameraPermission() { /* native camera via Kodular bridge - no pre-warm needed */ }
 
+/* Overlay ko <body> ke direct child bana do (sharePanel ke andar se nikaal ke) taaki
+   keyboard/resize par peeche ka ASH COSTING layout kabhi na dikhe. */
+(function () {
+    var ov = document.getElementById('ashAiFrameOverlay');
+    if (ov && ov.parentNode !== document.body) document.body.appendChild(ov);
+})();
+var __ashPrevBg = null;
+function ashAiFit() {
+    var o = document.getElementById('ashAiFrameOverlay');
+    if (!o || o.style.display === 'none') return;
+    var vv = window.visualViewport;
+    o.style.top = (vv ? vv.offsetTop : 0) + 'px';
+    o.style.height = (vv ? vv.height : window.innerHeight) + 'px';
+    o.style.bottom = 'auto';
+}
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', ashAiFit);
+    window.visualViewport.addEventListener('scroll', ashAiFit);
+}
+window.addEventListener('resize', ashAiFit);
+window.addEventListener('orientationchange', function () { setTimeout(ashAiFit, 150); });
 function ashAiOpenOverlay() {
-    document.getElementById('ashAiFrameOverlay').style.display = 'flex';
+    var o = document.getElementById('ashAiFrameOverlay');
+    if (__ashPrevBg === null) __ashPrevBg = [document.documentElement.style.background, document.body.style.background];
+    document.documentElement.style.background = '#0E1116';
+    document.body.style.background = '#0E1116';
+    o.style.display = 'flex';
+    ashAiFit();
     ashAiEnsureCameraPermission();
+}
+function ashAiCloseOverlay() {
+    document.getElementById('ashAiFrameOverlay').style.display = 'none';
+    if (__ashPrevBg) {
+        document.documentElement.style.background = __ashPrevBg[0];
+        document.body.style.background = __ashPrevBg[1];
+        __ashPrevBg = null;
+    }
 }
 </script>
 
