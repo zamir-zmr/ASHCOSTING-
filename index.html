@@ -5,22 +5,50 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">        
     <title>ASHCOSTING</title>
+    <meta name="theme-color" content="#0E1116" id="ash-theme">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <style>
+    /* ===== ASH COSTING opening splash (Zamir AI style) ===== */
+    #ashSplash{position:fixed;inset:0;z-index:2147483600;background:#0E1116;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .7s ease,transform .7s cubic-bezier(.4,0,.2,1),visibility .7s}
+    #ashSplash.hide{opacity:0;visibility:hidden;transform:scale(1.12)}
+    #ashSplash::before,#ashSplash::after{content:'';position:absolute;width:380px;height:380px;border-radius:50%;pointer-events:none}
+    #ashSplash::before{top:10%;left:-130px;background:radial-gradient(circle,rgba(37,174,207,.28),transparent 65%);animation:ashOrb1 7s ease-in-out infinite alternate}
+    #ashSplash::after{bottom:8%;right:-130px;background:radial-gradient(circle,rgba(253,239,90,.20),transparent 65%);animation:ashOrb2 7s ease-in-out infinite alternate}
+    .ash-sp-stage{position:relative;width:112px;height:112px;animation:ashFloat 3s .9s ease-in-out infinite}
+    .ash-sp-ring{position:absolute;inset:0;border-radius:26px;border:2px solid rgba(37,174,207,.65);opacity:0;animation:ashRing 2.2s .9s ease-out infinite}
+    .ash-sp-ring.r2{animation-delay:2s}
+    .ash-sp-logo{position:relative;display:block;width:112px;height:112px;border-radius:26px;object-fit:cover;filter:drop-shadow(0 10px 28px rgba(37,174,207,.5));animation:ashPop 1s cubic-bezier(.2,.9,.25,1.25) both}
+    .ash-sp-name{position:relative;font-family:'Segoe UI',Roboto,Arial,sans-serif;font-weight:800;font-size:24px;background:linear-gradient(90deg,#ffffff 0%,#2BC4DC 40%,#FDEF5A 60%,#ffffff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ashNameIn 1s .35s cubic-bezier(.2,.8,.2,1) both,ashShimmer 2.4s 1.4s linear infinite}
+    .ash-sp-bar{position:relative;width:130px;height:3px;border-radius:3px;background:#1D2230;overflow:hidden;animation:ashFadeUp .8s .6s both}
+    .ash-sp-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#25AECF,#FDEF5A);border-radius:3px;animation:ashSlide 1s ease-in-out infinite}
+    @keyframes ashPop{from{opacity:0;transform:scale(.4) rotate(-16deg)}to{opacity:1;transform:none}}
+    @keyframes ashFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes ashRing{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.2);opacity:0}}
+    @keyframes ashNameIn{from{opacity:0;letter-spacing:.4em;transform:translateY(10px)}to{opacity:1;letter-spacing:.02em;transform:none}}
+    @keyframes ashShimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+    @keyframes ashOrb1{to{transform:translate(130px,90px) scale(1.25)}}
+    @keyframes ashOrb2{to{transform:translate(-130px,-80px) scale(1.2)}}
+    @keyframes ashSlide{from{transform:translateX(-110%)}to{transform:translateX(280%)}}
+    @keyframes ashFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    </style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
 
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CostingApp">
+    <meta name="apple-mobile-web-app-title" content="ASH COSTING">
     
-    <link rel="apple-touch-icon" href="https://i.ibb.co/vzS8m8S/logo.png">
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" media="print" onload="this.media='all'">
 
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" media="print" onload="this.media='all'">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
 <style>
@@ -1514,6 +1542,24 @@ function openSmartShare() {
     
 </head>
 <body onload="initApp()">
+<div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icons/icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
+<script>
+(function () {
+    var sp = document.getElementById('ashSplash'), meta = document.getElementById('ash-theme');
+    function out() {
+        if (!sp || !sp.isConnected) return;
+        sp.classList.add('hide');
+        if (meta) meta.setAttribute('content', '#07c1c1');
+        setTimeout(function () { if (sp.isConnected) sp.remove(); }, 800);
+    }
+    function hide() { setTimeout(out, 1900); }
+    if (document.readyState === 'complete') hide(); else window.addEventListener('load', hide);
+    setTimeout(out, 5000);   // failsafe
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+        window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    }
+})();
+</script>
   
   <div id="cropModal" class="crop-modal">
     <div class="crop-container">
