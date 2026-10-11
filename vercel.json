@@ -6,6 +6,7 @@
     { "src": "*.html", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/(.*)", "headers": { "Cache-Control": "no-cache, no-store, must-revalidate" }, "continue": true },
     { "src": "/api/gemini", "dest": "/gemini.js" },
     { "handle": "filesystem" }
   ]

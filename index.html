@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">        
     <title>ASHCOSTING</title>
 
@@ -518,6 +519,23 @@ body {
     }
 }
 
+/* Recipe editor (landscape / PC): totals + FINISH neeche (bottom) me, compact */
+@media (min-width: 768px) {
+    #editorPanel-summary-col {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        padding-bottom: 10px !important;
+    }
+}
+@media (min-width: 768px) and (max-height: 760px) {
+    #editorPanel-summary-col { padding: 6px 12px 8px !important; width: 270px !important; min-width: 240px !important; }
+    #editorPanel-summary-col .calc-row { margin-bottom: 4px !important; font-size: 12px !important; }
+    #editorPanel-summary-col .calc-input { width: 70px !important; padding: 3px !important; font-size: 13px !important; }
+    #editorPanel-summary-col .calc-row[style*="font-size:18px"] { font-size: 15px !important; }
+    #editorPanel-summary-col .btn-pill { padding: 7px !important; margin-top: 2px !important; }
+}
+
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -913,7 +931,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
 }
 
 /* ===== LANDSCAPE / PC: compress DATA panel to fit, scroll as fallback ===== */
-@media (min-width: 600px) and (max-height: 640px) {
+@media (min-width: 600px) and (max-height: 760px) {
     #sharePanel .share-box { overflow-y: auto !important; overflow-x: hidden !important; }
     #sharePanel .sharepanel-nav { padding: 2px 14px !important; margin: 2px 4px !important; font-size: 14px !important; border-radius: 10px !important; }
     #sharePanel .sharepanel-nav i { font-size: 20px !important; }
@@ -4837,7 +4855,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
         
         <div style="background: #f8fafc; padding: 5px 5px; border-radius: 14px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
-              <h2 style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin:0;">Version:F2</h2>
+              <h2 style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin:0;">Version:F3</h2>
             </span>
             <span id="displayDeviceId" style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Loading...</span>
         </div>
@@ -4899,7 +4917,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
    <!-- ===== DESKTOP LAYOUT ===== -->
    <!-- Top info bar -->
    <div id="sp-desktop-topbar" style="display:none;">
-       <div style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 6px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); white-space:nowrap;">VERSION: F2</div>
+       <div style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 6px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); white-space:nowrap;">VERSION: F3</div>
        <div id="displayDeviceIdDesktop" style="font-size: 12px; font-family: 'Courier New', monospace; color: #fff; background: #1e3a3a; padding: 6px 16px; border-radius: 50px; font-weight: 700; display:flex; align-items:center; gap:8px;"><span style="width:8px;height:8px;background:#2ecc71;border-radius:50%;display:inline-block;"></span> Device ID: Loading...</div>
        <div id="sp-title-desktop" style="flex:1; background:#fff; border-radius:8px; padding: 8px 20px; font-size:18px; font-weight:700; color:#1e293b; letter-spacing:2px; border: 1px solid #e2e8f0;">DATA</div>
    </div>
