@@ -4305,6 +4305,7 @@ function downloadJSONFile() {
             window.__dlFlip = !window.__dlFlip;   // same data dobara bheja to bhi event aaye
             window.AppInventor.setWebViewString('DOWNLOAD:' + dataStr + (window.__dlFlip ? '\n' : ''));
             showToast("📥 Backup save ho raha hai...");
+            setTimeout(function () { ashShowBackupSheet(dataStr); }, 600);
             return;
         }
         const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
@@ -5690,6 +5691,91 @@ ashAiInitFirebaseListeners();
             pollUntil = Date.now() + 90000;
         }
     });
+})();
+</script>
+
+<script>
+/* =========================================================================
+   1) Backup sheet (APK): Kodular share na khule to yahin se Copy karke save karein
+   2) Header LOGO -> Firebase sync: logo par tap -> photo chuno -> sab devices me update
+   ========================================================================= */
+function ashShowBackupSheet(text) {
+    var old = document.getElementById('ashBkSheet'); if (old) old.remove();
+    var d = document.createElement('div');
+    d.id = 'ashBkSheet';
+    d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:#1e293b;color:#fff;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.45);font-family:Segoe UI,Roboto,Arial,sans-serif;';
+    d.innerHTML = '<div style="font-weight:800;font-size:15px;margin-bottom:4px;">📥 Backup ready</div>' +
+        '<div style="font-size:12px;opacity:.8;margin-bottom:8px;">Share/Save na khule to <b>Copy</b> dabayein aur WhatsApp / Notes me paste karke rakh lein. Restore: "Restore Data" box me paste karein.</div>' +
+        '<textarea id="ashBkText" readonly style="width:100%;height:64px;box-sizing:border-box;border-radius:10px;border:none;padding:8px;font-size:11px;background:#0f172a;color:#cbd5e1;resize:none;"></textarea>' +
+        '<div style="display:flex;gap:10px;margin-top:10px;">' +
+        '<button id="ashBkCopy" style="flex:1;padding:11px;border:none;border-radius:10px;background:#10b981;color:#fff;font-weight:800;font-size:14px;">📋 COPY BACKUP</button>' +
+        '<button id="ashBkClose" style="padding:11px 18px;border:none;border-radius:10px;background:#ef4444;color:#fff;font-weight:800;font-size:14px;">✕</button></div>';
+    document.body.appendChild(d);
+    var ta = d.querySelector('#ashBkText'); ta.value = text;
+    d.querySelector('#ashBkClose').onclick = function () { d.remove(); };
+    d.querySelector('#ashBkCopy').onclick = function () {
+        var ok = false;
+        try { ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length); ok = document.execCommand('copy'); } catch (e) {}
+        if (!ok && navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () { showToast('📋 Backup copy ho gaya'); }, function () { showToast('Copy fail — text select karke copy karein', true); });
+            return;
+        }
+        showToast(ok ? '📋 Backup copy ho gaya' : 'Copy fail — text select karke copy karein', !ok);
+    };
+}
+
+function ashApplyLogo(url) {
+    if (!url) return;
+    var imgEl = document.getElementById('appLogoImg'), textEl = document.getElementById('logoTextContent');
+    if (!imgEl) return;
+    imgEl.src = url; imgEl.style.display = 'block';
+    if (textEl) textEl.style.display = 'none';
+    var c = document.querySelector('.ash-logo-circle'), y = document.querySelector('.ash-yellow-lines');
+    if (c) c.style.display = 'none'; if (y) y.style.display = 'none';
+}
+
+// logo upload: square crop 256px + localStorage + Firebase (shared_app_logo)
+function uploadAppLogo(input) {
+    var f = input && input.files && input.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+            var S = 256, w = img.naturalWidth || img.width, h = img.naturalHeight || img.height, m = Math.min(w, h);
+            var c = document.createElement('canvas'); c.width = S; c.height = S;
+            var ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, S, S);
+            ctx.drawImage(img, (w - m) / 2, (h - m) / 2, m, m, 0, 0, S, S);
+            var dataUrl = c.toDataURL('image/jpeg', 0.85);
+            try { localStorage.setItem('ASH_CUSTOM_LOGO', dataUrl); } catch (err) {}
+            window.__ashLogoLocal = dataUrl;
+            ashApplyLogo(dataUrl);
+            if (typeof db !== 'undefined') {
+                db.ref('shared_app_logo').set({ img: dataUrl, t: Date.now() })
+                    .then(function () { showToast('🖼️ Logo sab devices me update ho gaya'); })
+                    .catch(function () { showToast('Logo Firebase me save nahi hua', true); });
+            } else showToast('🖼️ Logo update ho gaya');
+            input.value = '';
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(f);
+}
+
+// live listener: dusre device me logo badle to yahan turant dikhe
+(function () {
+    function start() {
+        if (typeof db === 'undefined') return;
+        db.ref('shared_app_logo').on('value', function (snap) {
+            var v = snap.val();
+            if (v && v.img && v.img !== window.__ashLogoLocal) {
+                window.__ashLogoLocal = v.img;
+                try { localStorage.setItem('ASH_CUSTOM_LOGO', v.img); } catch (e) {}
+                ashApplyLogo(v.img);
+            }
+        });
+    }
+    if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
 })();
 </script>
 </body>
