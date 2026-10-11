@@ -4254,6 +4254,13 @@ function downloadJSONFile() {
         
         // APK/Mobile Compatibility Fix:
         // Direct Blob ki jagah Base64 approach best hai mobile browsers ke liye
+        // Kodular APK: file Kodular ke DOWNLOAD: block se save + share hogi
+        if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+            window.__dlFlip = !window.__dlFlip;   // same data dobara bheja to bhi event aaye
+            window.AppInventor.setWebViewString('DOWNLOAD:' + dataStr + (window.__dlFlip ? '\n' : ''));
+            showToast("📥 Backup save ho raha hai...");
+            return;
+        }
         const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
         const dataUri = 'data:application/json;charset=utf-8;base64,' + base64Data;
 
@@ -5363,7 +5370,7 @@ ashAiInitFirebaseListeners();
                 say('Kodular se jawab nahi aaya. Kodular me WebViewStringChange + Camera blocks banaye hain? Tab tak "📱 Phone Camera" ya "🖼️ Gallery" use karein.');
         }, 5000);
         if (window.AppInventor && window.AppInventor.setWebViewString) {
-            window.AppInventor.setWebViewString('ZCAM_OPEN:' + facing);
+            window.AppInventor.setWebViewString('OPEN_CAMERA OPEN CAMERA:' + Date.now());
         } else if (window.parent && window.parent !== window) {
             window.parent.postMessage({ zcam: 'open', facing: facing }, '*');
         }
