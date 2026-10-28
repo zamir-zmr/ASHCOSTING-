@@ -25,8 +25,8 @@
     .ash-sp-ring.r2{animation-delay:2s}
     .ash-sp-logo{position:relative;display:block;width:112px;height:112px;border-radius:50%;object-fit:cover;filter:drop-shadow(0 10px 28px rgba(37,174,207,.5));animation:ashPop 1s cubic-bezier(.2,.9,.25,1.25) both}
     .ash-sp-name{position:relative;font-family:'Segoe UI',Roboto,Arial,sans-serif;font-weight:800;font-size:24px;background:linear-gradient(90deg,#ffffff 0%,#2BC4DC 40%,#FDEF5A 60%,#ffffff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ashNameIn 1s .35s cubic-bezier(.2,.8,.2,1) both,ashShimmer 2.4s 1.4s linear infinite}
-    .ash-sp-bar{position:relative;width:130px;height:3px;border-radius:3px;background:#1D2230;overflow:hidden;animation:ashFadeUp .8s .6s both}
-    .ash-sp-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#25AECF,#FDEF5A);border-radius:3px;animation:ashSlide 1s ease-in-out infinite}
+    .ash-sp-bar{position:relative;width:130px;height:3px;border-radius:22px;background:#1D2230;overflow:hidden;animation:ashFadeUp .8s .6s both}
+    .ash-sp-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#25AECF,#FDEF5A);border-radius:22px;animation:ashSlide 1s ease-in-out infinite}
     @keyframes ashPop{from{opacity:0;transform:scale(.4) rotate(-16deg)}to{opacity:1;transform:none}}
     @keyframes ashFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
     @keyframes ashRing{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.2);opacity:0}}
@@ -109,7 +109,7 @@ body {
     color: white;
     border: none;
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 22px;
     width: 100%;
     font-weight: bold;
     margin-top: 10px;
@@ -127,7 +127,7 @@ body {
     font-size: 12px;
     font-weight: bold;
     color: #475569;
-    border-radius: 8px;
+    border-radius: 22px;
     margin: 10px 0 5px 0;
     display: flex;
     justify-content: space-between;
@@ -173,7 +173,7 @@ body {
     background: white;
     z-index: 5000;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    border-radius: 0 0 15px 15px;
+    border-radius: 0 0 26px 26px;
     max-height: 200px;
     overflow-y: auto;
     border: 1px solid #eee;
@@ -195,7 +195,7 @@ body {
 
 /* ===== Ingredient dropdown + Missing-in-stock tag ===== */
 .ash-pick-btn{color:#07c1c1;cursor:pointer;text-align:center;font-size:15px;font-weight:900;border-right:1px solid #eee;height:24px;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent}
-.ash-pick-btn:active{background:#e0fafa;border-radius:6px}
+.ash-pick-btn:active{background:#e0fafa;border-radius:22px}
 .ash-miss-tag{display:inline-block;margin:1px 0 0 2px;padding:1px 6px;font-size:9px;font-weight:800;line-height:1.4;color:#fff;background:#e74c3c;border-radius:20px;letter-spacing:.2px;white-space:nowrap}
 .ash-miss-tag[hidden]{display:none}
 .row-item.ash-unmatched{border-color:#e74c3c !important;border-left-color:#e74c3c !important;background:#fff6f5 !important}
@@ -223,7 +223,7 @@ body {
     color: #64748b;
     margin-left: 15px;
     margin-right: 15px;
-    border-radius: 5px;
+    border-radius: 22px;
     border: 3px solid #00af9e;
     text-align: center;
 }
@@ -234,7 +234,7 @@ body {
     gap: 5px;
     background: white;
     padding: 10px;
-    border-radius: 12px;
+    border-radius: 22px;
     margin-bottom: 8px;
     align-items: center;
     font-size: 11px;
@@ -266,7 +266,7 @@ body {
 
 .btn-pill {
     padding: 6px 8px;
-    border-radius: 8px;
+    border-radius: 22px;
     font-weight: 700;
     font-size: 9px;
     transition: 0.2s;
@@ -488,7 +488,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 26px;
     font-size: 20px;
     border: 3px solid #d8ff20;
     font-weight: Normal;
@@ -505,7 +505,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 26px;
     font-size: 20px;
     border: 3px solid #d8ff20;
     font-weight: Normal;
@@ -522,7 +522,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 26px;
     font-size: 20px;
     border: 2px solid #f1ff22;
     font-weight: Normal;
@@ -539,7 +539,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 26px;
     font-size: 17px;
     border: 3px solid #d8ff20;
     font-weight: Normal;
@@ -559,7 +559,7 @@ body {
         min-width: 260px;
         border-left: 3px solid #07c1c1;
         border-top: none !important;
-        border-radius: 0 !important;
+        border-radius: 26px !important;
         margin-bottom: 0 !important;
         padding: 20px;
         overflow-y: auto;
@@ -613,7 +613,7 @@ input, select {
     padding: 12px;
     margin-bottom: 10px;
     border: 1.5px solid #eee;
-    border-radius: 12px;
+    border-radius: 22px;
     outline: none;
     font-size: 14px;
 }
@@ -681,7 +681,7 @@ input, select {
     width: 75px;
     padding: 5px;
     border: 1.5px solid #FFC107;
-    border-radius: 8px;
+    border-radius: 22px;
     text-align: center;
     margin: 0;
 }
@@ -728,7 +728,7 @@ from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1
     padding: 12px;
     margin: 15px 0;
     border: 2px solid #eee;
-    border-radius: 12px;
+    border-radius: 22px;
     font-size: 16px;
     outline: none;
     display: none;
@@ -748,7 +748,7 @@ from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1
     flex: 1;
     padding: 12px;
     border: none;
-    border-radius: 12px;
+    border-radius: 22px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -775,7 +775,7 @@ from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1
     width: 100%;
     height: 180px;
     margin: 10px 0;
-    border-radius: 12px;
+    border-radius: 22px;
     border: 1.5px solid #ddd;
     padding: 10px;
     font-size: 10px;
@@ -828,7 +828,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     width: 100%;
     height: 100vh;
     max-height: 100vh;
-    border-radius: 0px;
+    border-radius: 26px;
     padding: 20px;
     overflow-y: auto;
     position: relative;
@@ -954,7 +954,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
         width: 100%;
         padding: 13px 10px;
         border: none;
-        border-radius: 12px;
+        border-radius: 22px;
         font-weight: 700;
         font-size: 13px;
         cursor: pointer;
@@ -972,7 +972,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
         border-bottom: 1px solid #f1f1f1;
         cursor: pointer;
     }
-    .sp-item-row:hover { background: #f8fffe; border-radius: 8px; }
+    .sp-item-row:hover { background: #f8fffe; border-radius: 22px; }
     .sp-item-row input[type="checkbox"] {
         width: 18px; height: 18px; margin: 0; flex-shrink: 0;
         accent-color: #3b82f6;
@@ -984,15 +984,15 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
 /* ===== LANDSCAPE / PC: compress DATA panel to fit, scroll as fallback ===== */
 @media (min-width: 600px) and (max-height: 760px) {
     #sharePanel .share-box { overflow-y: auto !important; overflow-x: hidden !important; }
-    #sharePanel .sharepanel-nav { padding: 2px 14px !important; margin: 2px 4px !important; font-size: 14px !important; border-radius: 10px !important; }
+    #sharePanel .sharepanel-nav { padding: 2px 14px !important; margin: 2px 4px !important; font-size: 14px !important; border-radius: 22px !important; }
     #sharePanel .sharepanel-nav i { font-size: 20px !important; }
     #sp-desktop-topbar { padding: 3px 10px !important; gap: 8px !important; }
     #sp-desktop-topbar > div { padding: 3px 10px !important; font-size: 11px !important; }
     #sp-title-desktop { font-size: 13px !important; letter-spacing: 1px !important; }
     #sp-desktop-body { flex: 1 1 0 !important; min-height: 270px !important; }
     #sp-sidebar { width: 165px !important; min-width: 150px !important; padding: 6px 8px 56px !important; gap: 5px !important; overflow-y: auto !important; }
-    .sp-sidebar-btn { padding: 7px 6px !important; font-size: 11px !important; border-radius: 9px !important; }
-    #sp-sidebar > div[style*="dashed"] { padding: 5px !important; margin-top: 0 !important; border-radius: 10px !important; }
+    .sp-sidebar-btn { padding: 7px 6px !important; font-size: 11px !important; border-radius: 22px !important; }
+    #sp-sidebar > div[style*="dashed"] { padding: 5px !important; margin-top: 0 !important; border-radius: 22px !important; }
     #sp-sidebar > div[style*="dashed"] p { font-size: 9px !important; margin: 0 0 3px !important; }
     #sp-sidebar input[type="file"] { font-size: 10px !important; }
     #sp-sidebar > div:last-child { display: none !important; }
@@ -1004,10 +1004,10 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     #sp-bottom-bar { padding: 5px 10px !important; gap: 8px !important; }
     #sp-bottom-left, #sp-bottom-right { gap: 4px !important; }
     #sp-bottom-right { width: 230px !important; min-width: 200px !important; }
-    #sp-bottom-bar button { padding: 6px !important; font-size: 11px !important; border-radius: 9px !important; }
+    #sp-bottom-bar button { padding: 6px !important; font-size: 11px !important; border-radius: 22px !important; }
     #sp-bottom-bar p { font-size: 11px !important; margin: 0 !important; }
-    #shareCodeOutputDesktop { height: 32px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 9px !important; }
-    #shareRestoreInputDesktop { height: 40px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 9px !important; }
+    #shareCodeOutputDesktop { height: 32px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 22px !important; }
+    #shareRestoreInputDesktop { height: 40px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 22px !important; }
     #sharePanel #ashAiFabBtn { width: 42px !important; height: 42px !important; font-size: 19px !important; left: 10px !important; right: auto !important; bottom: 10px !important; }
 }
 @media (min-width: 600px) and (max-height: 420px) {
@@ -1029,7 +1029,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     gap: 10px;
     padding: 12px;
     border: 1px solid #eee;
-    border-radius: 10px;
+    border-radius: 22px;
     margin-bottom: 8px;
 }
 
@@ -1043,7 +1043,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     background: #54A0FF;
     color: white;
     padding: 2px 8px;
-    border-radius: 5px;
+    border-radius: 22px;
     font-size: 10px;
     font-weight: bold;
 }
@@ -1053,7 +1053,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     color: white;
     border: none;
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 22px;
     width: 100%;
     font-weight: bold;
     margin: 10px 0;
@@ -1064,7 +1064,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     color: white;
     border: 1px solid rgba(255,255,255,0.3);
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 22px;
     width: 100%;
     font-weight: bold;
     border-color: #54A0FF;
@@ -1075,7 +1075,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     color: white;
     border: none;
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 22px;
     width: 100%;
     font-weight: bold;
     margin-top: 10px;
@@ -1177,7 +1177,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     width: 60px !important;
     height: 60px !important;
     min-width: 60px;
-    border-radius: 8px;
+    border-radius: 22px;
 }
 
 .list-view-active .card-info {
@@ -1205,7 +1205,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     border: 1px solid #e2e8f0;
     width: 42px;
     height: 42px;
-    border-radius: 12px;
+    border-radius: 22px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1314,7 +1314,7 @@ from { opacity: 0; transform: translateY(5px); }
     border: 1px solid #e2e8f0;
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1503,9 +1503,9 @@ function showLockScreen(id, status) {
           <h1 style="color:#00D2D3;font-size:26px;">REGISTRATION REQUIRED</h1>
           <div style="background:#1e1e1e;padding:25px;border-radius:20px;border:1px solid #333;margin:15px;max-width:350px;width:100%;">
             <span style="color:#888;font-size:11px;">YOUR DEVICE ID</span><br>
-            <strong id="lock-device-id" style="font-size:16px;color:#fff;display:block;margin:15px 0;background:#121212;padding:12px;border-radius:10px;border:1px dashed #00D2D3;word-break:break-all;">${id}</strong>
+            <strong id="lock-device-id" style="font-size:16px;color:#fff;display:block;margin:15px 0;background:#121212;padding:12px;border-radius:22px;border:1px dashed #00D2D3;word-break:break-all;">${id}</strong>
             <button onclick="navigator.clipboard.writeText('${id}').then(()=>this.innerText='✅ COPIED!').catch(()=>{})" 
-              style="margin-bottom:10px;padding:8px 18px;border-radius:8px;border:1px solid #00D2D3;background:transparent;color:#00D2D3;font-size:12px;cursor:pointer;">
+              style="margin-bottom:10px;padding:8px 18px;border-radius:22px;border:1px solid #00D2D3;background:transparent;color:#00D2D3;font-size:12px;cursor:pointer;">
               📋 COPY DEVICE ID
             </button>
             <div style="text-align:left; border-top:1px solid #333; padding-top:15px; font-size:14px;">
@@ -1540,7 +1540,7 @@ function openSmartShare() {
     
     // Baki aapka purana HTML code niche...
     let html = '';
-    html += `<div class="share-section-title" style="background:#eef2f7; padding:5px 10px; font-size:11px; font-weight:bold; border-radius:5px; margin-bottom:5px;">📦 STOCK ITEMS</div>`;
+    html += `<div class="share-section-title" style="background:#eef2f7; padding:5px 10px; font-size:11px; font-weight:bold; border-radius:22px; margin-bottom:5px;">📦 STOCK ITEMS</div>`;
     stock.forEach((s, i) => {
         html += `<div class="share-item-row">
             <input type="checkbox" class="share-chk" data-type="stock" data-idx="${i}">
@@ -1563,6 +1563,14 @@ function openSmartShare() {
     
     
     
+<style>
+button,input:not([type=checkbox]):not([type=radio]),select,textarea{border-radius:22px}
+img:not(.ash-sp-logo){border-radius:18px}
+#appLogoImg,.ash-sp-logo,.ash-logo-circle{border-radius:50% !important}
+#ashPickOv{height:100%;bottom:auto}
+#ashPickBox{height:calc(100% - 98px) !important;max-height:none !important;margin-top:90px !important;margin-bottom:8px}
+#ashPickList{flex:1;min-height:0}
+</style>
 </head>
 <body onload="initApp()">
 <div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
@@ -1635,9 +1643,9 @@ function openSmartShare() {
             position: relative; z-index: 10000;
         ">
             <div id="hamburgerLines" style="display:flex; flex-direction:column; gap:5px;">
-                <span style="display:block; width:20px; height:2.5px; background:#F9E03B; border-radius:2px; transition:all 0.3s;"></span>
-                <span style="display:block; width:20px; height:2.5px; background:#F9E03B; border-radius:2px; transition:all 0.3s;"></span>
-                <span style="display:block; width:20px; height:2.5px; background:#F9E03B; border-radius:2px; transition:all 0.3s;"></span>
+                <span style="display:block; width:20px; height:2.5px; background:#F9E03B; border-radius:22px; transition:all 0.3s;"></span>
+                <span style="display:block; width:20px; height:2.5px; background:#F9E03B; border-radius:22px; transition:all 0.3s;"></span>
+                <span style="display:block; width:20px; height:2.5px; background:#F9E03B; border-radius:22px; transition:all 0.3s;"></span>
             </div>
         </button>
     </div>
@@ -1827,9 +1835,9 @@ function openSmartShare() {
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="stockSearchInput" placeholder="Search materials..."
                 oninput="filterStockItems()"
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
         </div>
-        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="openInputModal('stock')">
+        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 22px; cursor: pointer; white-space:nowrap;" onclick="openInputModal('stock')">
             <i class="fas fa-plus"></i> ADD MATERIAL
         </button>
     </div>
@@ -1859,12 +1867,12 @@ function openSmartShare() {
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="priceListSearchInput" placeholder="Search cakes..."
                 oninput="filterPriceList()"
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
         </div>
-        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="openAddPriceItem()">
+        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 22px; cursor: pointer; white-space:nowrap;" onclick="openAddPriceItem()">
             <i class="fas fa-plus"></i> ADD ITEM
         </button>
-        <button class="btn-pill" style="background:#f59e0b; color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="openImportPriceModal()">
+        <button class="btn-pill" style="background:#f59e0b; color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 22px; cursor: pointer; white-space:nowrap;" onclick="openImportPriceModal()">
             <i class="fas fa-file-import"></i> IMPORT
         </button>
     </div>
@@ -1939,7 +1947,7 @@ function openSmartShare() {
         <p style="text-align:center; font-size:11px; color:#94a3b8; margin-top:-8px;">Paste data below — one item per line<br>(Name, Qty, Price)</p>
 
         <textarea id="plImportText" placeholder="Red Velvet   8 inch   22
-Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; border:1px solid #e2e8f0; padding:10px; font-size:13px; font-family:inherit; margin-bottom:10px; resize:vertical;"></textarea>
+Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; border:1px solid #e2e8f0; padding:10px; font-size:13px; font-family:inherit; margin-bottom:10px; resize:vertical;"></textarea>
 
         <div style="display:flex; gap:10px;">
             <button class="btn-pill" style="flex:1; background:#f1f5f9;" onclick="closeImportPriceModal()">BACK</button>
@@ -1961,10 +1969,10 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
     
     <div id="catPanelInputRow" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
         <input type="text" id="newCatInp" placeholder="New Category Name..."
-            style="flex:1; min-width:150px; height: 35px; padding: 0 10px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+            style="flex:1; min-width:150px; height: 35px; padding: 0 10px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
 
 
-        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 10px; cursor: pointer; white-space:nowrap;" onclick="addCategory('stock')">
+        <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 22px; cursor: pointer; white-space:nowrap;" onclick="addCategory('stock')">
             <i class="fas fa-plus"></i> ADD CATEGORY
         </button>
 
@@ -2063,7 +2071,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
 <div id="stockViewModal" class="modal-overlay" onclick="if(event.target === this) smartClose()">
     <div class="input-modal" style="text-align:center; max-height: 90vh; overflow-y: auto; padding: 20px;">
         
-        <div style="background: #f8f9fa; border-radius: 15px; overflow: hidden; margin-bottom: 15px;">
+        <div style="background: #f8f9fa; border-radius: 26px; overflow: hidden; margin-bottom: 15px;">
             <img id="stockViewImg" 
                  style="width:100%; display: block; object-fit: cover;" 
                  onerror="this.src='https://via.placeholder.com/300?text=No+Image+Available'">
@@ -2074,7 +2082,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:10px; bo
         <h3 id="stockViewPrice" style="color:var(--accent); margin: 10px 0 20px 0; font-size: 18px;"></h3>
 
         <button class="btn-pill" 
-                style="width:100%; background:#f1f2f6; border: none; padding: 12px; font-weight: 600; cursor: pointer; border-radius: 12px;" 
+                style="width:100%; background:#f1f2f6; border: none; padding: 12px; font-weight: 600; cursor: pointer; border-radius: 22px;" 
                 onclick="smartClose()">
             CLOSE
         </button>
@@ -2474,7 +2482,7 @@ function renderCatFilters() {
     // Category Manager List (Original Logic)
     if(document.getElementById('catManagerList')) {
         document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:12px; margin-bottom:8px; align-items:center; border:3px solid #08cdcd; touch-action: pan-y;">
+        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:22px; margin-bottom:8px; align-items:center; border:3px solid #08cdcd; touch-action: pan-y;">
             <div style="display:flex; align-items:center; flex:1;">
                 <b class="cat-name-text" style="color:var(--accent)">${c}</b>
             </div>
@@ -2926,15 +2934,15 @@ function renderRecipes() {
 
         return `
         <div class="card" 
-             style="position:relative; margin:0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect}"
+             style="position:relative; margin:0; border-radius:26px; overflow:hidden; background:#fff; box-shadow:0 4px 15px rgba(0,0,0,0.05); display:flex; ${isListView ? 'flex-direction:row; height:75px; align-items:center; padding:6px; margin-bottom:8px;' : 'flex-direction:column; height:210px;'} ${dangerEffect}"
              onclick="isManage ? openInputModal('recipe', ${realIdx}) : openEditor(${realIdx})">
             
             <div onclick="event.stopPropagation(); showRecipeItems(${realIdx})" 
-                 style="position:absolute; ${isListView ? 'right:12px; top:50%; transform:translateY(-50%);' : 'top:8px; right:8px;'} width:34px; height:34px; background:rgba(255,255,255,0.95); backdrop-filter:blur(5px); border-radius:10px; display:flex; align-items:center; justify-content:center; z-index:10; color:#00D2D3; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+                 style="position:absolute; ${isListView ? 'right:12px; top:50%; transform:translateY(-50%);' : 'top:8px; right:8px;'} width:34px; height:34px; background:rgba(255,255,255,0.95); backdrop-filter:blur(5px); border-radius:22px; display:flex; align-items:center; justify-content:center; z-index:10; color:#00D2D3; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
                  <i class="fas fa-file-invoice" style="font-size:15px;"></i>
             </div>
             
-            <div style="${isListView ? 'width:62px; height:62px; min-width:62px;' : 'width:100%; height:135px;'} overflow:hidden; background:#f1f5f9; border-radius:12px;">
+            <div style="${isListView ? 'width:62px; height:62px; min-width:62px;' : 'width:100%; height:135px;'} overflow:hidden; background:#f1f5f9; border-radius:22px;">
                 ${photoContent}
             </div>
             
@@ -3068,18 +3076,18 @@ function showRecipeItems(idx) {
         <div style="padding:14px 16px; background:linear-gradient(135deg, #0d9488 0%, #0891b2 100%); color:#ffffff; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 22px 22px; 
         border-bottom:3px solid #075e56;
         box-shadow: 0 6px 18px rgba(0,0,0,0.25); position:relative;">
-            <div style="width:80px; height:80px; border-radius:12px; overflow:hidden; border:3px solid #ffffff; flex-shrink:0; background: #2d3748; box-shadow:0 3px 10px rgba(0,0,0,0.2);">
+            <div style="width:80px; height:80px; border-radius:22px; overflow:hidden; border:3px solid #ffffff; flex-shrink:0; background: #2d3748; box-shadow:0 3px 10px rgba(0,0,0,0.2);">
                 ${r.img ? `<img src="${r.img}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:70px;">🖼️</div>`}
             </div>
             <div style="flex:1; overflow:hidden;">
                 <h2 style="margin:0; font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#ffffff;">${r.name}</h2>
                 <div style="font-size:11px; color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; letter-spacing:1px;">Recipe</div>
             </div>
-            <div id="closeBtnIcon" style="width:32px; height:32px; background:rgba(255,255,255,0.18); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;">
+            <div id="closeBtnIcon" style="width:32px; height:32px; background:rgba(255,255,255,0.18); border-radius:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;">
                 <i class="fas fa-times" style="font-size:22px; color:#fff;"></i>
             </div>
             <input type="number" id="recipeMultiplyInput" value="1" step="0.1" min="0.1"
-                style="position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); width:52px; text-align:center; padding:5px 2px; border-radius:8px; border:2px solid #0d9488; font-weight:800; font-size:13px; color:#1e293b; background:#fff; z-index:20; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+                style="position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); width:52px; text-align:center; padding:5px 2px; border-radius:22px; border:2px solid #0d9488; font-weight:800; font-size:13px; color:#1e293b; background:#fff; z-index:20; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
         </div>
 
         <div style="flex:1; overflow-y:auto; padding-top:5px; background: #fff;">
@@ -3088,7 +3096,7 @@ function showRecipeItems(idx) {
             <div style="padding:15px 18px 20px 18px;">
                 <style>
                     #descEditBox:empty:before{content:'Step 1: ...';color:#94a3b8;}
-                    .descTBtn{width:30px;height:30px;border:1.5px solid #bfdbfe;border-radius:8px;background:#fff;color:#1e3a8a;font-weight:700;font-size:13px;cursor:pointer;}
+                    .descTBtn{width:30px;height:30px;border:1.5px solid #bfdbfe;border-radius:22px;background:#fff;color:#1e3a8a;font-weight:700;font-size:13px;cursor:pointer;}
                     .descSwatch{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px #cbd5e1;cursor:pointer;padding:0;}
                     .descTLabel{font-size:9px;color:#94a3b8;font-weight:800;letter-spacing:0.5px;width:100%;margin-top:2px;}
                     .descDivider{width:100%;height:1px;background:#e2e8f0;margin:3px 0;}
@@ -3096,39 +3104,39 @@ function showRecipeItems(idx) {
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <span style="font-size:12px; font-weight:800; color:#1e293b; text-transform:uppercase; letter-spacing:0.5px;">Steps / Method</span>
                     <div style="display:flex; gap:6px;">
-                        <button id="descEditBtn" style="border:none; background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">EDIT</button>
-                        <button id="descSaveBtn" style="display:none; border:none; background:#2ecc71; color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">SAVE</button>
-                        <button id="descDelBtn" style="border:none; background:var(--danger); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:8px; cursor:pointer;">DELETE</button>
+                        <button id="descEditBtn" style="border:none; background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:22px; cursor:pointer;">EDIT</button>
+                        <button id="descSaveBtn" style="display:none; border:none; background:#2ecc71; color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:22px; cursor:pointer;">SAVE</button>
+                        <button id="descDelBtn" style="border:none; background:var(--danger); color:#fff; font-size:11px; font-weight:700; padding:6px 10px; border-radius:22px; cursor:pointer;">DELETE</button>
                     </div>
                 </div>
                 <div id="descVideoView" style="display:none; align-items:center; gap:10px; margin-bottom:10px;">
                     <div id="descVideoLinkText" style="flex:1; min-width:0; font-size:12px; color:#2563eb; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;">🔗 Watch Video</div>
-                    <div id="descVideoThumbView" style="width:64px;height:64px;flex-shrink:0;border-radius:10px;background-color:#0f172a;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;">&#9654;</div>
+                    <div id="descVideoThumbView" style="width:64px;height:64px;flex-shrink:0;border-radius:22px;background-color:#0f172a;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;">&#9654;</div>
                 </div>
                 <div id="descVideoEdit" style="display:none; align-items:center; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="descVideoLinkInput" placeholder="Paste YouTube / Instagram / Facebook video link" style="flex:1; min-width:0; box-sizing:border-box; border:1.5px solid #cbd5e1; border-radius:8px; padding:8px 10px; font-size:12px; color:#1e293b;" value="${r.videoUrl ? String(r.videoUrl).replace(/"/g,'&quot;') : ''}">
-                    <div id="descVideoThumbEdit" style="width:64px;height:64px;flex-shrink:0;border-radius:10px;background-color:#0f172a;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;">&#9654;</div>
+                    <input type="text" id="descVideoLinkInput" placeholder="Paste YouTube / Instagram / Facebook video link" style="flex:1; min-width:0; box-sizing:border-box; border:1.5px solid #cbd5e1; border-radius:22px; padding:8px 10px; font-size:12px; color:#1e293b;" value="${r.videoUrl ? String(r.videoUrl).replace(/"/g,'&quot;') : ''}">
+                    <div id="descVideoThumbEdit" style="width:64px;height:64px;flex-shrink:0;border-radius:22px;background-color:#0f172a;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;">&#9654;</div>
                 </div>
                 <div id="descVideoPlayerOverlay" style="display:none; position:fixed; inset:0; background:#000; z-index:20001; align-items:center; justify-content:center;">
                     <iframe id="descVideoPlayerFrame" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
                     <button id="descVideoPlayerClose" type="button" style="position:absolute; top:14px; right:14px; width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,0.92);color:#1e293b;font-weight:900;font-size:18px;cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.4);">&times;</button>
                 </div>
-                <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:8px; padding:6px; display:flow-root; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
-                <div id="descEditBox" contenteditable="true" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:10px; padding:10px; font-size:13px; font-family:sans-serif; overflow-y:auto; white-space:pre-wrap; outline:none; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return ''; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
+                <div id="descViewBox" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; min-height:40px; border-radius:22px; padding:6px; display:flow-root; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return '<span style="color:#94a3b8;">No steps added yet. Tap EDIT to add.</span>'; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
+                <div id="descEditBox" contenteditable="true" style="display:none; width:100%; box-sizing:border-box; min-height:160px; border:2px solid var(--primary); border-radius:22px; padding:10px; font-size:13px; font-family:sans-serif; overflow-y:auto; white-space:pre-wrap; outline:none; ${r.descriptionBg ? `background:${r.descriptionBg};` : ''}">${(function(d){ if(!d) return ''; return /<[a-z][\s\S]*>/i.test(d) ? d : d.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); })(r.description)}</div>
                 <div id="descPhotoLightbox" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:20000; align-items:flex-start; justify-content:center; padding-top:9vh; box-sizing:border-box;">
                     <div style="position:relative; max-width:88vw; max-height:74vh;">
-                        <img id="descPhotoLightboxImg" src="" style="max-width:88vw; max-height:74vh; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.4); display:block;">
+                        <img id="descPhotoLightboxImg" src="" style="max-width:88vw; max-height:74vh; border-radius:22px; box-shadow:0 10px 40px rgba(0,0,0,0.4); display:block;">
                         <button id="descPhotoLightboxClose" type="button" style="position:absolute; top:-14px; right:-14px; width:32px;height:32px;border-radius:50%;border:none;background:#fff;color:#1e293b;font-weight:900;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.3);cursor:pointer;">&times;</button>
                     </div>
                 </div>
-                <div id="descFormatToolbar" style="display:none; position:fixed; z-index:10050; background:#ffffff; border:1.5px solid #bfdbfe; border-radius:12px; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,0.28); gap:6px; align-items:center; flex-wrap:wrap; max-width:270px;">
+                <div id="descFormatToolbar" style="display:none; position:fixed; z-index:10050; background:#ffffff; border:1.5px solid #bfdbfe; border-radius:22px; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,0.28); gap:6px; align-items:center; flex-wrap:wrap; max-width:270px;">
                     <button type="button" class="descTBtn" data-cmd="bold" title="Bold" style="font-weight:900;">B</button>
                     <button type="button" class="descTBtn" data-cmd="italic" title="Italic" style="font-style:italic;">I</button>
                     <button type="button" class="descTBtn" data-cmd="underline" title="Underline" style="text-decoration:underline;">U</button>
                     <button type="button" class="descTBtn" data-cmd="strikeThrough" title="Strikethrough" style="text-decoration:line-through;">S</button>
                     <button type="button" class="descTBtn" data-cmd="removeFormat" title="Normal" style="font-size:10px;">N</button>
                     <button type="button" class="descTBtn" id="descFontMinusBtn" title="Smaller Text">A-</button>
-                    <span id="descFontSizeBadge" style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 4px; border:1.5px solid #bfdbfe; border-radius:6px; background:#f1f5f9; color:#1e3a8a; font-weight:800; font-size:12px;">6</span>
+                    <span id="descFontSizeBadge" style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 4px; border:1.5px solid #bfdbfe; border-radius:22px; background:#f1f5f9; color:#1e3a8a; font-weight:800; font-size:12px;">6</span>
                     <button type="button" class="descTBtn" id="descFontPlusBtn" title="Bigger Text">A+</button>
                     <div class="descDivider"></div>
                     <span class="descTLabel">TEXT COLOR</span>
@@ -3167,7 +3175,7 @@ function showRecipeItems(idx) {
                 </div>
             </div>
             <button id="closeBtnBottom" style="width:100%;
-            padding:9px; border:2px solid #000; background:#00b8b8; color:#fff; border-radius:12px; font-weight:800; font-size:13px; letter-spacing:1px; cursor:pointer;">
+            padding:9px; border:2px solid #000; background:#00b8b8; color:#fff; border-radius:22px; font-weight:800; font-size:13px; letter-spacing:1px; cursor:pointer;">
                 CLOSE
             </button>
         </div>
@@ -3514,7 +3522,7 @@ function showRecipeItems(idx) {
                 descEditBox.focus();
                 descRestoreSelection();
                 document.execCommand('insertHTML', false,
-                    `<img src="${dataUrl}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;float:right;margin:2px 0 6px 10px;">`);
+                    `<img src="${dataUrl}" style="width:90px;height:90px;object-fit:cover;border-radius:22px;float:right;margin:2px 0 6px 10px;">`);
             };
             img.src = e.target.result;
         };
@@ -3709,7 +3717,7 @@ function renderTable() {
 
         const _missing = !latestItem;
         html += `
-        <div class="row-item${_missing ? ' ash-unmatched' : ''}" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 26px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 6px; box-shadow: none;">
+        <div class="row-item${_missing ? ' ash-unmatched' : ''}" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 26px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 22px; box-shadow: none;">
             
             <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             
@@ -3924,7 +3932,7 @@ function renderStock(searchQuery = "") {
         
         // Photo check: Agar photo hai to wo dikhao, nahi to icon
         const itemImg = s.img ? 
-            `<img src="${s.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">` : 
+            `<img src="${s.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 22px;">` : 
             `<i class="fas fa-box" style="color: var(--primary); font-size: 18px;"></i>`;
 
         return `
@@ -3937,14 +3945,14 @@ function renderStock(searchQuery = "") {
              onmouseup="cancelLongPress()">
              
             <div style="display:flex; align-items:center; flex:1;">
-                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #08cdcd; overflow: hidden;">
+                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 22px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #08cdcd; overflow: hidden;">
                     ${itemImg}
                 </div>
                 
                 <div>
                     <b style="color:#0f172a; display:block; font-size:15px; font-weight: 800; letter-spacing: -0.3px;">${s.name}</b>
                     <div style="display: flex; align-items: center; margin-top: 3px;">
-                        <span style="color: #0d9488; font-size: 11px; font-weight: 700; background: #f0fdfa; padding: 2px 6px; border-radius: 6px;">
+                        <span style="color: #0d9488; font-size: 11px; font-weight: 700; background: #f0fdfa; padding: 2px 6px; border-radius: 22px;">
                             ${(s.price || 0).toFixed(3)} OMR
                         </span>
                         <span style="margin: 0 6px; color: #cbd5e1; font-size: 10px;">•</span>
@@ -3953,7 +3961,7 @@ function renderStock(searchQuery = "") {
                 </div>
             </div>
             
-            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
+            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 22px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
                 <i class="fas fa-pen-to-square" style="color: #475569; font-size: 14px;"></i>
             </div>
         </div>`;
@@ -4445,11 +4453,11 @@ function openSmartShare() {
     html += `<div style="display: flex; gap: 12px; margin: 15px 0; height: 300px;">`; 
 
     // LEFT: STOCK
-    html += `<div style="flex: 1; display: flex; flex-direction: column; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border: 2px solid #e0e7ff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+    html += `<div style="flex: 1; display: flex; flex-direction: column; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border: 2px solid #e0e7ff; border-radius: 26px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
         <div style="background: linear-gradient(to right, #3b82f6, #2563eb); padding: 10px; text-align: center; font-size: 11px; font-weight: 900; color: #fff;">📦 STOCK</div>
         <div style="overflow-y: auto; flex: 1; padding: 8px; scrollbar-width: none;">`;
     stock.forEach((s, i) => {
-        html += `<label class="item-row" style="display: flex; align-items: center; padding: 1px 1px; border-radius: 10px; margin-bottom: 5px; cursor: pointer; transition: 0.3s;">
+        html += `<label class="item-row" style="display: flex; align-items: center; padding: 1px 1px; border-radius: 22px; margin-bottom: 5px; cursor: pointer; transition: 0.3s;">
             <input type="checkbox" class="share-chk" data-type="stock" data-idx="${i}" onchange="updateButtonUI()" style="width: 20px; height: 20px; accent-color: #3b82f6;">
             <div style="margin-left: 10px; flex: 1;">
                 <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${s.name}</div>
@@ -4460,11 +4468,11 @@ function openSmartShare() {
     html += `</div></div>`;
 
     // RIGHT: RECIPES
-    html += `<div style="flex: 1; display: flex; flex-direction: column; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border: 2px solid #fff1f2; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+    html += `<div style="flex: 1; display: flex; flex-direction: column; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border: 2px solid #fff1f2; border-radius: 26px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
         <div style="background: linear-gradient(to right, #f43f5e, #e11d48); padding: 10px; text-align: center; font-size: 11px; font-weight: 900; color: #fff;">📖 RECIPES</div>
         <div style="overflow-y: auto; flex: 1; padding: 8px; scrollbar-width: none;">`;
     recipes.forEach((r, i) => {
-        html += `<label class="item-row" style="display: flex; align-items: center; padding: 1px 1px; border-radius: 10px; margin-bottom: 5px; cursor: pointer; transition: 0.3s;">
+        html += `<label class="item-row" style="display: flex; align-items: center; padding: 1px 1px; border-radius: 22px; margin-bottom: 5px; cursor: pointer; transition: 0.3s;">
             <input type="checkbox" class="share-chk" data-type="recipe" data-idx="${i}" onchange="updateButtonUI()" style="width: 20px; height: 20px; accent-color: #e11d48;">
             <div style="margin-left: 10px; flex: 1;">
                 <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${r.name}</div>
@@ -4745,7 +4753,7 @@ function showImportSummary(log) {
             <div style="background:white; border-radius:20px; width:100%; max-width:320px; padding:20px; text-align:center;">
                 <h3 style="color:#00D2D3; margin:0;">Success!</h3>
                 <div style="max-height:150px; overflow-y:auto; font-size:12px; margin:15px 0; text-align:left;">${listHTML}</div>
-                <button onclick="document.getElementById('finalPopup').remove()" style="width:100%; padding:12px; background:#00D2D3; color:white; border:none; border-radius:10px; font-weight:bold;">OKAY</button>
+                <button onclick="document.getElementById('finalPopup').remove()" style="width:100%; padding:12px; background:#00D2D3; color:white; border:none; border-radius:22px; font-weight:bold;">OKAY</button>
             </div>
         </div>`;
     document.body.insertAdjacentHTML('beforeend', popup);
@@ -4902,7 +4910,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
 
 <div id="sharePanel" class="share-panel" style="font-family: 'Segoe UI', Roboto, sans-serif;">
     
-    <div class="share-box" style="background: #bef1f5; border-radius: 0px; padding: 0px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; max-height: 100vh;">
+    <div class="share-box" style="background: #bef1f5; border-radius: 26px; padding: 0px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; max-height: 100vh;">
 
    <!-- STICKY DATA HEADER (mobile + desktop) -->
    <div style="padding:1px; background:#07c1c1; flex-shrink:0;">
@@ -4915,24 +4923,24 @@ window.addEventListener('orientationchange', handleOrientationChange);
    <!-- ===== MOBILE SCROLLABLE CONTENT ===== -->
    <div id="sp-mobile-scroll" style="overflow-y: auto; flex: 1; padding: 15px 20px; padding-bottom: 20px;">
         
-        <div style="background: #f8fafc; padding: 5px 5px; border-radius: 14px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
+        <div style="background: #f8fafc; padding: 5px 5px; border-radius: 22px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
             <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">
-              <h2 style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin:0;">Version:F3</h2>
+              <h2 style="font-size: 10px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 22px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin:0;">Version:F3</h2>
             </span>
-            <span id="displayDeviceId" style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Loading...</span>
+            <span id="displayDeviceId" style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 22px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Loading...</span>
         </div>
 
         <div style="display: flex; gap: 8px; margin: 5px 0;">
-            <button id="btn-stock" onclick="bulkSelect('stock')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📦 ITEMS</button>
-            <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
-            <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">✓ SELECT ALL</button>
+            <button id="btn-stock" onclick="bulkSelect('stock')" style="flex: 1; padding: 12px; border: none; border-radius: 22px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📦 ITEMS</button>
+            <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 12px; border: none; border-radius: 22px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
+            <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 22px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">✓ SELECT ALL</button>
         </div>
         
         <div style="display: flex; gap: 10px; margin-bottom: 10px;">
             <button class="btn-blue" style="flex:1; background:#2ecc71;" onclick="downloadJSONFile()">📥 DOWNLOAD JSON</button>
         </div>
 
-        <div style="margin-top:0px; border: 2px dashed #0bd2ff; padding: 15px; border-radius: 18px; text-align: center; background: #f1f5f9; transition: 0.3s;">
+        <div style="margin-top:0px; border: 2px dashed #0bd2ff; padding: 15px; border-radius: 26px; text-align: center; background: #f1f5f9; transition: 0.3s;">
             <i class="fas fa-cloud-upload-alt" style="color: #06b6d4; font-size: 20px; margin-bottom: 0px;"></i>
             <p style="font-size: 10px; font-weight: 800; color: #475569; margin-bottom: 0px; text-transform: uppercase;">Import Backup JSON</p>
             <input type="file" id="importFile" accept=".json" style="font-size: 12px; width: 100%; color: #64748b;" onchange="importJSONFile(this)">
@@ -4940,26 +4948,26 @@ window.addEventListener('orientationchange', handleOrientationChange);
 
         <!-- Mobile: side-by-side Stock + Recipe columns, both scrollable -->
         <div style="display:flex; gap:8px; margin:8px 0; height:320px;">
-            <div style="flex:1; border:2px solid #3b82f6; border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+            <div style="flex:1; border:2px solid #3b82f6; border-radius:22px; overflow:hidden; display:flex; flex-direction:column;">
                 <div style="background:#3b82f6; color:white; text-align:center; font-size:11px; font-weight:800; padding:6px; letter-spacing:1px;">📦 STOCK</div>
                 <div id="mob-stock-list" style="overflow-y:auto; flex:1; padding:4px; background:#f8fafc;"></div>
             </div>
-            <div style="flex:1; border:2px solid #e11d48; border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+            <div style="flex:1; border:2px solid #e11d48; border-radius:22px; overflow:hidden; display:flex; flex-direction:column;">
                 <div style="background:#e11d48; color:white; text-align:center; font-size:11px; font-weight:800; padding:6px; letter-spacing:1px;">📜 RECIPES</div>
                 <div id="mob-recipe-list" style="overflow-y:auto; flex:1; padding:4px; background:#f8fafc;"></div>
             </div>
         </div>
         <div id="shareItemsList" style="display:none;"></div>
             
-        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 14px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 35px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
+        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 22px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 35px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
             <i class="fas fa-code"></i> GENERATE BACKUP CODE
         </button>
 
         <div style="position: relative; margin-bottom: 7px; width: 100%;">
-            <textarea id="shareCodeOutput" style="width:100%; height:70px; border-radius:14px; padding:12px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color: #334155; display: block; resize: none;" placeholder="The code will come here..." readonly></textarea>
+            <textarea id="shareCodeOutput" style="width:100%; height:70px; border-radius:22px; padding:12px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color: #334155; display: block; resize: none;" placeholder="The code will come here..." readonly></textarea>
         </div>
 
-        <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
+        <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 22px; border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
             <i class="fas fa-copy"></i> COPY GENERATED CODE
         </button>
 
@@ -4968,9 +4976,9 @@ window.addEventListener('orientationchange', handleOrientationChange);
         <div>
             <p style="font-size:13px; font-weight:700; color: #1e293b; margin-bottom:1px;">Restore Data</p>
             <div style="position: relative; margin-bottom: 1px; width: 100%;">
-                <textarea id="shareRestoreInput" style="width:100%; height:100px; border-radius:18px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
+                <textarea id="shareRestoreInput" style="width:100%; height:100px; border-radius:26px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
             </div>
-            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 16px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; margin-bottom: 35px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
+            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 26px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; margin-bottom: 35px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
                 🚀 <i class="fas fa-file-import"></i> ADD DATA TO APP
             </button>
         </div>
@@ -4979,9 +4987,9 @@ window.addEventListener('orientationchange', handleOrientationChange);
    <!-- ===== DESKTOP LAYOUT ===== -->
    <!-- Top info bar -->
    <div id="sp-desktop-topbar" style="display:none;">
-       <div style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 6px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); white-space:nowrap;">VERSION: F3</div>
+       <div style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 6px 14px; border-radius: 22px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); white-space:nowrap;">VERSION: F3</div>
        <div id="displayDeviceIdDesktop" style="font-size: 12px; font-family: 'Courier New', monospace; color: #fff; background: #1e3a3a; padding: 6px 16px; border-radius: 50px; font-weight: 700; display:flex; align-items:center; gap:8px;"><span style="width:8px;height:8px;background:#2ecc71;border-radius:50%;display:inline-block;"></span> Device ID: Loading...</div>
-       <div id="sp-title-desktop" style="flex:1; background:#fff; border-radius:8px; padding: 8px 20px; font-size:18px; font-weight:700; color:#1e293b; letter-spacing:2px; border: 1px solid #e2e8f0;">DATA</div>
+       <div id="sp-title-desktop" style="flex:1; background:#fff; border-radius:22px; padding: 8px 20px; font-size:18px; font-weight:700; color:#1e293b; letter-spacing:2px; border: 1px solid #e2e8f0;">DATA</div>
    </div>
 
    <!-- Desktop body -->
@@ -4993,7 +5001,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
            <button class="sp-sidebar-btn" style="background:#3b82f6; color:white;" onclick="bulkSelect('recipe')">📜 RECIPES</button>
            <button class="sp-sidebar-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:white;" onclick="toggleAllShare()">✓ SELECT ALL</button>
            <button class="sp-sidebar-btn" style="background:#2ecc71; color:white;" onclick="downloadJSONFile()">📥 DOWNLOAD JSON</button>
-           <div style="border: 2px dashed #0bd2ff; padding: 12px; border-radius: 14px; text-align: center; background: #f1f5f9; margin-top:4px;">
+           <div style="border: 2px dashed #0bd2ff; padding: 12px; border-radius: 22px; text-align: center; background: #f1f5f9; margin-top:4px;">
                <p style="font-size: 10px; font-weight: 800; color: #475569; margin: 0 0 6px; text-transform: uppercase;">IMPORT BACKUP JSON</p>
                <input type="file" id="importFileDesktop" accept=".json" style="font-size: 11px; width: 100%; color: #64748b;" onchange="importJSONFile(this)">
            </div>
@@ -5032,18 +5040,18 @@ window.addEventListener('orientationchange', handleOrientationChange);
            <!-- Bottom bar -->
            <div id="sp-bottom-bar">
                <div id="sp-bottom-left">
-                   <button style="width:100%; padding: 11px; border-radius: 12px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 13px; cursor: pointer;" onclick="generateShareCode()">
+                   <button style="width:100%; padding: 11px; border-radius: 22px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 13px; cursor: pointer;" onclick="generateShareCode()">
                        &lt;/&gt; GENERATE BACKUP CODE
                    </button>
-                   <textarea id="shareCodeOutputDesktop" style="width:100%; height:55px; border-radius:12px; padding:10px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color:#334155; resize:none;" placeholder="The code will come here..." readonly></textarea>
-                   <button style="width:100%; padding: 11px; border-radius: 12px; background:linear-gradient(135deg,#54A0FF,#00D2D3); color:white; border:none; font-weight:600; cursor:pointer;" onclick="copyShareCode()">
+                   <textarea id="shareCodeOutputDesktop" style="width:100%; height:55px; border-radius:22px; padding:10px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color:#334155; resize:none;" placeholder="The code will come here..." readonly></textarea>
+                   <button style="width:100%; padding: 11px; border-radius: 22px; background:linear-gradient(135deg,#54A0FF,#00D2D3); color:white; border:none; font-weight:600; cursor:pointer;" onclick="copyShareCode()">
                        <i class="fas fa-copy"></i> COPY GENERATED CODE
                    </button>
                </div>
                <div id="sp-bottom-right">
                    <p style="font-size:13px; font-weight:700; color:#1e293b; margin:0 0 4px;">Restore Data</p>
-                   <textarea id="shareRestoreInputDesktop" style="width:100%; height:70px; border-radius:14px; padding:10px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; outline:none; resize:none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
-                   <button style="width:100%; padding: 10px; border-radius: 14px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 14px; cursor: pointer;" onclick="processSmartAdd()">
+                   <textarea id="shareRestoreInputDesktop" style="width:100%; height:70px; border-radius:22px; padding:10px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; outline:none; resize:none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
+                   <button style="width:100%; padding: 10px; border-radius: 22px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 14px; cursor: pointer;" onclick="processSmartAdd()">
                        🚀 <i class="fas fa-file-import"></i> ADD DATA TO APP
                    </button>
                </div>
@@ -5060,7 +5068,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
     <div style="position:relative; width:100%; height:100%; max-width:100%; max-height:100%; background:#0E1116; display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; justify-content:space-between; background:#1e293b; padding:10px 16px; color:#fff;">
             <span style="font-weight:700; font-size:15px;"><i class="fas fa-robot"></i> ASH AI Bot</span>
-            <button onclick="ashAiCloseOverlay()" style="background:#ef4444; color:#fff; border:none; border-radius:8px; padding:8px 14px; font-weight:700; cursor:pointer;">✕ Close</button>
+            <button onclick="ashAiCloseOverlay()" style="background:#ef4444; color:#fff; border:none; border-radius:22px; padding:8px 14px; font-weight:700; cursor:pointer;">✕ Close</button>
         </div>
         <iframe id="ashAiIframe" src="ash-ai-bot.html" loading="eager" allow="camera *; microphone *; display-capture *; clipboard-read *; clipboard-write *; fullscreen *; autoplay *" allowfullscreen style="flex:1; width:100%; height:100%; min-height:0; border:none; background:#0E1116; color-scheme:dark;"></iframe>
     </div>
@@ -5438,16 +5446,16 @@ ashAiInitFirebaseListeners();
         root.style.cssText = 'display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:2147483000;flex-direction:column;';
         root.innerHTML =
             '<video id="zcamVideo" playsinline muted autoplay style="flex:1;min-height:0;width:100%;object-fit:cover;background:#000;visibility:hidden;"></video>' +
-            '<div id="zcamMsg" style="display:none;position:absolute;top:38%;left:16px;right:16px;color:#fff;background:rgba(30,41,59,.95);padding:12px 14px;border-radius:12px;font:600 14px/1.4 sans-serif;text-align:center;"></div>' +
+            '<div id="zcamMsg" style="display:none;position:absolute;top:38%;left:16px;right:16px;color:#fff;background:rgba(30,41,59,.95);padding:12px 14px;border-radius:22px;font:600 14px/1.4 sans-serif;text-align:center;"></div>' +
             '<div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;">' +
                 '<button type="button" id="zcamClose" style="background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:10px 16px;font:700 14px sans-serif;">✕ Close</button>' +
                 '<button type="button" id="zcamFlip" style="background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:10px 16px;font:700 14px sans-serif;">🔄 Front / Rear</button>' +
             '</div>' +
             '<div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;padding:16px 14px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.65));">' +
-                '<button type="button" id="zcamApp" style="display:none;background:#16a34a;color:#fff;border:none;border-radius:14px;padding:12px 12px;font:700 12px sans-serif;">📲 App Camera</button>' +
-                '<button type="button" id="zcamNative" style="background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:14px;padding:12px 12px;font:700 12px sans-serif;">📱 Phone Camera</button>' +
+                '<button type="button" id="zcamApp" style="display:none;background:#16a34a;color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">📲 App Camera</button>' +
+                '<button type="button" id="zcamNative" style="background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">📱 Phone Camera</button>' +
                 '<button type="button" id="zcamShot" aria-label="Capture" style="width:70px;height:70px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.45);"></button>' +
-                '<button type="button" id="zcamGallery" style="background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:14px;padding:12px 12px;font:700 12px sans-serif;">🖼️ Gallery</button>' +
+                '<button type="button" id="zcamGallery" style="background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">🖼️ Gallery</button>' +
             '</div>';
         document.body.appendChild(root);
 
@@ -5714,10 +5722,10 @@ function ashShowBackupSheet(text) {
     d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:#1e293b;color:#fff;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.45);font-family:Segoe UI,Roboto,Arial,sans-serif;';
     d.innerHTML = '<div style="font-weight:800;font-size:15px;margin-bottom:4px;">📥 Backup ready</div>' +
         '<div style="font-size:12px;opacity:.8;margin-bottom:8px;">Share/Save na khule to <b>Copy</b> dabayein aur WhatsApp / Notes me paste karke rakh lein. Restore: "Restore Data" box me paste karein.</div>' +
-        '<textarea id="ashBkText" readonly style="width:100%;height:64px;box-sizing:border-box;border-radius:10px;border:none;padding:8px;font-size:11px;background:#0f172a;color:#cbd5e1;resize:none;"></textarea>' +
+        '<textarea id="ashBkText" readonly style="width:100%;height:64px;box-sizing:border-box;border-radius:22px;border:none;padding:8px;font-size:11px;background:#0f172a;color:#cbd5e1;resize:none;"></textarea>' +
         '<div style="display:flex;gap:10px;margin-top:10px;">' +
-        '<button id="ashBkCopy" style="flex:1;padding:11px;border:none;border-radius:10px;background:#10b981;color:#fff;font-weight:800;font-size:14px;">📋 COPY BACKUP</button>' +
-        '<button id="ashBkClose" style="padding:11px 18px;border:none;border-radius:10px;background:#ef4444;color:#fff;font-weight:800;font-size:14px;">✕</button></div>';
+        '<button id="ashBkCopy" style="flex:1;padding:11px;border:none;border-radius:22px;background:#10b981;color:#fff;font-weight:800;font-size:14px;">📋 COPY BACKUP</button>' +
+        '<button id="ashBkClose" style="padding:11px 18px;border:none;border-radius:22px;background:#ef4444;color:#fff;font-weight:800;font-size:14px;">✕</button></div>';
     document.body.appendChild(d);
     var ta = d.querySelector('#ashBkText'); ta.value = text;
     d.querySelector('#ashBkClose').onclick = function () { d.remove(); };
@@ -5806,10 +5814,16 @@ function ashOpenPicker(i) {
     ashPickRow = i;
     var ov = document.getElementById('ashPickOv'), sInp = document.getElementById('ashPickSearch');
     sInp.value = ''; ashRenderPicker('');
-    var H = Math.max(260, Math.min(460, Math.round(window.innerHeight * 0.62) - 90));
-    var bx = document.getElementById('ashPickBox'); bx.style.height = H + 'px'; bx.style.marginTop = '90px';
+    ashFitPicker();
     ov.classList.add('show');
 }
+function ashFitPicker() {
+    var ov = document.getElementById('ashPickOv'), vv = window.visualViewport;
+    ov.style.height = (vv ? vv.height : window.innerHeight) + 'px';
+    ov.style.top = (vv ? vv.offsetTop : 0) + 'px';
+}
+if (window.visualViewport) { window.visualViewport.addEventListener('resize', ashFitPicker); window.visualViewport.addEventListener('scroll', ashFitPicker); }
+window.addEventListener('resize', ashFitPicker);
 function ashClosePicker() {
     document.getElementById('ashPickOv').classList.remove('show');
     ashPickRow = null;
