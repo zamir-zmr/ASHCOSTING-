@@ -1575,6 +1575,12 @@ img:not(.ash-sp-logo){border-radius:18px}
 .btn-finish{display:block;width:62%;max-width:260px;min-width:170px;margin:10px auto 2px;padding:12px 18px;border:none;border-radius:50px;background:linear-gradient(135deg,#07c1c1,#0891b2);color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;box-shadow:0 6px 16px rgba(7,193,193,.4);-webkit-tap-highlight-color:transparent}
 .btn-finish:active{transform:scale(.97);box-shadow:0 3px 8px rgba(7,193,193,.35)}
 </style>
+<style>
+#sumDetails{overflow:hidden;max-height:0;opacity:0;transition:max-height .4s ease,opacity .3s ease}
+#sumDetails.open{max-height:320px;opacity:1}
+#sumArrow{transition:transform .4s ease}
+#sumDetails.open ~ .calc-row #sumArrow{transform:rotate(180deg)}
+</style>
 </head>
 <body onload="initApp()">
 <div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
@@ -2046,7 +2052,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
 
         <!-- Cost Summary -->
         <div id="editorPanel-summary-col" style="background:white; padding:15px; border-top:3px solid var(--primary); border-radius:25px 25px 0 0; margin-bottom:0; padding-bottom:calc(15px + env(safe-area-inset-bottom,0px));">
-            <div class="calc-row" style="padding-top:0px; margin-top:0px;">
+            <div id="sumDetails"><div class="calc-row" style="padding-top:0px; margin-top:0px;">
                 <span>Recipe Cost:</span> <b id="recipeTotalDisplay">0.000</b>
             </div>
             <div class="calc-row" style="padding-top:0px; margin-top:0px;">
@@ -2061,8 +2067,9 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
             <div class="calc-row" style="padding-top:0px; margin-top:0px;">
                 <span>Margin %:</span> <input type="number" id="sellInp" class="calc-input" oninput="calcTotal()">
             </div>
+            </div>
             <div class="calc-row" style="font-size:18px; color:#2ecc71; border-top:1px solid #eee; padding-top:0px; margin-top:0px;">
-                <b>GRAND TOTAL:</b> <b id="grandTotal">0.000 OMR</b>
+                <b style="display:flex;align-items:center;gap:8px;"><span id="sumToggle" onclick="toggleSummary()" style="width:30px;height:30px;border-radius:50%;background:#e0fafa;color:#07c1c1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(7,193,193,.35);-webkit-tap-highlight-color:transparent;"><svg id="sumArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 15 12 9 18 15"/></svg></span>GRAND TOTAL:</b> <b id="grandTotal">0.000 OMR</b>
             </div>
             <button class="btn-finish" onclick="saveAndExit()">FINISH</button>
         </div>
@@ -3178,10 +3185,7 @@ function showRecipeItems(idx) {
                     <span style="font-size:12px; color:#00D2D3; font-weight:800; margin-left:2px;">OMR</span>
                 </div>
             </div>
-            <button id="closeBtnBottom" style="width:100%;
-            padding:9px; border:2px solid #000; background:#00b8b8; color:#fff; border-radius:22px; font-weight:800; font-size:13px; letter-spacing:1px; cursor:pointer;">
-                CLOSE
-            </button>
+            <button id="closeBtnBottom" class="btn-finish">CLOSE</button>
         </div>
     `;
     
@@ -3707,6 +3711,11 @@ let r = recipes[i];
     renderTable();
 }
         
+function toggleSummary() {
+    var d = document.getElementById('sumDetails');
+    if (d) d.classList.toggle('open');
+}
+
 function renderTable() {
     let r = recipes[activeIdx];
     let html = "";
