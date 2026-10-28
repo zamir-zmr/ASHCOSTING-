@@ -199,9 +199,9 @@ body {
 .ash-miss-tag{display:inline-block;margin:1px 0 0 2px;padding:1px 6px;font-size:9px;font-weight:800;line-height:1.4;color:#fff;background:#e74c3c;border-radius:20px;letter-spacing:.2px;white-space:nowrap}
 .ash-miss-tag[hidden]{display:none}
 .row-item.ash-unmatched{border-color:#e74c3c !important;border-left-color:#e74c3c !important;background:#fff6f5 !important}
-#ashPickOv{position:fixed;inset:0;z-index:2147483200;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center}
+#ashPickOv{position:fixed;inset:0;z-index:2147483200;background:rgba(0,0,0,.45);display:none;align-items:flex-start;justify-content:center}
 #ashPickOv.show{display:flex}
-#ashPickBox{width:100%;max-width:560px;max-height:75vh;background:#fff;border-radius:22px 22px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+#ashPickBox{width:calc(100% - 16px);max-width:560px;height:420px;margin-top:90px;background:#fff;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35)}
 #ashPickHead{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
 #ashPickHead b{flex:1;font-size:14px;color:#2d3436}
 #ashPickHead span{font-size:22px;color:#636e72;cursor:pointer;padding:0 6px}
@@ -4225,30 +4225,6 @@ if(finalOkBtn) {
 
     
     
-    // Logo ko gallery se upload aur save karne ka function
-function uploadAppLogo(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const max = 200; 
-                let w = img.width, h = img.height;
-                if (w > h) { if (w > max) { h *= max/w; w = max; } }
-                else { if (h > max) { w *= max/h; h = max; } }
-                canvas.width = w; canvas.height = h;
-                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                localStorage.setItem('ASH_CUSTOM_LOGO', dataUrl);
-                showLogo(dataUrl);
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
 function showLogo(url) {
     const imgEl = document.getElementById('appLogoImg');
     const textEl = document.getElementById('logoTextContent');
@@ -5785,7 +5761,7 @@ function uploadAppLogo(input) {
             if (typeof db !== 'undefined') {
                 db.ref('shared_app_logo').set({ img: dataUrl, t: Date.now() })
                     .then(function () { showToast('🖼️ Logo sab devices me update ho gaya'); })
-                    .catch(function () { showToast('Logo Firebase me save nahi hua', true); });
+                    .catch(function (err) { showToast('Logo Firebase me save nahi hua: ' + ((err && (err.code || err.message)) || ''), true); });
             } else showToast('🖼️ Logo update ho gaya');
             input.value = '';
         };
@@ -5797,7 +5773,7 @@ function uploadAppLogo(input) {
 // live listener: dusre device me logo badle to yahan turant dikhe
 (function () {
     function start() {
-        if (typeof db === 'undefined') return;
+        if (typeof db === 'undefined') { setTimeout(start, 1000); return; }
         db.ref('shared_app_logo').on('value', function (snap) {
             var v = snap.val();
             if (v && v.img && v.img !== window.__ashLogoLocal) {
@@ -5830,6 +5806,8 @@ function ashOpenPicker(i) {
     ashPickRow = i;
     var ov = document.getElementById('ashPickOv'), sInp = document.getElementById('ashPickSearch');
     sInp.value = ''; ashRenderPicker('');
+    var H = Math.max(260, Math.min(460, Math.round(window.innerHeight * 0.62) - 90));
+    var bx = document.getElementById('ashPickBox'); bx.style.height = H + 'px'; bx.style.marginTop = '90px';
     ov.classList.add('show');
 }
 function ashClosePicker() {
