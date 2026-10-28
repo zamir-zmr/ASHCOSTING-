@@ -221,9 +221,9 @@ body {
     font-weight: 900;
     font-size: 10px;
     color: #64748b;
-    margin-left: 15px;
-    margin-right: 15px;
-    border-radius: 22px;
+    margin-left: 4px;
+    margin-right: 4px;
+    border-radius: 12px;
     border: 3px solid #00af9e;
     text-align: center;
 }
@@ -1571,6 +1571,10 @@ img:not(.ash-sp-logo){border-radius:18px}
 #ashPickBox{height:calc(100% - 98px) !important;max-height:none !important;margin-top:90px !important;margin-bottom:8px}
 #ashPickList{flex:1;min-height:0}
 </style>
+<style>
+.btn-finish{display:block;width:62%;max-width:260px;min-width:170px;margin:10px auto 2px;padding:12px 18px;border:none;border-radius:50px;background:linear-gradient(135deg,#07c1c1,#0891b2);color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;box-shadow:0 6px 16px rgba(7,193,193,.4);-webkit-tap-highlight-color:transparent}
+.btn-finish:active{transform:scale(.97);box-shadow:0 3px 8px rgba(7,193,193,.35)}
+</style>
 </head>
 <body onload="initApp()">
 <div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
@@ -2034,14 +2038,14 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
                 <div>USED G</div>
                 <div>COST</div>
             </div>
-            <div style="flex:1; overflow-y:auto; padding:0px 15px 15px 15px;">
+            <div style="flex:1; overflow-y:auto; padding:0px 4px 8px 4px;">
                 <div id="suggestions"></div>
                 <div id="ingredientList" style="margin-top:0px;"></div>
             </div>
         </div>
 
         <!-- Cost Summary -->
-        <div id="editorPanel-summary-col" style="background:white; padding:15px; border-top:3px solid var(--primary); border-radius:25px 25px 0 0; margin-bottom:40px;">
+        <div id="editorPanel-summary-col" style="background:white; padding:15px; border-top:3px solid var(--primary); border-radius:25px 25px 0 0; margin-bottom:0; padding-bottom:calc(15px + env(safe-area-inset-bottom,0px));">
             <div class="calc-row" style="padding-top:0px; margin-top:0px;">
                 <span>Recipe Cost:</span> <b id="recipeTotalDisplay">0.000</b>
             </div>
@@ -2060,7 +2064,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
             <div class="calc-row" style="font-size:18px; color:#2ecc71; border-top:1px solid #eee; padding-top:0px; margin-top:0px;">
                 <b>GRAND TOTAL:</b> <b id="grandTotal">0.000 OMR</b>
             </div>
-            <button class="btn-pill" style="width:100%; background:var(--primary); color:white; margin-top:0px; padding:5px;" onclick="saveAndExit()">FINISH</button>
+            <button class="btn-finish" onclick="saveAndExit()">FINISH</button>
         </div>
 
     </div>
@@ -3717,7 +3721,7 @@ function renderTable() {
 
         const _missing = !latestItem;
         html += `
-        <div class="row-item${_missing ? ' ash-unmatched' : ''}" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 26px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 22px; box-shadow: none;">
+        <div class="row-item${_missing ? ' ash-unmatched' : ''}" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 26px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 12px; box-shadow: none;">
             
             <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             

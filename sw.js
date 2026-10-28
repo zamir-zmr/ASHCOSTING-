@@ -1,6 +1,6 @@
 // ASH COSTING service worker — network-first (updates turant aate hain), offline me cache se chalta hai
-const CACHE = 'ash-costing-v4';
-const SHELL = ['./', 'index.html', 'ash-ai-bot.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-96.png', 'logo.png', 'favicon-48.png', 'apple-touch-icon.png', 'favicon.ico'];
+const CACHE = 'ash-costing-v5';
+const SHELL = ['./', 'index.html', 'ash-ai-bot.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-96.png', 'logo.png', 'favicon-48.png', 'apple-touch-icon.png', 'favicon.ico', 'icon-192-maskable.png', 'icon-512-maskable.png'];
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
