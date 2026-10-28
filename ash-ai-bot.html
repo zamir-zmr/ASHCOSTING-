@@ -695,6 +695,11 @@
   }
 </style>
 <style>button,input:not([type=checkbox]):not([type=radio]),select,textarea{border-radius:22px}</style>
+<style>
+html,body{background:#0E1116;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
+</style>
+<script>document.addEventListener('contextmenu',function(e){if(!/^(INPUT|TEXTAREA)$/.test(e.target.tagName))e.preventDefault();});</script>
 </head>
 <body>
 

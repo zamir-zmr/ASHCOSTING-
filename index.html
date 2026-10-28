@@ -1581,6 +1581,12 @@ img:not(.ash-sp-logo){border-radius:18px}
 #sumArrow{transition:transform .4s ease}
 #sumDetails.open ~ .calc-row #sumArrow{transform:rotate(180deg)}
 </style>
+<style>
+#ashAiBackdrop{display:none;position:fixed;left:0;top:0;width:100%;height:100vh;min-height:100%;background:#0E1116;z-index:999990}
+body.ash-ai-open #ashAiBackdrop{display:block}
+body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not(style){visibility:hidden !important}
+#ashAiFrameOverlay{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+</style>
 </head>
 <body onload="initApp()">
 <div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
@@ -5077,6 +5083,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
     <i class="fas fa-robot"></i>
 </button>
 
+<div id="ashAiBackdrop"></div>
 <div id="ashAiFrameOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background:#0E1116; z-index:999999; align-items:center; justify-content:center; overflow:hidden; overscroll-behavior:none; color-scheme:dark;">
     <div style="position:relative; width:100%; height:100%; max-width:100%; max-height:100%; background:#0E1116; display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; justify-content:space-between; background:#1e293b; padding:10px 16px; color:#fff;">
@@ -5106,6 +5113,8 @@ async function ashAiEnsureCameraPermission() { /* native camera via Kodular brid
    keyboard/resize par peeche ka ASH COSTING layout kabhi na dikhe. */
 (function () {
     var ov = document.getElementById('ashAiFrameOverlay');
+    var bd = document.getElementById('ashAiBackdrop');
+    if (bd && bd.parentNode !== document.body) document.body.appendChild(bd);
     if (ov && ov.parentNode !== document.body) document.body.appendChild(ov);
 })();
 var __ashPrevBg = null;
@@ -5128,12 +5137,14 @@ function ashAiOpenOverlay() {
     if (__ashPrevBg === null) __ashPrevBg = [document.documentElement.style.background, document.body.style.background];
     document.documentElement.style.background = '#0E1116';
     document.body.style.background = '#0E1116';
+    document.body.classList.add('ash-ai-open');
     o.style.display = 'flex';
     ashAiFit();
     ashAiEnsureCameraPermission();
 }
 function ashAiCloseOverlay() {
     document.getElementById('ashAiFrameOverlay').style.display = 'none';
+    document.body.classList.remove('ash-ai-open');
     if (__ashPrevBg) {
         document.documentElement.style.background = __ashPrevBg[0];
         document.body.style.background = __ashPrevBg[1];
