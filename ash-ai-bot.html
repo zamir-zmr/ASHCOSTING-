@@ -570,13 +570,13 @@
     50%{ box-shadow:0 0 0 8px rgba(255,77,77,0); }
   }
 
-  input[type="text"]{
+  input[type="text"],input[type="search"]{
     flex:1; background:transparent; border:none; outline:none;
     color:var(--text); font-family:'Inter',sans-serif; font-size:14.5px;
     padding:10px 0; min-width:0;
   }
 
-  input[type="text"]::placeholder{ color:var(--text-dim); }
+  input[type="text"]::placeholder,input[type="search"]::placeholder{ color:var(--text-dim); }
 
   button[type="submit"]{
     background:var(--accent); color:#1A0E00; border:none;
@@ -700,7 +700,7 @@ html,body{background:#0E1116;-webkit-user-select:none;user-select:none;-webkit-t
 input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
 </style>
 <script>document.addEventListener('contextmenu',function(e){if(!/^(INPUT|TEXTAREA)$/.test(e.target.tagName))e.preventDefault();});</script>
-<style>#user-input::-webkit-search-cancel-button,#user-input::-webkit-search-decoration{-webkit-appearance:none;display:none}#user-input{-webkit-appearance:none;appearance:none}</style>
+<style>#chat-form{display:flex;align-items:center;gap:8px;width:100%;box-sizing:border-box}#user-input{flex:1 1 auto;width:auto;min-width:0}#plus-btn,#mic-btn,#send-btn{flex:0 0 auto}#user-input::-webkit-search-cancel-button,#user-input::-webkit-search-decoration{-webkit-appearance:none;display:none}#user-input{-webkit-appearance:none;appearance:none}</style>
 </head>
 <body>
 
@@ -877,7 +877,25 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
     });
   }
 
+  async function fastRead(file){
+    if (!window.createImageBitmap) throw new Error('no bitmap');
+    const MAX = 800;
+    let bmp = await createImageBitmap(file);
+    let w = bmp.width, h = bmp.height;
+    const k = Math.min(1, MAX / Math.max(w, h));
+    w = Math.max(1, Math.round(w * k)); h = Math.max(1, Math.round(h * k));
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(bmp, 0, 0, w, h);
+    if (bmp.close) bmp.close();
+    const out = c.toDataURL('image/jpeg', 0.7);
+    c.width = c.height = 0;
+    return { mimeType: 'image/jpeg', base64: out.split(',')[1], previewUrl: out };
+  }
   function readFileAsBase64(file){
+    return fastRead(file).catch(() => readFileAsBase64Slow(file));
+  }
+  function readFileAsBase64Slow(file){
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
@@ -1933,7 +1951,7 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
    ========================================================================= */
 (function () {
     if (window.ZCam) return;
-    var CAM_MAX_SIDE = 800, CAM_QUALITY = 0.7;
+    var CAM_MAX_SIDE = 640, CAM_QUALITY = 0.6;
     var onDone = null, busy = false, lastSig = '', pollUntil = 0, pongT = null;
     var inIframe = false;
     try { inIframe = window.parent && window.parent !== window; } catch (e) {}
@@ -2025,7 +2043,7 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
     setInterval(function () {
         if (Date.now() > pollUntil) return;
         try { handleAppString(readAppString()); } catch (e) {}
-    }, 300);
+    }, 80);
 
     function openNative() {
         window.AppInventor.setWebViewString('OPEN_CAMERA OPEN CAMERA:' + Date.now());

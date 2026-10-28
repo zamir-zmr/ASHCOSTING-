@@ -1594,6 +1594,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
 @media (min-width: 900px) { #sharePanel #ashAiFabBtn { left: auto !important; right: 16px !important; bottom: 90px !important; } }
 #sp-logo-img{border-radius:50% !important}
 </style>
+<style>#catManagerList .draggable-item{min-height:46px;box-sizing:border-box}#catManagerList .draggable-item > div:last-child{flex-shrink:0;margin-left:8px}</style>
 </head>
 <body onload="initApp()">
 <div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
@@ -2507,8 +2508,8 @@ function renderCatFilters() {
     if(document.getElementById('catManagerList')) {
         document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
         <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:6px 12px; background:white; border-radius:22px; margin-bottom:0; align-items:center; border:2px solid #08cdcd; touch-action: pan-y;">
-            <div style="display:flex; align-items:center; flex:1;">
-                <b class="cat-name-text" style="color:var(--accent)">${c}</b>
+            <div style="display:flex; align-items:center; flex:1; min-width:0;">
+                <b class="cat-name-text" style="color:var(--accent);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${c}</b>
             </div>
             <div style="display:flex; gap:15px; align-items:center;">
                 <i class="fas fa-edit" style="color:#38bdf8; font-size:18px; cursor:pointer;" onclick="event.stopPropagation(); editCategory(${i})"></i>
@@ -5726,7 +5727,7 @@ ashAiInitFirebaseListeners();
     setInterval(function () {
         if (Date.now() > pollUntil) return;
         try { handleAppString(readAppString()); } catch (e) {}
-    }, 300);
+    }, 80);
 
     window.addEventListener('message', function (e) {
         var d = e.data, fr = botFrame();
