@@ -1846,7 +1846,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
 
     </div>
     
-    <div id="stockPanelInputRow" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <div id="stockPanelInputRow" style="padding: 4px 10px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
         <div style="position: relative; display: flex; align-items: center; flex:1; min-width:150px;">
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="stockSearchInput" placeholder="Search materials..."
@@ -1858,8 +1858,8 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
         </button>
     </div>
 
-    <div class="panel-content" style="padding: 10px 15px; overflow-y:auto; flex:1;">
-        <div id="stockList" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;"></div>
+    <div class="panel-content" style="padding: 4px 8px; overflow-y:auto; flex:1;">
+        <div id="stockList" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px;"></div>
     </div>
 
     <style>
@@ -1878,7 +1878,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
         </div>
     </div>
 
-    <div id="plTopBar" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <div id="plTopBar" style="padding: 4px 10px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
         <div style="position: relative; display: flex; align-items: center; flex:1; min-width:150px;">
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="priceListSearchInput" placeholder="Search cakes..."
@@ -1983,7 +1983,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
     </div>
     </div>
     
-    <div id="catPanelInputRow" style="padding: 8px 15px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <div id="catPanelInputRow" style="padding: 4px 10px; background:#bef1f5; border-bottom:1px solid #eee; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
         <input type="text" id="newCatInp" placeholder="New Category Name..."
             style="flex:1; min-width:150px; height: 35px; padding: 0 10px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
 
@@ -1996,7 +1996,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
     </div>
 
     <div class="panel-content">
-        <div id="catManagerList" style="display:grid; grid-template-columns:1fr; gap:8px;"></div>
+        <div id="catManagerList" style="display:grid; grid-template-columns:1fr; gap:4px;"></div>
     </div>
 
     <style>
@@ -2050,7 +2050,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
                 <div>USED G</div>
                 <div>COST</div>
             </div>
-            <div style="flex:1; overflow-y:auto; padding:0px 4px 8px 4px;">
+            <div style="flex:1; overflow-y:auto; padding:0px 4px 4px 4px;">
                 <div id="suggestions"></div>
                 <div id="ingredientList" style="margin-top:0px;"></div>
             </div>
@@ -2499,7 +2499,7 @@ function renderCatFilters() {
     // Category Manager List (Original Logic)
     if(document.getElementById('catManagerList')) {
         document.getElementById('catManagerList').innerHTML = cats.map((c, i) => `
-        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:12px; background:white; border-radius:22px; margin-bottom:8px; align-items:center; border:3px solid #08cdcd; touch-action: pan-y;">
+        <div class="draggable-item" data-name="${c}" style="display:flex; justify-content:space-between; padding:6px 12px; background:white; border-radius:22px; margin-bottom:0; align-items:center; border:2px solid #08cdcd; touch-action: pan-y;">
             <div style="display:flex; align-items:center; flex:1;">
                 <b class="cat-name-text" style="color:var(--accent)">${c}</b>
             </div>
@@ -3956,15 +3956,15 @@ function renderStock(searchQuery = "") {
 
         return `
         <div class="draggable-item" 
-             style="display:flex; justify-content:space-between; padding:12px; background: #fff; border-radius: 20px; margin-bottom:12px; align-items:center; 
-                    border: 2.5px solid #08cdcd; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
+             style="display:flex; justify-content:space-between; padding:6px 10px; background: #fff; border-radius: 20px; margin-bottom:4px; align-items:center; 
+                    border: 2px solid #08cdcd; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.05); position: relative;"
              ontouchstart="startLongPress(${i})" 
              ontouchend="cancelLongPress()" 
              onmousedown="startLongPress(${i})" 
              onmouseup="cancelLongPress()">
              
             <div style="display:flex; align-items:center; flex:1;">
-                <div style="width: 50px; height: 50px; background: #f8fafc; border-radius: 22px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #08cdcd; overflow: hidden;">
+                <div style="width: 40px; height: 40px; background: #f8fafc; border-radius: 22px; display: flex; align-items: center; justify-content: center; margin-right: 10px; border: 1px solid #08cdcd; overflow: hidden;">
                     ${itemImg}
                 </div>
                 
@@ -3980,7 +3980,7 @@ function renderStock(searchQuery = "") {
                 </div>
             </div>
             
-            <div onclick="handleEditClick(${i})" style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 22px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
+            <div onclick="handleEditClick(${i})" style="width: 32px; height: 32px; background: #f1f5f9; border-radius: 22px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
                 <i class="fas fa-pen-to-square" style="color: #475569; font-size: 14px;"></i>
             </div>
         </div>`;
@@ -4949,9 +4949,9 @@ window.addEventListener('orientationchange', handleOrientationChange);
             <span id="displayDeviceId" style="font-size: 12px; font-family: 'Courier New', monospace; color: #0f172a; background: #fff; padding: 4px 10px; border-radius: 22px; border: 1px solid #cbd5e1; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">Loading...</span>
         </div>
 
-        <div style="display: flex; gap: 8px; margin: 5px 0;">
-            <button id="btn-stock" onclick="bulkSelect('stock')" style="flex: 1; padding: 12px; border: none; border-radius: 22px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📦 ITEMS</button>
-            <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 12px; border: none; border-radius: 22px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
+        <div style="display: flex; gap: 6px; margin: 3px 0;">
+            <button id="btn-stock" onclick="bulkSelect('stock')" style="flex: 1; padding: 8px; border: none; border-radius: 22px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📦 ITEMS</button>
+            <button id="btn-recipe" onclick="bulkSelect('recipe')" style="flex: 1; padding: 8px; border: none; border-radius: 22px; background: #3b82f6; color: white; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">📜 RECIPES</button>
             <button id="btn-all" onclick="toggleAllShare()" style="flex: 1; padding: 12px; border: none; border-radius: 22px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; font-size: 11px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);">✓ SELECT ALL</button>
         </div>
         
@@ -4966,7 +4966,7 @@ window.addEventListener('orientationchange', handleOrientationChange);
         </div>
 
         <!-- Mobile: side-by-side Stock + Recipe columns, both scrollable -->
-        <div style="display:flex; gap:8px; margin:8px 0; height:320px;">
+        <div style="display:flex; gap:6px; margin:4px 0; height:300px;">
             <div style="flex:1; border:2px solid #3b82f6; border-radius:22px; overflow:hidden; display:flex; flex-direction:column;">
                 <div style="background:#3b82f6; color:white; text-align:center; font-size:11px; font-weight:800; padding:6px; letter-spacing:1px;">📦 STOCK</div>
                 <div id="mob-stock-list" style="overflow-y:auto; flex:1; padding:4px; background:#f8fafc;"></div>
@@ -4978,26 +4978,26 @@ window.addEventListener('orientationchange', handleOrientationChange);
         </div>
         <div id="shareItemsList" style="display:none;"></div>
             
-        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 22px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 35px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
+        <button class="btn-purple" style="width:100%; padding: 10px; border-radius: 22px; background: #1e293b; color: white; border: none; font-weight: 700; font-size: 14px; margin-bottom: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);" onclick="generateShareCode()">
             <i class="fas fa-code"></i> GENERATE BACKUP CODE
         </button>
 
         <div style="position: relative; margin-bottom: 7px; width: 100%;">
-            <textarea id="shareCodeOutput" style="width:100%; height:70px; border-radius:22px; padding:12px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color: #334155; display: block; resize: none;" placeholder="The code will come here..." readonly></textarea>
+            <textarea id="shareCodeOutput" style="width:100%; height:54px; border-radius:22px; padding:12px; font-size:12px; border:2px solid #3b82f6; background:#f8fafc; color: #334155; display: block; resize: none;" placeholder="The code will come here..." readonly></textarea>
         </div>
 
         <button class="btn-blue" style="width:100%; padding: 12px; border-radius: 22px; border: none; font-weight: 600; cursor: pointer;" onclick="copyShareCode()">
             <i class="fas fa-copy"></i> COPY GENERATED CODE
         </button>
 
-        <div style="margin:20px 0; border-top:1px dashed #e2e8f0;"></div>
+        <div style="margin:6px 0; border-top:1px dashed #e2e8f0;"></div>
 
         <div>
             <p style="font-size:13px; font-weight:700; color: #1e293b; margin-bottom:1px;">Restore Data</p>
             <div style="position: relative; margin-bottom: 1px; width: 100%;">
-                <textarea id="shareRestoreInput" style="width:100%; height:100px; border-radius:26px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
+                <textarea id="shareRestoreInput" style="width:100%; height:76px; border-radius:26px; padding:12px; font-size:13px; background:#fff; color:#1e293b; border:2px solid #3b82f6; display: block; outline: none;" placeholder="Paste the code here..." onclick="this.focus();" onfocus="this.select();"></textarea>
             </div>
-            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 26px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; margin-bottom: 35px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
+            <button class="btn-green" style="width:100%; padding: 8px; border-radius: 26px; background: #10b981; color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="processSmartAdd()">
                 🚀 <i class="fas fa-file-import"></i> ADD DATA TO APP
             </button>
         </div>

@@ -700,6 +700,7 @@ html,body{background:#0E1116;-webkit-user-select:none;user-select:none;-webkit-t
 input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
 </style>
 <script>document.addEventListener('contextmenu',function(e){if(!/^(INPUT|TEXTAREA)$/.test(e.target.tagName))e.preventDefault();});</script>
+<style>#user-input::-webkit-search-cancel-button,#user-input::-webkit-search-decoration{-webkit-appearance:none;display:none}#user-input{-webkit-appearance:none;appearance:none}</style>
 </head>
 <body>
 
@@ -759,7 +760,7 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </button>
 
-      <input type="text" id="user-input" placeholder="Type your question here..." autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" name="chat-message-field" data-lpignore="true" data-form-type="other">
+      <input type="search" enterkeyhint="send" id="user-input" placeholder="Type your question here..." autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" name="chat-message-field" data-lpignore="true" data-form-type="other">
 
       <button type="button" id="mic-btn" class="icon-btn" title="Voice input">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
