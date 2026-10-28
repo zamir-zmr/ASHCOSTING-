@@ -995,7 +995,10 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     #sp-sidebar > div[style*="dashed"] { padding: 5px !important; margin-top: 0 !important; border-radius: 22px !important; }
     #sp-sidebar > div[style*="dashed"] p { font-size: 9px !important; margin: 0 0 3px !important; }
     #sp-sidebar input[type="file"] { font-size: 10px !important; }
-    #sp-sidebar > div:last-child { display: none !important; }
+    #sp-sidebar > div:last-child { display: flex !important; padding-top: 6px !important; margin-top: auto !important; }
+    #sp-sidebar > div:last-child img { width: 64px !important; height: 64px !important; border-width: 3px !important; }
+    #sp-sidebar > div:last-child span { font-size: 12px !important; }
+    #sp-sidebar > div:last-child span span { display: none !important; }
     #sp-stock-col, #sp-recipe-col { padding: 3px 8px !important; }
     .sp-item-row { padding: 4px 4px !important; gap: 8px !important; }
     .sp-item-row input[type="checkbox"] { width: 16px !important; height: 16px !important; }
@@ -1008,7 +1011,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     #sp-bottom-bar p { font-size: 11px !important; margin: 0 !important; }
     #shareCodeOutputDesktop { height: 32px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 22px !important; }
     #shareRestoreInputDesktop { height: 40px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 22px !important; }
-    #sharePanel #ashAiFabBtn { width: 42px !important; height: 42px !important; font-size: 19px !important; left: 10px !important; right: auto !important; bottom: 10px !important; }
+    #sharePanel #ashAiFabBtn { width: 42px !important; height: 42px !important; font-size: 19px !important; left: auto !important; right: 14px !important; bottom: 84px !important; }
 }
 @media (min-width: 600px) and (max-height: 420px) {
     #sharePanel .sharepanel-nav { padding: 0 12px !important; font-size: 12px !important; }
@@ -1586,6 +1589,10 @@ img:not(.ash-sp-logo){border-radius:18px}
 body.ash-ai-open #ashAiBackdrop{display:block}
 body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not(style){visibility:hidden !important}
 #ashAiFrameOverlay{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style>
+@media (min-width: 900px) { #sharePanel #ashAiFabBtn { left: auto !important; right: 16px !important; bottom: 90px !important; } }
+#sp-logo-img{border-radius:50% !important}
 </style>
 </head>
 <body onload="initApp()">
@@ -5877,6 +5884,25 @@ function ashPickStock(idx) {
     renderTable();
     showToast('Selected: ' + s.name);
 }
+</script>
+<script>
+(function(){
+  function sync(){
+    var s=document.getElementById('sp-logo-img'), a=document.getElementById('appLogoImg');
+    if(!s||!a) return;
+    var u=a.getAttribute('src');
+    try{ var l=localStorage.getItem('ASH_CUSTOM_LOGO'); if(l && (!u || u.indexOf('icon-192')===0)) u=l; }catch(e){}
+    if(u && s.getAttribute('src')!==u){ s.onerror=null; s.src=u; }
+  }
+  window.ashSyncSideLogo=sync;
+  function start(){
+    sync();
+    var a=document.getElementById('appLogoImg');
+    if(a && window.MutationObserver) new MutationObserver(sync).observe(a,{attributes:true,attributeFilter:['src']});
+    setInterval(sync,2000);
+  }
+  if(document.readyState==='complete') start(); else window.addEventListener('load',start);
+})();
 </script>
 </body>
 </html>
