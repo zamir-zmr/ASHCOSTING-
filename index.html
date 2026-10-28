@@ -7,9 +7,12 @@
     <title>ASHCOSTING</title>
     <meta name="theme-color" content="#0E1116" id="ash-theme">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+    <meta name="apple-mobile-web-app-title" content="ASH Costing">
     <style>
     /* ===== ASH COSTING opening splash (Zamir AI style) ===== */
     #ashSplash{position:fixed;inset:0;z-index:2147483600;background:#0E1116;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .7s ease,transform .7s cubic-bezier(.4,0,.2,1),visibility .7s}
@@ -18,9 +21,9 @@
     #ashSplash::before{top:10%;left:-130px;background:radial-gradient(circle,rgba(37,174,207,.28),transparent 65%);animation:ashOrb1 7s ease-in-out infinite alternate}
     #ashSplash::after{bottom:8%;right:-130px;background:radial-gradient(circle,rgba(253,239,90,.20),transparent 65%);animation:ashOrb2 7s ease-in-out infinite alternate}
     .ash-sp-stage{position:relative;width:112px;height:112px;animation:ashFloat 3s .9s ease-in-out infinite}
-    .ash-sp-ring{position:absolute;inset:0;border-radius:26px;border:2px solid rgba(37,174,207,.65);opacity:0;animation:ashRing 2.2s .9s ease-out infinite}
+    .ash-sp-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,174,207,.65);opacity:0;animation:ashRing 2.2s .9s ease-out infinite}
     .ash-sp-ring.r2{animation-delay:2s}
-    .ash-sp-logo{position:relative;display:block;width:112px;height:112px;border-radius:26px;object-fit:cover;filter:drop-shadow(0 10px 28px rgba(37,174,207,.5));animation:ashPop 1s cubic-bezier(.2,.9,.25,1.25) both}
+    .ash-sp-logo{position:relative;display:block;width:112px;height:112px;border-radius:50%;object-fit:cover;filter:drop-shadow(0 10px 28px rgba(37,174,207,.5));animation:ashPop 1s cubic-bezier(.2,.9,.25,1.25) both}
     .ash-sp-name{position:relative;font-family:'Segoe UI',Roboto,Arial,sans-serif;font-weight:800;font-size:24px;background:linear-gradient(90deg,#ffffff 0%,#2BC4DC 40%,#FDEF5A 60%,#ffffff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ashNameIn 1s .35s cubic-bezier(.2,.8,.2,1) both,ashShimmer 2.4s 1.4s linear infinite}
     .ash-sp-bar{position:relative;width:130px;height:3px;border-radius:3px;background:#1D2230;overflow:hidden;animation:ashFadeUp .8s .6s both}
     .ash-sp-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#25AECF,#FDEF5A);border-radius:3px;animation:ashSlide 1s ease-in-out infinite}
@@ -189,12 +192,32 @@ body {
     background-color: #f9f9f9;
 }
 
+
+/* ===== Ingredient dropdown + Missing-in-stock tag ===== */
+.ash-pick-btn{color:#07c1c1;cursor:pointer;text-align:center;font-size:15px;font-weight:900;border-right:1px solid #eee;height:24px;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent}
+.ash-pick-btn:active{background:#e0fafa;border-radius:6px}
+.ash-miss-tag{display:inline-block;margin:1px 0 0 2px;padding:1px 6px;font-size:9px;font-weight:800;line-height:1.4;color:#fff;background:#e74c3c;border-radius:20px;letter-spacing:.2px;white-space:nowrap}
+.ash-miss-tag[hidden]{display:none}
+.row-item.ash-unmatched{border-color:#e74c3c !important;border-left-color:#e74c3c !important;background:#fff6f5 !important}
+#ashPickOv{position:fixed;inset:0;z-index:2147483200;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center}
+#ashPickOv.show{display:flex}
+#ashPickBox{width:100%;max-width:560px;max-height:75vh;background:#fff;border-radius:22px 22px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+#ashPickHead{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
+#ashPickHead b{flex:1;font-size:14px;color:#2d3436}
+#ashPickHead span{font-size:22px;color:#636e72;cursor:pointer;padding:0 6px}
+#ashPickSearch{margin:0 14px 8px;padding:10px 14px;border:1.5px solid #07c1c1;border-radius:30px;font-size:14px;outline:none;width:auto}
+#ashPickList{overflow-y:auto;padding:0 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.ash-pick-item{display:flex;justify-content:space-between;gap:10px;padding:12px 6px;border-bottom:1px solid #eee;font-weight:700;font-size:13px;color:#2d3436;cursor:pointer}
+.ash-pick-item:active{background:#e0fafa}
+.ash-pick-item small{color:#07c1c1;font-weight:800;white-space:nowrap}
+.ash-pick-empty{padding:20px;text-align:center;color:#b2bec3;font-size:13px}
+
 .row-header {
     display: grid;
-    grid-template-columns: 55px 2.4fr 1fr 1fr 1fr 1fr;
-    gap: 5px;
+    grid-template-columns: 54px 1.5fr 42px 42px 42px 55px;
+    gap: 0;
     background: #f8fafc;
-    padding: 5px 5px;
+    padding: 5px 2px 5px 3px;
     font-weight: 900;
     font-size: 10px;
     color: #64748b;
@@ -1542,7 +1565,7 @@ function openSmartShare() {
     
 </head>
 <body onload="initApp()">
-<div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icons/icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
+<div id="ashSplash"><div class="ash-sp-stage"><i class="ash-sp-ring"></i><i class="ash-sp-ring r2"></i><img class="ash-sp-logo" src="icon-192.png" alt="ASH COSTING" width="112" height="112"></div><div class="ash-sp-name">ASH COSTING</div><div class="ash-sp-bar"><i></i></div></div>
 <script>
 (function () {
     var sp = document.getElementById('ashSplash'), meta = document.getElementById('ash-theme');
@@ -1592,7 +1615,7 @@ function openSmartShare() {
                 <b class="ash-main-text"></b>
                 <span class="ash-sub-text"></span>
             </div>
-            <img id="appLogoImg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; z-index:4; border-radius:50%;">
+            <img id="appLogoImg" src="icon-192.png?v=2" alt="ASH BAKES" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; z-index:4; border-radius:50%;">
             <input type="file" id="logoInput" hidden accept="image/*" onchange="uploadAppLogo(this)">
         </div>
     </div>
@@ -3684,13 +3707,17 @@ function renderTable() {
             it.total = latestItem.base || latestItem.total || 1000;
         }
 
+        const _missing = !latestItem;
         html += `
-        <div class="row-item" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 6px; box-shadow: none;">
+        <div class="row-item${_missing ? ' ash-unmatched' : ''}" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 26px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 6px; box-shadow: none;">
             
             <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             
+            <div class="ash-pick-btn" title="Stock se chuno" onclick="ashOpenPicker(${i})">▾</div>
+            
             <div style="padding-left: 6px; border-right: 1px solid #eee; overflow: hidden;">
-                <input type="text" value="${it.name}" oninput="upd(${i},'name',this.value)" style="width: 100%; font-size: 12px; border:none; background:transparent; font-weight: 600; color: #2d3436; outline: none; height: 24px;">
+                <input type="text" value="${String(it.name).replace(/"/g,'&quot;')}" oninput="upd(${i},'name',this.value)" style="width: 100%; font-size: 12px; border:none; background:transparent; font-weight: 600; color: #2d3436; outline: none; height: 24px;">
+                <span class="ash-miss-tag" ${_missing ? '' : 'hidden'}>⚠ Missing in stock</span>
             </div>
             
             <input type="number" value="${it.price}" oninput="upd(${i},'price',this.value)" style="text-align: center; font-size: 11px; border:none; border-right: 1px solid #eee; background:transparent; outline: none; height: 24px; width: 100%;">
@@ -3741,6 +3768,12 @@ function upd(i, k, v) {
     let rows = document.querySelectorAll('#ingredientList .row-item');
     if(rows[i]) {
         rows[i].querySelector('b').innerText = rowCost.toFixed(3);
+        if (k === 'name') {
+            const miss = !ashFindStock(v);
+            rows[i].classList.toggle('ash-unmatched', miss);
+            const tg = rows[i].querySelector('.ash-miss-tag');
+            if (tg) tg.hidden = !miss;
+        }
     }
 
     calcTotal(); 
@@ -4994,11 +5027,11 @@ window.addEventListener('orientationchange', handleOrientationChange);
 
          <div style="margin-top:auto; padding-top:20px; display:flex; justify-content:center; align-items:center; flex-direction:column; gap:6px;">
                <img id="sp-logo-img"
-                    src="https://lh3.googleusercontent.com/d/1MzHDhy46zv7gwOygWGncNHrRC1SdWqzH"
+                    src="icon-192.png?v=2"
                     width="110"
                     height="110"
                     style="border-radius:50%; object-fit:cover; opacity:0.85; box-shadow:0 2px 8px rgba(0,0,0,0.15); border:5px solid #7bff7b;"
-                    onerror="this.src='https://i.ibb.co/vzS8m8S/logo.png'; this.onerror=null;">
+                    onerror="this.src='https://lh3.googleusercontent.com/d/1MzHDhy46zv7gwOygWGncNHrRC1SdWqzH'; this.onerror=null;">
                
              <span style="font-size:19px; color:#000000; text-align:center; display:block; margin-top:0px;">Ash Bakes<br><span style="font-size:9px;color:#000000; display:block; margin-top:0px;">Data Backup Solutions</span></span>
            
@@ -5776,6 +5809,58 @@ function uploadAppLogo(input) {
     }
     if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
 })();
+</script>
+
+<div id="ashPickOv" onclick="if(event.target===this)ashClosePicker()">
+  <div id="ashPickBox">
+    <div id="ashPickHead"><b>📦 Stock se ingredient chuno</b><span onclick="ashClosePicker()">✕</span></div>
+    <input type="text" id="ashPickSearch" placeholder="🔍 Search stock..." oninput="ashRenderPicker(this.value)">
+    <div id="ashPickList"></div>
+  </div>
+</div>
+<script>
+/* ===== Ingredient dropdown (▾) + Missing-in-stock check ===== */
+var ashPickRow = null;
+function ashFindStock(name) {
+    var n = String(name || '').trim().toLowerCase();
+    if (!n) return null;
+    return stock.find(function (s) { return String(s.name || '').trim().toLowerCase() === n; }) || null;
+}
+function ashOpenPicker(i) {
+    ashPickRow = i;
+    var ov = document.getElementById('ashPickOv'), sInp = document.getElementById('ashPickSearch');
+    sInp.value = ''; ashRenderPicker('');
+    ov.classList.add('show');
+}
+function ashClosePicker() {
+    document.getElementById('ashPickOv').classList.remove('show');
+    ashPickRow = null;
+}
+function ashRenderPicker(q) {
+    q = String(q || '').trim().toLowerCase();
+    var box = document.getElementById('ashPickList');
+    var list = stock.map(function (s, idx) { return { s: s, idx: idx }; })
+        .filter(function (o) { return !q || String(o.s.name || '').toLowerCase().indexOf(q) !== -1; });
+    if (!list.length) { box.innerHTML = '<div class="ash-pick-empty">Stock me koi item nahi mila</div>'; return; }
+    box.innerHTML = list.map(function (o) {
+        var s = o.s, b = s.base || s.total || 1000, p = parseFloat(s.price) || 0;
+        var nm = String(s.name).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        return '<div class="ash-pick-item" onclick="ashPickStock(' + o.idx + ')"><span>' + nm + '</span><small>' + p.toFixed(3) + ' OMR / ' + b + 'g</small></div>';
+    }).join('');
+}
+function ashPickStock(idx) {
+    var s = stock[idx];
+    if (!s || ashPickRow === null || !recipes[activeIdx] || !recipes[activeIdx].items[ashPickRow]) { ashClosePicker(); return; }
+    var it = recipes[activeIdx].items[ashPickRow], b = parseFloat(s.base || s.total) || 1000;
+    it.name = s.name;
+    it.price = parseFloat(s.price) || 0;
+    it.total = b;
+    it.base = b;
+    ashClosePicker();
+    syncRecipeToCloud();
+    renderTable();
+    showToast('Selected: ' + s.name);
+}
 </script>
 </body>
 </html>

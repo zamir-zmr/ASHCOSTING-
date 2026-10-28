@@ -17,11 +17,15 @@
       "use": "@vercel/static"
     },
     {
+      "src": "favicon.ico",
+      "use": "@vercel/static"
+    },
+    {
       "src": "sw.js",
       "use": "@vercel/static"
     },
     {
-      "src": "icons/*",
+      "src": "*.png",
       "use": "@vercel/static"
     }
   ],
