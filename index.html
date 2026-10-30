@@ -3036,16 +3036,14 @@ function showRecipeItems(idx) {
         });
 
         const itemHTML = (it, usedQty, itemCost, i, extraStyle = '') => `
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 14px; flex:1; ${extraStyle}">
-                <div style="flex:1;">
-                    <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform:uppercase; line-height:1;">${it.name}</div>
-                    <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">
-                        ${Number(usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:5px 14px; flex:1; ${extraStyle}">
+                <div style="flex:1; min-width:0; font-weight:700; color:#1e293b; font-size:12px; text-transform:uppercase; line-height:1.2;">${it.name}</div>
+                <div style="display:flex; align-items:baseline; gap:10px; flex-shrink:0;">
+                    <div style="font-size:12px; color:#00D2D3; font-weight:700;">${Number(usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span></div>
+                    <div style="display:flex; align-items:baseline; gap:4px;">
+                        <div style="font-weight:900; color:#2ecc71; font-size:14px; line-height:1;">${Number(itemCost).toFixed(3)}</div>
+                        <div style="font-weight:700; color:#94a3b8; font-size:8px; text-transform:uppercase;">OMR</div>
                     </div>
-                </div>
-                <div style="display:flex; align-items:baseline; gap:4px; margin-top:5px;">
-                    <div style="font-weight:900; color:#2ecc71; font-size:14px; line-height:1;">${Number(itemCost).toFixed(3)}</div>
-                    <div style="font-weight:700; color:#94a3b8; font-size:8px; text-transform:uppercase;">OMR</div>
                 </div>
             </div>`;
 
@@ -3065,16 +3063,7 @@ function showRecipeItems(idx) {
                 if (isLast) {
                     // Last odd item — only left half, right half empty
                     html += `<div class="recipe-item-row" style="display:flex; border-bottom:2px solid #04fffb; animation:itemSlide 0.2s ease forwards; animation-delay:${i * 0.02}s;">
-                        <div style="flex:1; display:flex; justify-content:center; align-items:center; padding:5px 14px; gap:20px;">
-                            <div style="flex:1;">
-                                <div style="font-weight:700; color:#1e293b; font-size:12px; text-transform:uppercase; line-height:1;">${rows[i].it.name}</div>
-                                <div style="font-size:11px; color:#00D2D3; font-weight:700; margin-top:1px;">${Number(rows[i].usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${rows[i].it.unit || ' g'}</span></div>
-                            </div>
-                            <div style="display:flex; align-items:baseline; gap:4px;">
-                                <div style="font-weight:900; color:#2ecc71; font-size:14px;">${Number(rows[i].itemCost).toFixed(3)}</div>
-                                <div style="font-weight:700; color:#94a3b8; font-size:8px; text-transform:uppercase;">OMR</div>
-                            </div>
-                        </div>
+                        ${itemHTML(rows[i].it, rows[i].usedQty, rows[i].itemCost, i)}
                         <div style="flex:1; border-left:2px solid #04fffb;"></div>
                     </div>`;
                 } else {
@@ -3192,13 +3181,6 @@ function showRecipeItems(idx) {
         </div>
 
         <div style="padding:12px 20px; background:#fff; border-top:3px solid #17b128; border-radius:30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);">
-            <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:10px;">
-                <div style="text-align:right;">
-                    <span style="font-size:10px; color:#94a3b8; font-weight:800; letter-spacing:0.5px; display:block; margin-bottom:2px;">NET PRODUCTION COST</span>
-                    <span id="recipeNetTotalDisplay" style="font-size:26px; font-weight:900; color:#1e293b; line-height:1;">${Number(calculatedTotal).toFixed(3)}</span>
-                    <span style="font-size:12px; color:#00D2D3; font-weight:800; margin-left:2px;">OMR</span>
-                </div>
-            </div>
             <button id="closeBtnBottom" class="btn-finish">CLOSE</button>
         </div>
     `;
@@ -3746,7 +3728,7 @@ function renderTable() {
         html += `
         <div class="row-item${_missing ? ' ash-unmatched' : ''}" data-id="${i}" style="touch-action: pan-y; display: grid; grid-template-columns: 28px 26px 1.5fr 42px 42px 42px 55px; align-items: center; gap: 0; padding: 6px 2px; margin: 4px 0; background: #fff; border: 1.5px solid #07c1c1; border-left: 4px solid #00D2D3; border-radius: 12px; box-shadow: none;">
             
-            <div onclick="recipes[activeIdx].items.splice(${i},1); syncRecipeToCloud(); renderTable();" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
+            <div onclick="ashConfirmDeleteItem(${i})" style="color:#ff7675; cursor:pointer; text-align: center; font-size: 14px; border-right: 1px solid #eee; height: 24px; display: flex; align-items: center; justify-content: center;">✕</div>
             
             <div class="ash-pick-btn" title="Stock se chuno" onclick="ashOpenPicker(${i})">▾</div>
             
@@ -4922,7 +4904,57 @@ window.addEventListener('orientationchange', handleOrientationChange);
     
     
     
-    <div id="confirmOverlay" class="custom-confirm-overlay">
+    
+<style>
+#ashDelOverlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:2000000;align-items:center;justify-content:center;padding:20px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#ashDelOverlay.show{display:flex}
+#ashDelBox{background:#fff;border-radius:22px;width:100%;max-width:320px;padding:24px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:ashDelPop .18s ease}
+@keyframes ashDelPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+#ashDelIcon{width:54px;height:54px;border-radius:50%;background:#fee2e2;color:#ef4444;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px}
+#ashDelBox h3{margin:0 0 6px;font-size:18px;color:#1e293b;font-weight:800}
+#ashDelBox p{margin:0 0 18px;font-size:13.5px;color:#64748b;line-height:1.45;word-break:break-word}
+#ashDelBtns{display:flex;gap:10px}
+#ashDelBtns button{flex:1;border:none;border-radius:22px;padding:12px 0;font-weight:800;font-size:14px;cursor:pointer}
+#ashDelCancel{background:#f1f5f9;color:#334155}
+#ashDelOk{background:#ef4444;color:#fff}
+</style>
+<div id="ashDelOverlay">
+  <div id="ashDelBox">
+    <div id="ashDelIcon"><i class="fas fa-trash-alt"></i></div>
+    <h3>Delete item?</h3>
+    <p id="ashDelMsg"></p>
+    <div id="ashDelBtns">
+      <button type="button" id="ashDelCancel">Cancel</button>
+      <button type="button" id="ashDelOk">Delete</button>
+    </div>
+  </div>
+</div>
+<script>
+var __ashDelIdx = null;
+function ashConfirmDeleteItem(i) {
+    var it = recipes[activeIdx] && recipes[activeIdx].items[i];
+    if (!it) return;
+    __ashDelIdx = i;
+    document.getElementById('ashDelMsg').textContent = 'Are you sure you want to remove "' + (it.name || 'this item') + '" from this recipe?';
+    document.getElementById('ashDelOverlay').classList.add('show');
+}
+function ashCloseDeleteItem() {
+    document.getElementById('ashDelOverlay').classList.remove('show');
+    __ashDelIdx = null;
+}
+document.getElementById('ashDelCancel').onclick = ashCloseDeleteItem;
+document.getElementById('ashDelOverlay').addEventListener('click', function (e) { if (e.target === this) ashCloseDeleteItem(); });
+document.getElementById('ashDelOk').onclick = function () {
+    if (__ashDelIdx !== null && recipes[activeIdx]) {
+        recipes[activeIdx].items.splice(__ashDelIdx, 1);
+        syncRecipeToCloud();
+        renderTable();
+    }
+    ashCloseDeleteItem();
+};
+</script>
+
+<div id="confirmOverlay" class="custom-confirm-overlay">
     <div class="confirm-box">
         <h3 id="confirmTitle">Confirm</h3>
         <p id="confirmMsg" style="color:#636e72; font-size:14px;"></p>
@@ -5094,10 +5126,6 @@ window.addEventListener('orientationchange', handleOrientationChange);
 <div id="ashAiBackdrop"></div>
 <div id="ashAiFrameOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background:#0E1116; z-index:999999; align-items:center; justify-content:center; overflow:hidden; overscroll-behavior:none; color-scheme:dark;">
     <div style="position:relative; width:100%; height:100%; max-width:100%; max-height:100%; background:#0E1116; display:flex; flex-direction:column;">
-        <div style="display:flex; align-items:center; justify-content:space-between; background:#1e293b; padding:10px 16px; color:#fff;">
-            <span style="font-weight:700; font-size:15px;"><i class="fas fa-robot"></i> ASH AI Bot</span>
-            <button onclick="ashAiCloseOverlay()" style="background:#ef4444; color:#fff; border:none; border-radius:22px; padding:8px 14px; font-weight:700; cursor:pointer;">✕ Close</button>
-        </div>
         <iframe id="ashAiIframe" src="ash-ai-bot.html" loading="eager" allow="camera *; microphone *; display-capture *; clipboard-read *; clipboard-write *; fullscreen *; autoplay *" allowfullscreen style="flex:1; width:100%; height:100%; min-height:0; border:none; background:#0E1116; color-scheme:dark;"></iframe>
     </div>
 </div>
@@ -5140,6 +5168,7 @@ if (window.visualViewport) {
 }
 window.addEventListener('resize', ashAiFit);
 window.addEventListener('orientationchange', function () { setTimeout(ashAiFit, 150); });
+var __ashPushed = false;
 function ashAiOpenOverlay() {
     var o = document.getElementById('ashAiFrameOverlay');
     if (__ashPrevBg === null) __ashPrevBg = [document.documentElement.style.background, document.body.style.background];
@@ -5149,8 +5178,9 @@ function ashAiOpenOverlay() {
     o.style.display = 'flex';
     ashAiFit();
     ashAiEnsureCameraPermission();
+    try { history.pushState({ ashAi: true, panel: 'sharePanel' }, ""); __ashPushed = true; } catch (e) {}
 }
-function ashAiCloseOverlay() {
+function ashAiDoClose() {
     document.getElementById('ashAiFrameOverlay').style.display = 'none';
     document.body.classList.remove('ash-ai-open');
     if (__ashPrevBg) {
@@ -5158,7 +5188,26 @@ function ashAiCloseOverlay() {
         document.body.style.background = __ashPrevBg[1];
         __ashPrevBg = null;
     }
+    var sp = document.getElementById('sharePanel');
+    if (sp) sp.style.display = 'flex';
 }
+function ashAiCloseOverlay() {
+    if (__ashPushed) { history.back(); return; }
+    ashAiDoClose();
+}
+/* Phone back button: close AI bot and return to the data (share) layout */
+window.addEventListener('popstate', function (e) {
+    var o = document.getElementById('ashAiFrameOverlay');
+    if (o && o.style.display !== 'none' && __ashPushed) {
+        __ashPushed = false;
+        ashAiDoClose();
+        e.stopImmediatePropagation();
+    }
+}, true);
+/* Close request coming from the bot's own header (X next to the volume button) */
+window.addEventListener('message', function (e) {
+    if (e.data && e.data.ashAi === 'close') ashAiCloseOverlay();
+});
 </script>
 
 <script>
