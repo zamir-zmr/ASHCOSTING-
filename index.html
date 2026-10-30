@@ -3036,15 +3036,9 @@ function showRecipeItems(idx) {
         });
 
         const itemHTML = (it, usedQty, itemCost, i, extraStyle = '') => `
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:5px 14px; flex:1; ${extraStyle}">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 14px; flex:1; min-width:0; ${extraStyle}">
                 <div style="flex:1; min-width:0; font-weight:700; color:#1e293b; font-size:12px; text-transform:uppercase; line-height:1.2;">${it.name}</div>
-                <div style="display:flex; align-items:baseline; gap:10px; flex-shrink:0;">
-                    <div style="font-size:12px; color:#00D2D3; font-weight:700;">${Number(usedQty.toFixed(2))}<span style="font-size:9px; color:#94a3b8; font-weight:500;">${it.unit || ' g'}</span></div>
-                    <div style="display:flex; align-items:baseline; gap:4px;">
-                        <div style="font-weight:900; color:#2ecc71; font-size:14px; line-height:1;">${Number(itemCost).toFixed(3)}</div>
-                        <div style="font-weight:700; color:#94a3b8; font-size:8px; text-transform:uppercase;">OMR</div>
-                    </div>
-                </div>
+                <div style="flex-shrink:0; font-size:13px; color:#00D2D3; font-weight:800;">${Number(usedQty.toFixed(2))}<span style="font-size:10px; color:#94a3b8; font-weight:600;">${it.unit || ' g'}</span></div>
             </div>`;
 
         let html = '';
@@ -3063,8 +3057,11 @@ function showRecipeItems(idx) {
                 if (isLast) {
                     // Last odd item — only left half, right half empty
                     html += `<div class="recipe-item-row" style="display:flex; border-bottom:2px solid #04fffb; animation:itemSlide 0.2s ease forwards; animation-delay:${i * 0.02}s;">
-                        ${itemHTML(rows[i].it, rows[i].usedQty, rows[i].itemCost, i)}
-                        <div style="flex:1; border-left:2px solid #04fffb;"></div>
+                        <div style="flex:1; display:flex;">
+                            ${itemHTML(rows[i].it, rows[i].usedQty, rows[i].itemCost, i)}
+                        </div>
+                        <div style="width:2px; background:#04fffb; flex-shrink:0;"></div>
+                        <div style="flex:1; display:flex;"></div>
                     </div>`;
                 } else {
                     html += `<div class="recipe-item-row" style="display:flex; border-bottom:2px solid #04fffb; animation:itemSlide 0.2s ease forwards; animation-delay:${i * 0.02}s;">
@@ -3087,7 +3084,14 @@ function showRecipeItems(idx) {
     let calculatedTotal = initialRender.total;
 
     overlay.innerHTML = `
-        <div style="padding:14px 16px; background:linear-gradient(135deg, #0d9488 0%, #0891b2 100%); color:#ffffff; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 22px 22px; 
+        <style>
+@media (min-width:768px), (max-height:520px) {
+  .rcp-head{padding:6px 16px !important;}
+  .rcp-multi{position:static !important; transform:none !important; bottom:auto !important; left:auto !important; flex-shrink:0; order:2;}
+  .rcp-x{order:3;}
+}
+</style>
+        <div class="rcp-head" style="padding:14px 16px; background:linear-gradient(135deg, #0d9488 0%, #0891b2 100%); color:#ffffff; display:flex; align-items:center; gap:15px; flex-shrink:0; border-radius: 0 0 22px 22px; 
         border-bottom:3px solid #075e56;
         box-shadow: 0 6px 18px rgba(0,0,0,0.25); position:relative;">
             <div style="width:80px; height:80px; border-radius:22px; overflow:hidden; border:3px solid #ffffff; flex-shrink:0; background: #2d3748; box-shadow:0 3px 10px rgba(0,0,0,0.2);">
@@ -3097,10 +3101,10 @@ function showRecipeItems(idx) {
                 <h2 style="margin:0; font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#ffffff;">${r.name}</h2>
                 <div style="font-size:11px; color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; letter-spacing:1px;">Recipe</div>
             </div>
-            <div id="closeBtnIcon" style="width:32px; height:32px; background:rgba(255,255,255,0.18); border-radius:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;">
+            <div id="closeBtnIcon" class="rcp-x" style="width:32px; height:32px; background:rgba(255,255,255,0.18); border-radius:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;">
                 <i class="fas fa-times" style="font-size:22px; color:#fff;"></i>
             </div>
-            <input type="number" id="recipeMultiplyInput" value="1" step="0.1" min="0.1"
+            <input type="number" id="recipeMultiplyInput" class="rcp-multi" value="1" step="0.1" min="0.1"
                 style="position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); width:52px; text-align:center; padding:5px 2px; border-radius:22px; border:2px solid #0d9488; font-weight:800; font-size:13px; color:#1e293b; background:#fff; z-index:20; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
         </div>
 
@@ -3180,8 +3184,8 @@ function showRecipeItems(idx) {
             </div>
         </div>
 
-        <div style="padding:12px 20px; background:#fff; border-top:3px solid #17b128; border-radius:30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);">
-            <button id="closeBtnBottom" class="btn-finish">CLOSE</button>
+        <div style="padding:6px 20px calc(6px + env(safe-area-inset-bottom, 0px)); background:#fff; border-top:3px solid #17b128; border-radius:18px 18px 0 0; box-shadow: 0 -6px 18px rgba(0,0,0,0.05); flex-shrink:0;">
+            <button id="closeBtnBottom" class="btn-finish" style="margin:0 auto; padding:10px 18px;">CLOSE</button>
         </div>
     `;
     
