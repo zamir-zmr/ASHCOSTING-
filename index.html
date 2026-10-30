@@ -2058,6 +2058,10 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
                 <div>USED G</div>
                 <div>COST</div>
             </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; padding:4px 8px 0 8px;">
+                <button type="button" onclick="ashCopyItems()" style="border:none; background:#ff9f43; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">COPY</button>
+                <button type="button" onclick="ashPasteItems()" style="border:none; background:#ff6b35; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">PASTE</button>
+            </div>
             <div style="flex:1; overflow-y:auto; padding:0px 4px 4px 4px;">
                 <div id="suggestions"></div>
                 <div id="ingredientList" style="margin-top:0px;"></div>
@@ -3087,7 +3091,6 @@ function showRecipeItems(idx) {
         <style>
 @media (min-width:768px), (max-height:520px) {
   .rcp-head{padding:6px 16px !important;}
-  .rcp-multi{position:static !important; transform:none !important; bottom:auto !important; left:auto !important; flex-shrink:0; order:2;}
   .rcp-x{order:3;}
 }
 </style>
@@ -3860,6 +3863,12 @@ function addIng(name, price, base) {
     // 1. Recipe ke andar item push karein
     if (!recipes[activeIdx].items) recipes[activeIdx].items = [];
     
+    // Duplicate check: same name + same used qty (new item = 0) already hai to dobara add nahi hoga
+    if (ashIsDupItem(recipes[activeIdx].items, name, 0)) {
+        showToast("Already in list: " + name, true);
+        return;
+    }
+
     recipes[activeIdx].items.push({
         name: name,
         price: parseFloat(price) || 0,
@@ -3884,6 +3893,40 @@ function addIng(name, price, base) {
 }
 
 
+
+// --- Duplicate check + Copy/Paste recipe items ---
+function ashIsDupItem(items, name, used) {
+    const n = String(name).trim().toLowerCase();
+    const u = parseFloat(used) || 0;
+    return (items || []).some(x =>
+        String(x.name).trim().toLowerCase() === n && (parseFloat(x.used) || 0) === u);
+}
+
+function ashCopyItems() {
+    const items = (recipes[activeIdx] && recipes[activeIdx].items) || [];
+    if (!items.length) { showToast("Nothing to copy", true); return; }
+    try { localStorage.setItem('ash_items_clip', JSON.stringify(items)); } catch(e) {}
+    window._ashItemsClip = JSON.parse(JSON.stringify(items));
+    showToast("Copied " + items.length + " items");
+}
+
+function ashPasteItems() {
+    let clip = window._ashItemsClip;
+    if (!clip) { try { clip = JSON.parse(localStorage.getItem('ash_items_clip') || 'null'); } catch(e) {} }
+    if (!clip || !clip.length) { showToast("Nothing copied yet", true); return; }
+    const r = recipes[activeIdx];
+    if (!r) return;
+    if (!r.items) r.items = [];
+    let added = 0;
+    clip.forEach(it => {
+        if (ashIsDupItem(r.items, it.name, it.used)) return;
+        r.items.push(JSON.parse(JSON.stringify(it)));
+        added++;
+    });
+    syncRecipeToCloud();
+    renderTable();
+    showToast(added ? ("Pasted " + added + " items") : "All items already exist", !added);
+}
 
 // Naya sync helper function jo maine add kiya hai cloud sync ke liye
 function syncRecipeToCloud() {
