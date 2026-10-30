@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">        
     <title>ASHCOSTING</title>
     <meta name="theme-color" content="#0E1116" id="ash-theme">
     <link rel="manifest" href="manifest.json">
@@ -1604,7 +1604,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
     function out() {
         if (!sp || !sp.isConnected) return;
         sp.classList.add('hide');
-        if (meta) meta.setAttribute('content', '#07c1c1');
+        if (meta) meta.setAttribute('content', '#07c1c1'); document.documentElement.style.background = '#07c1c1';
         setTimeout(function () { if (sp.isConnected) sp.remove(); }, 800);
     }
     function hide() { setTimeout(out, 1900); }
@@ -2058,13 +2058,13 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
                 <div>USED G</div>
                 <div>COST</div>
             </div>
-            <div style="display:flex; justify-content:flex-end; gap:8px; padding:4px 8px 0 8px;">
-                <button type="button" onclick="ashCopyItems()" style="border:none; background:#ff9f43; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">COPY</button>
-                <button type="button" onclick="ashPasteItems()" style="border:none; background:#ff6b35; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">PASTE</button>
-            </div>
             <div style="flex:1; overflow-y:auto; padding:0px 4px 4px 4px;">
                 <div id="suggestions"></div>
                 <div id="ingredientList" style="margin-top:0px;"></div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; padding:6px 8px 10px 8px;">
+                <button type="button" onclick="ashCopyItems()" style="border:none; background:#ff9f43; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">COPY</button>
+                <button type="button" onclick="ashPasteItems()" style="border:none; background:#ff6b35; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">PASTE</button>
+            </div>
             </div>
         </div>
 
