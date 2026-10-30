@@ -1258,6 +1258,7 @@ from { opacity: 0; transform: translateY(5px); }
 .search-bar-modern {
     display: flex;
     align-items: center;
+    justify-content: center; /* Inner elements ko horizontally center karne ke liye */
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 50px;
@@ -1268,8 +1269,7 @@ from { opacity: 0; transform: translateY(5px); }
     height: 48px;
     overflow: hidden;
     border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
+    }
 .search-bar-modern.active {
     width: 280px;
     border: 1.5px solid #10b981;
@@ -1300,12 +1300,14 @@ from { opacity: 0; transform: translateY(5px); }
     color: #1e293b;
     transition: all 0.4s;
     opacity: 0;
+    text-align: center; /* Type hone wala text bilkul beech mein aaye */
 }
 
 .search-bar-modern.active #recipeSearchInput {
     width: 100%;
     padding: 0 15px;
     opacity: 1;
+    text-align: center; /* Active hone par bhi text center rahe */
 }
 
 .ash-clear-btn{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; border:none; background:#e2e8f0; color:#475569; font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; z-index:2;}
