@@ -1258,7 +1258,6 @@ from { opacity: 0; transform: translateY(5px); }
 .search-bar-modern {
     display: flex;
     align-items: center;
-    justify-content: center; /* Inner elements ko horizontally center karne ke liye */
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 50px;
@@ -1269,7 +1268,8 @@ from { opacity: 0; transform: translateY(5px); }
     height: 48px;
     overflow: hidden;
     border: 1px solid rgba(16, 185, 129, 0.2);
-    }
+}
+
 .search-bar-modern.active {
     width: 280px;
     border: 1.5px solid #10b981;
@@ -1296,20 +1296,24 @@ from { opacity: 0; transform: translateY(5px); }
     padding: 0;
     width: 0;
     font-size: 14px;
+  margin-top: 10px;
     font-weight: 600;
     color: #1e293b;
     transition: all 0.4s;
     opacity: 0;
-    text-align: center; /* Type hone wala text bilkul beech mein aaye */
 }
 
 .search-bar-modern.active #recipeSearchInput {
     width: 100%;
     padding: 0 15px;
     opacity: 1;
-    text-align: center; /* Active hone par bhi text center rahe */
 }
 
+  .ash-clear-btn2{position:absolute; 
+   margin-top: 30px;               
+  right:8px; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; border:none; background:#e2e8f0; color:#475569; font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; z-index:2;}
+
+  
 .ash-clear-btn{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; border:none; background:#e2e8f0; color:#475569; font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; z-index:2;}
 @media (min-width:768px), (max-height:520px) {
   .header-search-container{ right:65px; }
@@ -1784,7 +1788,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
             </div>
         </button>
         <input type="text" id="recipeSearchInput" placeholder="Search recipes..." oninput="handleSearch(this.value)">
-        <button type="button" id="recipeSearchClear" class="ash-clear-btn" onclick="ashClearSearch('recipeSearchInput','handleSearch')" style="display:none; position:static; flex-shrink:0; margin-right:6px;"><i class="fas fa-times"></i></button>
+        <button type="button" id="recipeSearchClear" class="ash-clear-btn2" onclick="ashClearSearch('recipeSearchInput','handleSearch')" style="display:none; position:static; flex-shrink:0; margin-right:6px;"><i class="fas fa-times"></i></button>
     </div>
 </div>
 
@@ -1888,7 +1892,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
     </style>
 </div>
 
-<div id="priceListPanel" class="panel">
+ <div id="priceListPanel" class="panel">
     <div style="padding:1px; background:#07c1c1;">
         <div class="stockpanel-nav">PRICE LIST
         <span onclick="closePanel('priceListPanel')" style="cursor:pointer;"</span>
