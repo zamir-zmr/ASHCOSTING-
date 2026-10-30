@@ -1308,6 +1308,12 @@ from { opacity: 0; transform: translateY(5px); }
     opacity: 1;
 }
 
+.ash-clear-btn{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; border:none; background:#e2e8f0; color:#475569; font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; z-index:2;}
+@media (min-width:768px), (max-height:520px) {
+  .header-search-container{ right:65px; }
+  .search-bar-modern.active{ width:min(560px, 65vw); }
+}
+
 .floating-toggle {
     position: fixed;
     top: 57px;
@@ -1776,6 +1782,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
             </div>
         </button>
         <input type="text" id="recipeSearchInput" placeholder="Search recipes..." oninput="handleSearch(this.value)">
+        <button type="button" id="recipeSearchClear" class="ash-clear-btn" onclick="ashClearSearch('recipeSearchInput','handleSearch')" style="display:none; position:static; flex-shrink:0; margin-right:6px;"><i class="fas fa-times"></i></button>
     </div>
 </div>
 
@@ -1859,7 +1866,8 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="stockSearchInput" placeholder="Search materials..."
                 oninput="filterStockItems()"
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+                style="width:100%; height: 35px; padding: 0 34px 0 35px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+            <button type="button" id="stockSearchClear" class="ash-clear-btn" onclick="ashClearSearch('stockSearchInput','filterStockItems')" style="display:none;"><i class="fas fa-times"></i></button>
         </div>
         <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 22px; cursor: pointer; white-space:nowrap;" onclick="openInputModal('stock')">
             <i class="fas fa-plus"></i> ADD MATERIAL
@@ -1891,7 +1899,8 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
             <i class="fas fa-search" style="position: absolute; left: 12px; color: #94a3b8; font-size: 12px;"></i>
             <input type="text" id="priceListSearchInput" placeholder="Search cakes..."
                 oninput="filterPriceList()"
-                style="width:100%; height: 35px; padding: 0 10px 0 35px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+                style="width:100%; height: 35px; padding: 0 34px 0 35px; border-radius: 22px; border: 1px solid #e2e8f0; background: white; font-size: 13px; outline: none; margin:0;">
+            <button type="button" id="priceListSearchClear" class="ash-clear-btn" onclick="ashClearSearch('priceListSearchInput','filterPriceList')" style="display:none;"><i class="fas fa-times"></i></button>
         </div>
         <button class="btn-pill" style="background:var(--primary); color:white; padding: 8px 16px; font-size: 12px; border: none; border-radius: 22px; cursor: pointer; white-space:nowrap;" onclick="openAddPriceItem()">
             <i class="fas fa-plus"></i> ADD ITEM
@@ -2062,6 +2071,7 @@ Tiramisu Cake   8 inch   18" rows="10" style="width:100%; border-radius:22px; bo
                 <div id="suggestions"></div>
                 <div id="ingredientList" style="margin-top:0px;"></div>
             <div style="display:flex; justify-content:flex-end; gap:8px; padding:6px 8px 10px 8px;">
+                <button type="button" id="ashUndoBtn" onclick="ashUndoPaste()" title="Undo paste" style="border:none; background:#64748b; color:#fff; font-size:13px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer; opacity:.45;"><i class="fas fa-undo"></i></button>
                 <button type="button" onclick="ashCopyItems()" style="border:none; background:#ff9f43; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">COPY</button>
                 <button type="button" onclick="ashPasteItems()" style="border:none; background:#ff6b35; color:#fff; font-size:11px; font-weight:800; padding:6px 14px; border-radius:22px; cursor:pointer;">PASTE</button>
             </div>
@@ -2901,6 +2911,22 @@ function toggleView() {
 let searchQuery = "";
 let isSearchActive = false; // Flag to stop animation during search
 
+function ashClearSearch(id, fn) {
+    const inp = document.getElementById(id);
+    if (!inp) return;
+    inp.value = '';
+    const b = document.getElementById(id.replace('Input','Clear')); if (b) b.style.display = 'none';
+    if (typeof window[fn] === 'function') window[fn]('');
+    inp.focus();
+}
+document.addEventListener('input', function (e) {
+    const id = e.target && e.target.id;
+    if (id === 'recipeSearchInput' || id === 'stockSearchInput' || id === 'priceListSearchInput') {
+        const b = document.getElementById(id.replace('Input','Clear'));
+        if (b) b.style.display = e.target.value ? 'flex' : 'none';
+    }
+});
+
 function toggleSearch() {
     const wrapper = document.getElementById('searchWrapper');
     const input = document.getElementById('recipeSearchInput');
@@ -2916,6 +2942,7 @@ function toggleSearch() {
     } else {
         input.value = '';
         searchQuery = '';
+        const _c = document.getElementById('recipeSearchClear'); if (_c) _c.style.display = 'none';
         icon.className = 'fas fa-search';
         renderRecipes(); 
     }
@@ -3902,6 +3929,17 @@ function ashIsDupItem(items, name, used) {
         String(x.name).trim().toLowerCase() === n && (parseFloat(x.used) || 0) === u);
 }
 
+function ashUndoPaste() {
+    const u = window._ashPasteUndo;
+    if (!u || !recipes[u.idx]) { showToast("Nothing to undo", true); return; }
+    recipes[u.idx].items = u.items;
+    window._ashPasteUndo = null;
+    const ub = document.getElementById('ashUndoBtn'); if (ub) ub.style.opacity = '.45';
+    syncRecipeToCloud();
+    if (u.idx === activeIdx) renderTable();
+    showToast("Paste undone");
+}
+
 function ashCopyItems() {
     const items = (recipes[activeIdx] && recipes[activeIdx].items) || [];
     if (!items.length) { showToast("Nothing to copy", true); return; }
@@ -3917,6 +3955,7 @@ function ashPasteItems() {
     const r = recipes[activeIdx];
     if (!r) return;
     if (!r.items) r.items = [];
+    window._ashPasteUndo = { idx: activeIdx, items: JSON.parse(JSON.stringify(r.items)) };
     let added = 0;
     clip.forEach(it => {
         if (ashIsDupItem(r.items, it.name, it.used)) return;
@@ -3925,6 +3964,8 @@ function ashPasteItems() {
     });
     syncRecipeToCloud();
     renderTable();
+    const ub = document.getElementById('ashUndoBtn'); if (ub) ub.style.opacity = added ? '1' : '.45';
+    if (!added) window._ashPasteUndo = null;
     showToast(added ? ("Pasted " + added + " items") : "All items already exist", !added);
 }
 
