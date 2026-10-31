@@ -1296,7 +1296,6 @@ from { opacity: 0; transform: translateY(5px); }
     padding: 0;
     width: 0;
     font-size: 14px;
-  margin-top: 10px;
     font-weight: 600;
     color: #1e293b;
     transition: all 0.4s;
@@ -1309,11 +1308,6 @@ from { opacity: 0; transform: translateY(5px); }
     opacity: 1;
 }
 
-  .ash-clear-btn2{position:absolute; 
-   margin-top: 30px;               
-  right:8px; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; border:none; background:#e2e8f0; color:#475569; font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; z-index:2;}
-
-  
 .ash-clear-btn{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; border:none; background:#e2e8f0; color:#475569; font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; z-index:2;}
 @media (min-width:768px), (max-height:520px) {
   .header-search-container{ right:65px; }
@@ -1788,7 +1782,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
             </div>
         </button>
         <input type="text" id="recipeSearchInput" placeholder="Search recipes..." oninput="handleSearch(this.value)">
-        <button type="button" id="recipeSearchClear" class="ash-clear-btn2" onclick="ashClearSearch('recipeSearchInput','handleSearch')" style="display:none; position:static; flex-shrink:0; margin-right:6px;"><i class="fas fa-times"></i></button>
+        <button type="button" id="recipeSearchClear" class="ash-clear-btn" onclick="ashClearSearch('recipeSearchInput','handleSearch')" style="display:none; position:static; flex-shrink:0; margin-right:6px;"><i class="fas fa-times"></i></button>
     </div>
 </div>
 
@@ -1892,7 +1886,7 @@ body.ash-ai-open > *:not(#ashAiFrameOverlay):not(#ashAiBackdrop):not(script):not
     </style>
 </div>
 
- <div id="priceListPanel" class="panel">
+<div id="priceListPanel" class="panel">
     <div style="padding:1px; background:#07c1c1;">
         <div class="stockpanel-nav">PRICE LIST
         <span onclick="closePanel('priceListPanel')" style="cursor:pointer;"</span>
@@ -4048,7 +4042,7 @@ function renderStock(searchQuery = "") {
              onmouseup="cancelLongPress()">
              
             <div style="display:flex; align-items:center; flex:1;">
-                <div style="width: 40px; height: 40px; background: #f8fafc; border-radius: 22px; display: flex; align-items: center; justify-content: center; margin-right: 10px; border: 1px solid #08cdcd; overflow: hidden;">
+                <div style="width: 58px; height: 58px; flex-shrink:0; background: #f8fafc; border-radius: 22px; display: flex; align-items: center; justify-content: center; margin-right: 12px; border: 1px solid #08cdcd; overflow: hidden;">
                     ${itemImg}
                 </div>
                 
@@ -5597,7 +5591,7 @@ ashAiInitFirebaseListeners();
 
     var stream = null, facing = 'environment', onDone = null, els = null, bridge = false;
 
-    function showApp() { bridge = true; if (els) els.root.querySelector('#zcamApp').style.display = 'block'; }
+    function showApp() { bridge = true; }
 
     // Kodular native Camera bridge: top page -> AppInventor.setWebViewString, iframe -> parent.postMessage
     function requestNative() {
@@ -5626,11 +5620,9 @@ ashAiInitFirebaseListeners();
                 '<button type="button" id="zcamClose" style="background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:10px 16px;font:700 14px sans-serif;">✕ Close</button>' +
                 '<button type="button" id="zcamFlip" style="background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:10px 16px;font:700 14px sans-serif;">🔄 Front / Rear</button>' +
             '</div>' +
-            '<div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;padding:16px 14px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.65));">' +
-                '<button type="button" id="zcamApp" style="display:none;background:#16a34a;color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">📲 App Camera</button>' +
-                '<button type="button" id="zcamNative" style="background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">📱 Phone Camera</button>' +
+            '<div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;padding:16px 14px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.65));">' +
                 '<button type="button" id="zcamShot" aria-label="Capture" style="width:70px;height:70px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.45);"></button>' +
-                '<button type="button" id="zcamGallery" style="background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">🖼️ Gallery</button>' +
+                '<button type="button" id="zcamGallery" style="position:absolute;right:14px;bottom:calc(32px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:22px;padding:12px 12px;font:700 12px sans-serif;">🖼️ Gallery</button>' +
             '</div>';
         document.body.appendChild(root);
 
@@ -5659,12 +5651,7 @@ ashAiInitFirebaseListeners();
             facing = (facing === 'environment') ? 'user' : 'environment';
             start();
         };
-        root.querySelector('#zcamNative').onclick = function () {
-            var inp = facing === 'user' ? els.inFront : els.inRear;
-            inp.click();
-        };
         root.querySelector('#zcamGallery').onclick = function () { els.inGallery.click(); };
-        root.querySelector('#zcamApp').onclick = requestNative;
         if (window.AppInventor || bridge) showApp();
         else if (window.parent && window.parent !== window) { try { window.parent.postMessage({ zcam: 'ping' }, '*'); } catch (e) {} }
         return els;
@@ -5678,16 +5665,9 @@ ashAiInitFirebaseListeners();
     function say(text) {
         els.msg.style.display = text ? 'block' : 'none';
         els.msg.textContent = text || '';
-        var nb = els.root.querySelector('#zcamNative');
         var shot = els.root.querySelector('#zcamShot');
-        if (text) {            // live camera nahi -> native camera primary
-            els.video.style.visibility = 'hidden';
-            nb.style.background = '#2563eb'; nb.style.fontSize = '15px'; nb.style.padding = '16px 20px';
-            shot.style.display = 'none';
-        } else {
-            nb.style.background = 'rgba(255,255,255,.18)'; nb.style.fontSize = '12px'; nb.style.padding = '12px 12px';
-            shot.style.display = 'block';
-        }
+        if (text) els.video.style.visibility = 'hidden';
+        shot.style.display = 'block';
     }
 
     function close() {
@@ -5713,7 +5693,11 @@ ashAiInitFirebaseListeners();
 
     function snap() {
         var v = els.video;
-        if (!stream || !v.videoWidth) return;
+        if (!stream || !v.videoWidth) {
+            var inp = facing === 'user' ? els.inFront : els.inRear;
+            inp.click();
+            return;
+        }
         var max = 1600, w = v.videoWidth, h = v.videoHeight;
         if (Math.max(w, h) > max) { var k = max / Math.max(w, h); w = Math.round(w * k); h = Math.round(h * k); }
         var c = document.createElement('canvas');
@@ -5730,7 +5714,7 @@ ashAiInitFirebaseListeners();
         els.video.style.transform = (facing === 'user') ? 'scaleX(-1)' : 'none';
         var md = navigator.mediaDevices;
         if (!window.isSecureContext || !md || !md.getUserMedia) {
-            say('Live camera is mode me available nahi (HTTPS chahiye). "📱 Phone Camera" dabayein.');
+            say('Live camera available nahi. Shutter dabayein ya Gallery use karein.');
             return;
         }
         try {
@@ -5742,16 +5726,20 @@ ashAiInitFirebaseListeners();
             stop();
             var n = e && e.name;
             say((n === 'NotAllowedError' || n === 'SecurityError'
-                ? 'Is app me live camera allowed nahi hai. Neeche camera button dabayein.'
-                : 'Live camera start nahi hua. Neeche camera button dabayein.') + ' [' + (n || 'error') + ']');
+                ? 'Live camera allowed nahi hai. Shutter dabayein ya Gallery use karein.'
+                : 'Live camera start nahi hua. Shutter dabayein ya Gallery use karein.') + ' [' + (n || 'error') + ']');
         }
     }
 
     // public: ZCam.open('environment' | 'user', function(dataUrl){ ... })
+    function isKodular() {
+        return !!window.AppInventor || /;\s*wv\)/.test(navigator.userAgent || '');
+    }
     function open(which, cb) {
         build();
         facing = (which === 'user') ? 'user' : 'environment';
         onDone = cb;
+        if (isKodular()) { els.inGallery.click(); return; }
         els.root.style.display = 'flex';
         start();
     }
