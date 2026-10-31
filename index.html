@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>try{ if (screen.orientation && screen.orientation.lock && window.matchMedia('(max-width: 900px)').matches) screen.orientation.lock('portrait').catch(function(){}); }catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">        
@@ -3437,7 +3438,51 @@ function showRecipeItems(idx) {
 
     descEditBox.addEventListener('mouseup', descSaveSelection);
     descEditBox.addEventListener('keyup', descSaveSelection);
-    descEditBox.addEventListener('touchend', () => setTimeout(descSaveSelection, 30));
+    descEditBox.addEventListener('touchend', descSaveSelection);
+    // Long-press / selection hote hi turant popup (touchend ka wait nahi)
+    let descSelRaf = 0;
+    document.addEventListener('selectionchange', () => {
+        if (descEditBox.style.display === 'none') return;
+        if (descSelRaf) cancelAnimationFrame(descSelRaf);
+        descSelRaf = requestAnimationFrame(() => { descSelRaf = 0; descSaveSelection(); });
+    });
+
+    // Keyboard ke upar caret / last photo visible rakho
+    function descScroller() {
+        let el = descEditBox.parentElement;
+        while (el && el !== document.body) {
+            const oy = getComputedStyle(el).overflowY;
+            if ((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight) return el;
+            el = el.parentElement;
+        }
+        return document.scrollingElement;
+    }
+    function descEnsureCaretVisible() {
+        if (descEditBox.style.display === 'none') return;
+        const sel = window.getSelection();
+        if (!sel.rangeCount || !descEditBox.contains(sel.anchorNode)) return;
+        const rg = sel.getRangeAt(0);
+        let rect = rg.getClientRects()[0];
+        if (!rect || (!rect.height && !rect.bottom)) {
+            const n = rg.startContainer.nodeType === 1 ? rg.startContainer : rg.startContainer.parentElement;
+            rect = n.getBoundingClientRect();
+        }
+        const vv = window.visualViewport;
+        const visBottom = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
+        const limit = visBottom - 150; // neeche CLOSE bar ke liye jagah
+        if (rect.bottom > limit) {
+            const sc = descScroller();
+            if (sc) sc.scrollTop += (rect.bottom - limit);
+        }
+    }
+    descEditBox.style.paddingBottom = '150px';
+    descEditBox.addEventListener('focus', () => setTimeout(descEnsureCaretVisible, 250));
+    descEditBox.addEventListener('input', descEnsureCaretVisible);
+    descEditBox.addEventListener('click', () => setTimeout(descEnsureCaretVisible, 50));
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => setTimeout(descEnsureCaretVisible, 80));
+    }
+    window.addEventListener('resize', () => setTimeout(descEnsureCaretVisible, 120));
 
     // Toolbar ko tap karte hi selection/focus na ude - isse har button turant kaam karta hai
     descToolbar.addEventListener('pointerdown', (e) => e.preventDefault());
