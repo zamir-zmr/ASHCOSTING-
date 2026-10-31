@@ -3328,7 +3328,10 @@ function showRecipeItems(idx) {
             const clean = url.split('?')[0].replace(/\/$/, '');
             return { embed: clean + '/embed/', thumb: null };
         }
-        if (/facebook\.com|fb\.watch/.test(url)) {
+        if (/facebook\.com|fb\.watch|fb\.com/.test(url)) {
+            // share/v, share/r jaise short links embed nahi hote -> Facebook me kholo
+            const fbEmbeddable = /facebook\.com\/(?:watch\/?\?v=|[^\/?]+\/videos\/|reel\/|video\.php)|fb\.watch/.test(url);
+            if (!fbEmbeddable) return { embed: null, thumb: null };
             return { embed: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`, thumb: null };
         }
         return { embed: null, thumb: null };
@@ -3458,6 +3461,24 @@ function showRecipeItems(idx) {
         if (descSelRaf) cancelAnimationFrame(descSelRaf);
         descSelRaf = requestAnimationFrame(() => { descSelRaf = 0; descSaveSelection(); });
     });
+
+    // Scroll karte waqt popup selection ke saath chale (text par na chadhe)
+    let descScrollRaf = 0;
+    function descRepositionToolbar() {
+        if (descToolbar.style.display !== 'flex') return;
+        const sel = window.getSelection();
+        if (!sel.rangeCount || sel.isCollapsed || !descEditBox.contains(sel.anchorNode)) { descHideToolbar(); return; }
+        const rect = sel.getRangeAt(0).getBoundingClientRect();
+        const vv = window.visualViewport;
+        const visBottom = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
+        if (rect.bottom < 0 || rect.top > visBottom) { descToolbar.style.visibility = 'hidden'; return; }
+        descShowToolbarAt(rect);
+    }
+    window.addEventListener('scroll', () => {
+        if (descToolbar.style.display !== 'flex') return;
+        if (descScrollRaf) cancelAnimationFrame(descScrollRaf);
+        descScrollRaf = requestAnimationFrame(() => { descScrollRaf = 0; descRepositionToolbar(); });
+    }, true);
 
     // Keyboard ke upar caret / last photo visible rakho
     function descScroller() {
