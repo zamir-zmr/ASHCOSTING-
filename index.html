@@ -984,7 +984,13 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
 
 /* ===== LANDSCAPE / PC: compress DATA panel to fit, scroll as fallback ===== */
 @media (min-width: 600px) and (max-height: 760px) {
-    #sharePanel .share-box { overflow-y: auto !important; overflow-x: hidden !important; }
+    #sharePanel .share-box { display: block !important; overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; }
+    #sharePanel .share-box > div:first-child { position: sticky; top: 0; z-index: 20; }
+    #sp-desktop-body { flex: none !important; height: auto !important; min-height: 0 !important; overflow: visible !important; }
+    #sp-sidebar { overflow: visible !important; padding-bottom: 14px !important; }
+    #sp-main-area { overflow: visible !important; min-height: 0 !important; }
+    #sp-lists-row { flex: none !important; height: 300px !important; }
+    #sharePanel #ashAiFabBtn { position: fixed !important; }
     #sharePanel .sharepanel-nav { padding: 2px 14px !important; margin: 2px 4px !important; font-size: 14px !important; border-radius: 22px !important; }
     #sharePanel .sharepanel-nav i { font-size: 20px !important; }
     #sp-desktop-topbar { padding: 3px 10px !important; gap: 8px !important; }
@@ -1012,7 +1018,7 @@ from { transform: translateX(-50px) rotate(-90deg); opacity: 0; }
     #sp-bottom-bar p { font-size: 11px !important; margin: 0 !important; }
     #shareCodeOutputDesktop { height: 32px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 22px !important; }
     #shareRestoreInputDesktop { height: 40px !important; padding: 5px 8px !important; font-size: 11px !important; border-radius: 22px !important; }
-    #sharePanel #ashAiFabBtn { width: 42px !important; height: 42px !important; font-size: 19px !important; left: auto !important; right: 14px !important; bottom: 84px !important; }
+    #sharePanel #ashAiFabBtn { width: 42px !important; height: 42px !important; font-size: 19px !important; left: auto !important; right: 14px !important; bottom: 16px !important; }
 }
 @media (min-width: 600px) and (max-height: 420px) {
     #sharePanel .sharepanel-nav { padding: 0 12px !important; font-size: 12px !important; }
@@ -3400,19 +3406,25 @@ function showRecipeItems(idx) {
     function descHideToolbar() { descToolbar.style.display = 'none'; }
 
     function descShowToolbarAt(rect) {
-        const tw = 270, th = 220;
+        const tw = 270;
+        descToolbar.style.visibility = 'hidden';
+        descToolbar.style.display = 'flex';
+        const th = descToolbar.offsetHeight || 230;
         let left = rect.left + (rect.width / 2) - (tw / 2);
         left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
-        // Android ka native Copy/Cut/Paste bubble usually selection ke UPAR aata hai,
-        // isliye humara popup pehle NEECHE dikhane ki koshish karega taaki overlap na ho.
-        let top = rect.bottom + 16;
-        if (top + th > window.innerHeight - 80) {
-            top = rect.top - th - 16;
-            if (top < 8) top = 8;
+        // Native Copy/Cut bubble selection ke upar (~70px) aata hai -> humara popup uske bhi UPAR,
+        // taaki selected text aur native bubble dono saaf dikhein.
+        const vv = window.visualViewport;
+        const visBottom = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
+        let top = rect.top - th - 80;
+        if (top < 8) {
+            // upar jagah nahi -> selection ke NEECHE (handles ke baad)
+            top = rect.bottom + 44;
+            if (top + th > visBottom - 8) top = Math.max(8, visBottom - th - 8);
         }
         descToolbar.style.left = left + 'px';
         descToolbar.style.top = top + 'px';
-        descToolbar.style.display = 'flex';
+        descToolbar.style.visibility = 'visible';
     }
 
     // Har selection/caret change track karte hain (photo insert ke liye caret bhi chahiye)
@@ -5106,9 +5118,9 @@ document.getElementById('ashDelOk').onclick = function () {
 
    <!-- STICKY DATA HEADER (mobile + desktop) -->
    <div style="padding:1px; background:#07c1c1; flex-shrink:0;">
-    <div class="sharepanel-nav">DATA 
-    <span onclick="document.getElementById('sharePanel').style.display='none'"></span>
-    <i class="fas fa-times" style="font-size:30px; cursor:pointer;" onclick="document.getElementById('sharePanel').style.display='none'"></i>
+    <div class="editorpanel-nav">
+    <span>DATA</span>
+    <i class="fas fa-times" style="font-size:30px; color:black; cursor:pointer;" onclick="document.getElementById('sharePanel').style.display='none'"></i>
     </div>
    </div>
 
